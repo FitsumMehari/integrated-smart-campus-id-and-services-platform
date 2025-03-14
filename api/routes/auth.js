@@ -73,6 +73,21 @@ router.get("/users", async(req, res, next) => {
     res.status(200).json({ "message": "Users found", allUsers })
 })
 
+// Get Digital ID
+router.post("/digitalid", async(req, res, next) => {
+    try {
+        var user = await User.findOne({ userId: req.body.userId })
+
+    } catch (error) {
+        next(error)
+    }
+
+    if (!user) return res.status(200).json({ "message": "No users found" })
+
+    var digitalId = user.digitalId
+    res.status(200).json({ "message": "User found", digitalId })
+})
+
 // Add a guest
 router.post("/guest", async(req, res, next) => {
     if (!req.body.username || !req.body.phone) return res.status(200).json({ message: "Please fill the required inputs" })
@@ -352,4 +367,5 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
 //     }
 // );
 
+module.exports = router;
 module.exports = router;
