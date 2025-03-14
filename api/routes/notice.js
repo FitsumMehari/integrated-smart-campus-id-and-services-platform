@@ -21,8 +21,6 @@ router.get("/:category", async(req, res, next) => {
             var notices = await Notice.find({ category: req.params.category });
         }
         if (!notices) return res.status(200).json({ message: "No notices found" });
-        console.log(notices);
-
 
         res.status(200).json({ message: "Notices Found", notices });
     } catch (error) {
@@ -47,6 +45,8 @@ router.post("/", async(req, res, next) => {
         })
 
         await newNotice.save()
+
+        console.log("New notices has been added.");
 
         res.status(200).json({ "message": "Notice saved successfully" })
 
