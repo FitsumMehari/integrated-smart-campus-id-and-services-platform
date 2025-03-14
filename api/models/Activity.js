@@ -13,6 +13,11 @@ const ActivitySchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    category: {
+        type: String,
+        enum: ["cafe", "gate", "school"],
+        required: false,
+    },
 }, {
     timestamps: true,
 });
