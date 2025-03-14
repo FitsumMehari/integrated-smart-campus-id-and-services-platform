@@ -57,6 +57,22 @@ const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 //     }
 // });
 
+
+// Get all users
+router.get("/users", async(req, res, next) => {
+    try {
+        var allUsers = await User.find()
+
+    } catch (error) {
+        next(error)
+    }
+
+    if (!allUsers) return res.status(200).json({ "message": "No users found" })
+
+
+    res.status(200).json({ "message": "Users found", allUsers })
+})
+
 // Student Login
 router.post("/studentlogin", async(req, res, next) => {
     console.log(process.env.JWTKEY);
