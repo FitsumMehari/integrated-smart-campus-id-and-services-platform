@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
 const authRoute = require("./routes/auth")
+const noticeRoute = require("./routes/notice")
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/notice", noticeRoute);
 
 //ROUTE NOT FOUND
 app.use((req, res, next) => {
