@@ -3,6 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
+const authRoute = require("./routes/auth")
+
 dotenv.config();
 
 const app = express();
@@ -29,6 +31,7 @@ app.get("/", (req, res) => {
 
 });
 
+app.use("/auth", authRoute);
 
 //ROUTE NOT FOUND
 app.use((req, res, next) => {
