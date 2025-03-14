@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-// const transporter = require("./transporter");
+const transporter = require("./transporter");
 const verifyOTP = require("./verifyOTP");
 
 
@@ -132,12 +132,17 @@ router.post("/login", async(req, res, next) => {
 
             const accessToken = jwt.sign({
                     _id: user._id,
+                    userId: user.userId,
                     username: user.username,
                     email: user.email,
                     phone: user.phone,
                     isAdmin: user.userType === "admin",
+                    isCafe: user.userType === "cafe",
+                    isGate: user.userType === "gate",
+                    isSchool: user.userType === "school",
                     userType: user.userType,
-                    clubs: user.clubs,
+                    gender: user.gender,
+                    department: user.department,
                     profilePic: user.profilePic,
                     isLoggedIn: true,
                 },
@@ -152,8 +157,6 @@ router.post("/login", async(req, res, next) => {
         }
     }
 });
-
-
 
 // Update
 // router.put("/updateprofile", verifyToken, async(req, res, next) => {
@@ -198,7 +201,7 @@ router.post("/forgot-password", async(req, res, next) => {
 
         const createdPasswordResetOTP = await sendPasswordResetOTP(email, res);
 
-        res.status(200).json();
+        res.status(200).json({ "message": "OTP sent" });
     } catch (error) {
         next(error);
     }
