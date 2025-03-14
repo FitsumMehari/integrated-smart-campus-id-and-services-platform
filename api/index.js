@@ -8,6 +8,7 @@ const noticeRoute = require("./routes/notice")
 const belongingsRoute = require("./routes/belongings")
 const messagesRoute = require("./routes/messages")
 const activitysRoute = require("./routes/activity")
+const gatesRoute = require("./routes/gate")
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use("/notice", noticeRoute);
 app.use("/belongings", belongingsRoute);
 app.use("/messages", messagesRoute);
 app.use("/activity", activitysRoute);
+app.use("/gate", gatesRoute);
 
 //ROUTE NOT FOUND
 app.use((req, res, next) => {
