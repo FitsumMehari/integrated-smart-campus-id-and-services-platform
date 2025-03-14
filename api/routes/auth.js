@@ -73,6 +73,27 @@ router.get("/users", async(req, res, next) => {
     res.status(200).json({ "message": "Users found", allUsers })
 })
 
+// Add a guest
+router.post("/guest", async(req, res, next) => {
+    if (!req.body.username || !req.body.phone) return res.status(200).json({ message: "Please fill the required inputs" })
+    try {
+        const newUser = new User({
+            username: req.body.username,
+            phone: req.body.phone,
+            gender: req.body.gender,
+            userType: "guest"
+        })
+
+        await newUser.save();
+
+        console.log("New user saved as a gues");
+
+        res.status(200).json({ message: "New user saved successfully" })
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Student Login
 router.post("/studentlogin", async(req, res, next) => {
     console.log(process.env.JWTKEY);
