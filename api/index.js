@@ -19,7 +19,7 @@ const app = express();
 
 app.use(cors()); // Use the cors middleware with your options
 
-const PORT = process.env.PORT || 3000;
+const PORT = 4500;
 app.use(express.json());
 
 // Database connector code
