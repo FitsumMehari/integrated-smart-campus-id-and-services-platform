@@ -15,7 +15,7 @@ const ActivitySchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["cafe", "gate", "school"],
+        enum: ["cafe", "gate", "school", "other"],
         required: false,
     },
 }, {
