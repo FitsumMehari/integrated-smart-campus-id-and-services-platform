@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const transporter = require("./transporter");
 const verifyOTP = require("./verifyOTP");
 
+const Activity = require("../models/Activity")
+
 
 dotenv.config();
 
@@ -101,7 +103,7 @@ router.post("/guest", async(req, res, next) => {
 
         await newUser.save();
 
-        console.log("New user saved as a gues");
+        console.log("New user saved as a guest");
 
         res.status(200).json({ message: "New user saved successfully" })
     } catch (error) {
@@ -153,6 +155,21 @@ router.post("/studentlogin", async(req, res, next) => {
                 }
             );
 
+
+            var timeElapsed = Date.now();
+            var today = new Date(timeElapsed);
+
+            var newActivity = new Activity({
+                userId: foundUser._id,
+                title: "Login",
+                description: `The person is loggin in at ${today.toLocaleString()}`,
+                category: 'other'
+            })
+
+            await newActivity.save()
+            console.log(`A person called  ${user.username} has logged in `);
+            console.log("New activity added.");
+
             res.status(200).json({ message: "Log In Successful!", accessToken });
         } catch (err) {
             return next(err);
@@ -202,7 +219,19 @@ router.post("/login", async(req, res, next) => {
                     expiresIn: "7d",
                 }
             );
+            var timeElapsed = Date.now();
+            var today = new Date(timeElapsed);
 
+            var newActivity = new Activity({
+                userId: foundUser._id,
+                title: "Login",
+                description: `The person is loggin in at ${today.toLocaleString()}`,
+                category: 'other'
+            })
+
+            await newActivity.save()
+            console.log(`A person called  ${user.username} has logged in `);
+            console.log("New activity added.");
             res.status(200).json({ message: "Log In Successful!", accessToken });
         } catch (err) {
             return next(err);
@@ -253,6 +282,9 @@ router.post("/forgot-password", async(req, res, next) => {
 
         const createdPasswordResetOTP = await sendPasswordResetOTP(email, res);
 
+        console.log(`Password reset request sent for a user with the following email: ${email}`);
+
+
         res.status(200).json({ "message": "OTP sent" });
     } catch (error) {
         next(error);
@@ -293,6 +325,9 @@ const sendOTP = async(otpDetails) => {
     try {
         await transporter.sendMail(mailOptions);
         await User.findOneAndUpdate({ email: otpDetails.email }, { generatedOTP: otpDetails.generatedOTP });
+
+        console.log(`OTP for resetting password has been sent to the following email: ${mailOptions.to}`);
+
     } catch (error) {
         console.error("Error sending OTP:", error);
         throw error;
@@ -325,6 +360,20 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
         existingUser.password = hashedPassword;
         existingUser.generatedOTP = undefined;
         await existingUser.save();
+
+        var timeElapsed = Date.now();
+        var today = new Date(timeElapsed);
+
+        var newActivity = new Activity({
+            userId: foundUser._id,
+            title: "Password Change",
+            description: `The person is has changed their password at ${today.toLocaleString()}`,
+            category: 'other'
+        })
+
+        await newActivity.save()
+        console.log(`A person called  ${existingUser.username} has changed their password. `);
+        console.log("New activity added.");
 
         res.json({ message: "Password reset successfully" });
     } catch (error) {

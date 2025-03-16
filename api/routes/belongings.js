@@ -10,6 +10,8 @@ dotenv.config();
 
 const jwtPrivateKey = process.env.JWTKEY;
 const Belongings = require("../models/Belonging");
+const Activity = require("../models/Activity");
+const User = require("../models/User");
 
 const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 
@@ -21,7 +23,6 @@ router.get("/:userId", async(req, res, next) => {
             var belongings = await Belongings.find({ userId: req.params.userId });
         }
         if (!belongings) return res.status(200).json({ message: "No items found" });
-
 
         res.status(200).json({ message: "Items Found", belongings });
     } catch (error) {
@@ -44,6 +45,25 @@ router.post("/", async(req, res, next) => {
         await newBelongings.save()
 
         console.log("New Items added.");
+
+        var timeElapsed = Date.now();
+        var today = new Date(timeElapsed);
+
+
+        const foundUser = await User.findById(req.params.userId)
+
+        if (foundUser) {
+            var newActivity = new Activity({
+                userId: foundUser._id,
+                title: "Belonging Added",
+                description: `The person has registered a new item with the serial number: ${req.body.serialKey} at ${today.toLocaleString()}`,
+                category: 'other'
+            })
+
+            await newActivity.save()
+            console.log(`An item has been registerd as a belonging under a person called  ${foundUser.username} `);
+            console.log("New activity added.");
+        }
 
         res.status(200).json({ "message": "Item saved successfully" })
 
