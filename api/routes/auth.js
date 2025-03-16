@@ -160,7 +160,7 @@ router.post("/studentlogin", async(req, res, next) => {
             var today = new Date(timeElapsed);
 
             var newActivity = new Activity({
-                userId: foundUser._id,
+                userId: user._id,
                 title: "Login",
                 description: `The person is loggin in at ${today.toLocaleString()}`,
                 category: 'other'
@@ -416,5 +416,4 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
 //     }
 // );
 
-module.exports = router;
 module.exports = router;
