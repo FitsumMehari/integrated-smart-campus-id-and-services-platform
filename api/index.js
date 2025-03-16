@@ -19,7 +19,7 @@ const app = express();
 
 app.use(cors()); // Use the cors middleware with your options
 
-const PORT = 4500;
+const PORT = process.env.PORT || 4500;
 app.use(express.json());
 
 // Database connector code
@@ -61,4 +61,4 @@ app.listen(PORT, () => {
     console.log(`Server is up and running on PORT: ${PORT}`);
 });
 
-module.exports = app;
+// module.exports = app;
