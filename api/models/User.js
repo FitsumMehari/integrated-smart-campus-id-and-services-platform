@@ -47,6 +47,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    cafeStatus: {
+        type: String,
+        enum: ["cafe", "noncafe", "selfsponsored"],
+        required: false,
+    },
     lastMeal: {
         type: String,
         required: false,
