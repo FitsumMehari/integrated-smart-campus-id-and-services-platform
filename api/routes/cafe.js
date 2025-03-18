@@ -22,12 +22,12 @@ router.post("/enter", async(req, res, next) => {
     }
     try {
         var foundUser = await Users.findById(req.body.id)
-
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 
-        if (!foundUser) return res.status(200).json({ message: "You may NOT enter" });
-        console.log(today.toLocaleString());
+        if (!foundUser) return res.status(200).json({ message: "You may NOT enter. You are not in the system." });
+
+        if (foundUser.cafeStatus == "noncafe" || foundUser.cafeStatus == "selfsponsored") return res.status(200).json({ message: "You may NOT enter. You are not a cafe user." });
 
         if (foundUser.lastMeal) {
             var mealGap = timeElapsed - foundUser.lastMeal
