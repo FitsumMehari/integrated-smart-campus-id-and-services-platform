@@ -61,13 +61,23 @@ const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 
 
 // Get all users
-router.get("/users", async(req, res, next) => {
-    try {
-        var allUsers = await User.find()
+router.get("/users/:userId", async(req, res, next) => {
+    if (req.params.userId == "all") {
+        try {
+            var allUsers = await User.find()
 
-    } catch (error) {
-        next(error)
+        } catch (error) {
+            next(error)
+        }
+    } else {
+        try {
+            var allUsers = await User.findOne({ userId: req.params.userId })
+
+        } catch (error) {
+            next(error)
+        }
     }
+
 
     if (!allUsers) return res.status(200).json({ "message": "No users found" })
 
@@ -113,7 +123,6 @@ router.post("/guest", async(req, res, next) => {
 
 // Student Login
 router.post("/studentlogin", async(req, res, next) => {
-    console.log(process.env.JWTKEY);
 
     if (!req.body.id || !req.body.password) {
         res.status(400).json("Please fill the required inputs!");
