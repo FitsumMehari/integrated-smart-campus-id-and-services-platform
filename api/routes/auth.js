@@ -163,7 +163,10 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                 if (tempsavedProfilePic.fileName != "") {
                     fs.rmSync(path.join(__dirname, '..', 'uploads', tempsavedProfilePic.fileName))
                 }
-                fs.rmSync(path.join(__dirname, digitalIdImageFileName))
+                if (digitalIdImageFileName != "") {
+                    fs.rmSync(path.join(__dirname, digitalIdImageFileName))
+                }
+
 
                 res.status(200).json({ message: "User account created successfully", finalSavedUser })
             } else {
