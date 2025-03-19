@@ -105,6 +105,10 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                     tempfileURL
                 );
             }
+
+            // Hash the new password
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
             const newUser = new User({
                 userId: req.body.userId,
                 username: req.body.username,
@@ -112,7 +116,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                 department: req.body.department,
                 email: req.body.email,
                 gender: req.body.gender,
-                password: req.body.password,
+                password: hashedPassword,
                 phone: req.body.phone,
                 userType: req.body.userType,
                 profilePic: tempsavedProfilePic.fileURL
