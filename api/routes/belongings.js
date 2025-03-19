@@ -15,12 +15,12 @@ const User = require("../models/User");
 
 const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 
-router.get("/:userId", async(req, res, next) => {
+router.get("/:filter", async(req, res, next) => {
     try {
-        if (req.params.userId == "all") {
+        if (req.params.filter == "all") {
             var belongings = await Belongings.find();
         } else {
-            var belongings = await Belongings.find({ userId: req.params.userId });
+            var belongings = await Belongings.find({ _id: req.params.filter });
         }
         if (!belongings) return res.status(200).json({ message: "No items found" });
 

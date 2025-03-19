@@ -23,7 +23,7 @@ router.get("/:filter", async(req, res, next) => {
         ) {
             var activities = await Activity.find({ category: req.params.filter });
         } else {
-            var activities = await Activity.find({ userId: req.params.filter });
+            var activities = await Activity.find({ _id: req.params.filter });
 
         }
         if (!activities) return res.status(200).json({ message: "No activities found" });

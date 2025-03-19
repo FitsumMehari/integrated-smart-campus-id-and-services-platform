@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const MessageSchema = new mongoose.Schema({
-    to: {
-        type: String,
-        required: false,
-    },
     message: {
         type: String,
         required: false,

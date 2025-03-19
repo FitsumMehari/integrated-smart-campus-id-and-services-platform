@@ -21,7 +21,7 @@ router.post("/enter", async(req, res, next) => {
         return res.status(200).json({ message: "Please fill the required inputs" });
     }
     try {
-        var foundUser = await Users.findById(req.body.id)
+        var foundUser = await Users.findOne({ _id: req.body.id })
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 

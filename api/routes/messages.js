@@ -30,15 +30,13 @@ router.get("/:category", async(req, res, next) => {
 });
 
 router.post("/", async(req, res, next) => {
-    if (!req.body.to ||
-        !req.body.message ||
+    if (!req.body.message ||
         !req.body.category
     ) {
         return res.status(200).json({ "message": "Please fill the required inputs" })
     }
     try {
         var newMessage = new Messages({
-            to: req.body.to,
             message: req.body.message,
             category: req.body.category
         })
