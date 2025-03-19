@@ -2,18 +2,37 @@ const router = require("express").Router();
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
-const transporter = require("./transporter");
-const verifyOTP = require("./verifyOTP");
-
-const Activity = require("../models/Activity")
-
+const multer = require("multer");
+const fs = require("fs");
+const QRCode = require("qrcode");
+const path = require("path");
 
 dotenv.config();
 
-const jwtPrivateKey = process.env.JWTKEY;
-const User = require("../models/User");
+const transporter = require("./transporter");
+const verifyOTP = require("./verifyOTP");
+const cloudinaryFileUpload = require("./cloudinaryFileUpload");
+
 const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
+
+
+
+const jwtPrivateKey = process.env.JWTKEY;
+
+const Activity = require("../models/Activity")
+const User = require("../models/User");
+
+// Configure Multer for file upload handling
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+const upload = multer({ storage: storage })
+
 
 // Register
 // router.post("/register", async(req, res, next) => {
@@ -59,6 +78,106 @@ const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 //     }
 // });
 
+// Add a new user 
+router.post("/user", upload.single("profilePic"), async(req, res, next) => {
+    if (!req.body.userId) return res.status(200).json({ message: "Please fill the required inputs" })
+    else {
+        try {
+
+            const existingUser = await User.findOne({ userId: req.body.userId });
+
+            if (existingUser) {
+                return res.status(200).json({ message: "User Id is already taken" })
+            }
+
+            if (req.file) {
+                var tempfileName = req.file.originalname;
+                var tempfileURL = req.file.path;
+                var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                    tempfileName,
+                    tempfileURL
+                );
+            } else {
+                var tempfileName = "";
+                var tempfileURL = "";
+                var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                    tempfileName,
+                    tempfileURL
+                );
+            }
+            const newUser = new User({
+                userId: req.body.userId,
+                username: req.body.username,
+                cafeStatus: req.body.cafeStatus,
+                department: req.body.department,
+                email: req.body.email,
+                gender: req.body.gender,
+                password: req.body.password,
+                phone: req.body.phone,
+                userType: req.body.userType,
+                profilePic: tempsavedProfilePic.fileURL
+            })
+
+            const savedUser = await newUser.save();
+
+            if (savedUser) {
+                // move this code to its own file
+                let data = JSON.stringify({
+                    username: savedUser.username,
+                    userId: savedUser.userId,
+                    _id: savedUser._id,
+                });
+
+                // Options for QR code generation
+                const options = {
+                    errorCorrectionLevel: "H",
+                    type: "image/png",
+                    quality: 0.92,
+                    margin: 1,
+                    color: {
+                        dark: "#000000",
+                        light: "#FFFFFF",
+                    },
+                };
+
+                var digitalIdImageFileName = `${savedUser._id}.png`;
+                // Generate QR code and save as image
+                QRCode.toFile(
+                    path.join(__dirname, digitalIdImageFileName),
+                    data,
+                    options,
+                    function(err) {
+                        if (err) throw err;
+                        console.log("QR code saved!");
+                    }
+                );
+
+                const tempsavedDigitalId = await cloudinaryFileUpload.setSavedFile(
+                    digitalIdImageFileName,
+                    path.join(__dirname, digitalIdImageFileName)
+                );
+
+                savedUser.digitalId = tempsavedDigitalId.fileURL
+                const finalSavedUser = await savedUser.save()
+
+                if (tempsavedProfilePic.fileName != "") {
+                    fs.rmSync(path.join(__dirname, '..', 'uploads', tempsavedProfilePic.fileName))
+                }
+                fs.rmSync(path.join(__dirname, digitalIdImageFileName))
+
+                res.status(200).json({ message: "User account created successfully", finalSavedUser })
+            } else {
+                res.status(200).json({ message: "Account creation failed" })
+            }
+
+
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+})
 
 // Get all users
 router.get("/users/:userId", async(req, res, next) => {
