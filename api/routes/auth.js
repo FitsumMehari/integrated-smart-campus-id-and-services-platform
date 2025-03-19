@@ -110,7 +110,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
             const newUser = new User({
-                userId: req.body.userId,
+                studentId: req.body.studentId,
                 username: req.body.username,
                 cafeStatus: req.body.cafeStatus,
                 department: req.body.department,
@@ -128,8 +128,8 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                 // move this code to its own file
                 let data = JSON.stringify({
                     username: savedUser.username,
-                    userId: savedUser.userId,
-                    _id: savedUser._id,
+                    studentId: savedUser.studentId,
+                    userId: savedUser._id,
                 });
 
                 // Options for QR code generation
@@ -214,7 +214,7 @@ router.get("/users/:id", async(req, res, next) => {
 // Get Digital ID
 router.post("/digitalid", async(req, res, next) => {
     try {
-        var user = await User.findOne({ userId: req.body.userId })
+        var user = await User.findOne({ studentId: req.body.userId })
 
     } catch (error) {
         next(error)
@@ -254,7 +254,7 @@ router.post("/studentlogin", async(req, res, next) => {
         res.status(400).json("Please fill the required inputs!");
     } else {
         try {
-            const user = await User.findOne({ userId: req.body.id });
+            const user = await User.findOne({ studentId: req.body.id });
 
             if (!user) {
                 return res.status(200).json({ message: "Wrong Credientials!" });
@@ -271,7 +271,7 @@ router.post("/studentlogin", async(req, res, next) => {
 
             const accessToken = jwt.sign({
                     _id: user._id,
-                    userId: user.userId,
+                    studentId: user.studentId,
                     username: user.username,
                     email: user.email,
                     phone: user.phone,
@@ -336,7 +336,7 @@ router.post("/login", async(req, res, next) => {
 
             const accessToken = jwt.sign({
                     _id: user._id,
-                    userId: user.userId,
+                    studentId: user.studentId || '',
                     username: user.username,
                     email: user.email,
                     phone: user.phone,
