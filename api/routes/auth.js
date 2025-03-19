@@ -358,7 +358,7 @@ router.post("/login", async(req, res, next) => {
             var today = new Date(timeElapsed);
 
             var newActivity = new Activity({
-                userId: foundUser._id,
+                userId: user._id,
                 title: "Login",
                 description: `The person is loggin in at ${today.toLocaleString()}`,
                 category: 'other'
@@ -500,7 +500,7 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
         var today = new Date(timeElapsed);
 
         var newActivity = new Activity({
-            userId: foundUser._id,
+            userId: existingUser._id,
             title: "Password Change",
             description: `The person is has changed their password at ${today.toLocaleString()}`,
             category: 'other'
