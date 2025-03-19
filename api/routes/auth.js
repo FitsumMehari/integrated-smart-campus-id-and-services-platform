@@ -187,7 +187,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
 })
 
 // Get all users
-router.get("/users/:userId", async(req, res, next) => {
+router.get("/users/:id", async(req, res, next) => {
     if (req.params.userId == "all") {
         try {
             var allUsers = await User.find()
@@ -197,7 +197,7 @@ router.get("/users/:userId", async(req, res, next) => {
         }
     } else {
         try {
-            var allUsers = await User.findOne({ userId: req.params.userId })
+            var allUsers = await User.findOne({ _id: req.params.id })
 
         } catch (error) {
             next(error)
