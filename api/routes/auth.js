@@ -223,7 +223,8 @@ router.post("/digitalid", async(req, res, next) => {
     if (!user) return res.status(200).json({ "message": "No users found" })
 
     var digitalId = user.digitalId
-    res.status(200).json({ "message": "User found", digitalId })
+    var { password, ...otherUserInfo } = user
+    res.status(200).json({ "message": "User found", digitalId, otherUserInfo })
 })
 
 // Add a guest
