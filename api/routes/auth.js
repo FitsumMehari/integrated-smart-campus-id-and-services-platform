@@ -214,7 +214,7 @@ router.get("/users/:id", async(req, res, next) => {
 // Get Digital ID
 router.post("/digitalid", async(req, res, next) => {
     try {
-        var user = await User.findOne({ studentId: req.body.userId })
+        var user = await User.findOne({ studentId: req.body.userId }).select("-password")
 
     } catch (error) {
         next(error)
@@ -223,8 +223,8 @@ router.post("/digitalid", async(req, res, next) => {
     if (!user) return res.status(200).json({ "message": "No users found" })
 
     var digitalId = user.digitalId
-    var { password, ...otherUserInfo } = user
-    res.status(200).json({ "message": "User found", digitalId, otherUserInfo })
+        // var { password, ...otherUserInfo } = user
+    res.status(200).json({ "message": "User found", digitalId, user })
 })
 
 // Add a guest
