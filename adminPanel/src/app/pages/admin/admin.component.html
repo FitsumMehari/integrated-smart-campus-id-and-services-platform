@@ -1,0 +1,110 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened class="sidenav">
+        <mat-toolbar>
+            <span class="sidebar-title">
+        SMART <span class="id-blue">ID</span>
+            </span>
+        </mat-toolbar>
+        <mat-nav-list class="side-nav-list">
+            <mat-list-item *ngFor="let item of sideNavItems" routerLinkActive="active" [routerLink]="item.route" class="menu-item">
+                <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+                <span class="menu-label">{{ item.label | translate }}</span>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+            <span>Admin Panel</span>
+            <span class="spacer"></span>
+
+            <button mat-icon-button (click)="toggleDarkMode()">
+        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+            <button mat-button [matMenuTriggerFor]="languageMenu">
+        {{ currentLanguage.toUpperCase() }}
+      </button>
+            <mat-menu #languageMenu="matMenu">
+                <button mat-menu-item (click)="changeLanguage('en')">EN</button>
+                <button mat-menu-item (click)="changeLanguage('am')">አማ</button>
+                <button mat-menu-item (click)="changeLanguage('tg')">ትግ</button>
+            </mat-menu>
+
+            <button mat-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon> {{"Profile" | translate}}
+      </button>
+            <mat-menu #profileMenu="matMenu">
+                <button mat-menu-item (click)="openAccountDialog()">{{"Account" | translate}}</button>
+                <button mat-menu-item (click)="logout()">{{"Logout" | translate}}</button>
+            </mat-menu>
+        </mat-toolbar>
+
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+<div class="add-admin-backdrop" *ngIf="modalService.showAddAdmin" (click)="modalService.close()"></div>
+<div class="add-admin-card" *ngIf="modalService.showAddAdmin">
+    <h2>Add a New Administrator</h2>
+    <p class="subtitle">Please fill the form</p>
+    <div class="add-admin-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" name="phone">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword">
+        </mat-form-field>
+
+        <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic">
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select name="role" class="mat-select-panel">
+                <mat-option value="admin">Admin</mat-option>
+                <mat-option value="manager">Manager</mat-option>
+                <mat-option value="staff">Staff</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Add Admin</button>
+            <button mat-button type="button" (click)="modalService.close()">Cancel</button>
+        </div>
+    </div>
+</div>
