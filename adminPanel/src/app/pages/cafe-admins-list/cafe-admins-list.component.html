@@ -4,14 +4,14 @@
         <button mat-raised-button color="primary" (click)="openAddAdminCard()">Add New Admin</button>
         <mat-list>
             <mat-list-item *ngFor="let admin of cafeAdministrators; let i = index">
-                <div class="admin-info">
-                    <div matListItemTitle class="admin-name">{{ admin.name }}</div>
-                    <div matListItemLine class="admin-title">{{ admin.title }}</div>
-                </div>
                 <img matListItemAvatar [src]="admin.profilePic" alt="{{ admin.name }}" class="profile-pic">
+                <div matListItemTitle class="admin-name">{{ admin.name }}</div>
+                <div matListItemLine class="admin-title">{{ admin.title }}</div>
+                <div class="admin-info">
+                </div>
                 <div matListItemMeta class="list-actions">
-                    <mat-icon class="edit-icon" (click)="editAdmin(admin)">edit</mat-icon>
-                    <mat-icon class="remove-icon" (click)="removeAdmin(admin)">delete</mat-icon>
+                    <mat-icon class="edit-icon" style="color: red;" (click)="editAdmin(admin)">edit</mat-icon>
+                    <mat-icon class="remove-icon" style="color: blue;" (click)="removeAdmin(admin)">delete</mat-icon>
                 </div>
             </mat-list-item>
         </mat-list>

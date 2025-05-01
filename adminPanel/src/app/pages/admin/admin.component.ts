@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../../services/modal.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 
 
 interface SideNavItem {
@@ -23,6 +26,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
   @ViewChild('navbar', { static: false, read: ElementRef }) navbar!: ElementRef;
   @ViewChild('sidebar', { static: false, read: ElementRef }) sidebar!: ElementRef;
 
+    private openModalSubscription: Subscription | undefined;
+
   isDarkMode = false;
   currentLanguage = 'en';
 
@@ -34,7 +39,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     { label: 'Registrar', icon: 'how_to_reg', route: '/admin/registrar' },
   ];
 
-  constructor(public dialog: MatDialog, private renderer: Renderer2, private translateService: TranslateService, public modalService: ModalService) {}
+  constructor(public dialog: MatDialog, private renderer: Renderer2, private translateService: TranslateService, public modalService: ModalService, private router: Router) {}
 
 
   ngOnInit(): void {
@@ -69,6 +74,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   openAccountDialog() {
     // this.dialog.open(AccountDialogComponent);
+    this.modalService.openEditProfile();
   }
 
   handleSecondaryAdd(): void {
@@ -81,5 +87,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   logout() {
     console.log('Logout clicked');
+    localStorage.removeItem('isLoggedIn')
+    this.router.navigate(['/login'])
   }
 }

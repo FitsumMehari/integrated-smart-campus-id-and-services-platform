@@ -1,1 +1,41 @@
-<button (click)="login()">Login</button>
+<!-- <button (click)="login()">Login</button> -->
+<div class="login-container">
+    <div class="left-section">
+        <div class="logo">SMART <span class="id-blue">ID</span></div>
+    </div>
+    <div class="right-section">
+        <h2 class="welcome left-align">Welcome!</h2>
+        <p class="credentials-text left-align">Enter your Credentials to access your account</p>
+
+        <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Email</mat-label>
+            <input matInput [formControl]="emailFormControl">
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="!emailFormControl.hasError('required') && emailFormControl.hasError('email')">
+                Please enter a valid email address
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="passwordFormControl">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password">
+        <mat-icon svgIcon="{{ hidePassword ? 'eye-off' : 'eye' }}"></mat-icon>
+      </button>
+            <mat-error *ngIf="passwordFormControl.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <div class="actions left-align">
+            <button mat-raised-button color="primary" (click)="login()" [disabled]="emailFormControl.invalid || passwordFormControl.invalid">
+        Login
+      </button>
+            <div class="forgot-password">
+                <span class="forgot-password-text" (click)="forgotPassword()">Forgot password?</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,12 +3,12 @@
         <h2>{{"Administrators" | translate}}</h2>
         <mat-list class="mat-list">
             <mat-list-item *ngFor="let admin of administrators; let i = index">
-                <span matListItemMeta class="list-index">{{ i + 1 }}</span>
-                <div class="admin-info">
-                    <div matListItemTitle class="admin-name">{{ admin.name }}</div>
-                    <div matListItemLine class="admin-role">{{ admin.role }}</div>
-                </div>
                 <img matListItemAvatar [src]="admin.profilePic" alt="{{ admin.name }}" class="profile-pic">
+                <div matListItemTitle class="admin-name">{{ admin.name }}</div>
+                <div matListItemLine class="admin-role">{{ admin.role }}</div>
+                <div class="admin-info">
+                </div>
+                <span matListItemMeta class="list-index">{{ i + 1 }}</span>
             </mat-list-item>
         </mat-list>
     </div>

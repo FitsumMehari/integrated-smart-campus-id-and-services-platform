@@ -18,9 +18,12 @@ interface DashboardCard {
 export class DashboardComponent implements OnInit {
   cards: DashboardCard[] = [
     { title: 'Admins', icon: 'supervisor_account', count: 0, route: 'admins' },
-    { title: 'Students', icon: 'school', count: 0, route: 'students' },
-    { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
-    { title: 'Messages', icon: 'email', count: 0, route: 'messages' }
+    // { title: 'Students', icon: 'school', count: 0, route: 'students' },
+    // { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
+    // { title: 'Messages', icon: 'email', count: 0, route: 'messages' }
+    { title: 'Students', icon: 'school', count: 0, route: 'admins' },
+    { title: 'Notices', icon: 'notifications', count: 0, route: 'admins' },
+    { title: 'Messages', icon: 'email', count: 0, route: 'admins' }
   ];
 
   constructor(private router: Router, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {

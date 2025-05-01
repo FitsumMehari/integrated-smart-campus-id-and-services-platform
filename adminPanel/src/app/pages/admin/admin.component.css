@@ -117,7 +117,7 @@
 }
 
 
-/* For modal */
+/* For add admin modal */
 
 .add-admin-backdrop {
     position: fixed;
@@ -199,7 +199,432 @@
 }
 
 
-/* end of modal */
+/* end of add admin modal */
+
+
+/* For edit profile modal */
+
+.edit-profile-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black for blur effect */
+    z-index: 10;
+    /* Ensure it's above other content */
+    backdrop-filter: blur(5px);
+    /* Apply the blur effect */
+}
+
+.edit-profile-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Slightly increase width if needed */
+    max-height: 90%;
+    /* Allow for more vertical space */
+    overflow-y: auto;
+    /* Enable scrolling if content still overflows */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-profile-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.edit-profile-card .subtitle {
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: 20px;
+}
+
+.edit-profile-form {
+    display: grid;
+    /* Use grid layout for better control */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns for larger screens */
+    gap: 15px 20px;
+    /* Row and column gap */
+}
+
+
+/* Make single column for smaller screens */
+
+@media (max-width: 600px) {
+    .edit-profile-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.edit-profile-form mat-form-field,
+.edit-profile-form>div {
+    /* Style the profile picture div */
+    width: 100%;
+    /* Make form fields take full width of their grid cell */
+}
+
+.edit-profile-form .actions {
+    grid-column: 1 / -1;
+    /* Make actions span both columns */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+/* end of edit profile modal */
+
+
+/* For add notice modal */
+
+.add-notice-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black for blur effect */
+    z-index: 10;
+    /* Ensure it's above other content */
+    backdrop-filter: blur(5px);
+    /* Apply the blur effect */
+}
+
+.add-notice-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Slightly increase width if needed */
+    max-height: 90%;
+    /* Allow for more vertical space */
+    overflow-y: auto;
+    /* Enable scrolling if content still overflows */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-notice-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.add-notice-card .subtitle {
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: 20px;
+}
+
+.add-notice-form {
+    display: grid;
+    /* Use grid layout for better control */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns for larger screens */
+    gap: 15px 20px;
+    /* Row and column gap */
+}
+
+
+/* Make single column for smaller screens */
+
+@media (max-width: 600px) {
+    .add-notice-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.add-notice-form mat-form-field,
+.add-notice-form>div {
+    /* Style the profile picture div */
+    width: 100%;
+    /* Make form fields take full width of their grid cell */
+}
+
+.add-notice-form .actions {
+    grid-column: 1 / -1;
+    /* Make actions span both columns */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+/* end of add notice modal */
+
+
+/* For edit notice modal */
+
+.edit-notice-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black for blur effect */
+    z-index: 10;
+    /* Ensure it's above other content */
+    backdrop-filter: blur(5px);
+    /* Apply the blur effect */
+}
+
+.edit-notice-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Slightly increase width if needed */
+    max-height: 90%;
+    /* Allow for more vertical space */
+    overflow-y: auto;
+    /* Enable scrolling if content still overflows */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-notice-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.edit-notice-card .subtitle {
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: 20px;
+}
+
+.edit-notice-form {
+    display: grid;
+    /* Use grid layout for better control */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns for larger screens */
+    gap: 15px 20px;
+    /* Row and column gap */
+}
+
+
+/* Make single column for smaller screens */
+
+@media (max-width: 600px) {
+    .edit-notice-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.edit-notice-form mat-form-field,
+.edit-notice-form>div {
+    /* Style the profile picture div */
+    width: 100%;
+    /* Make form fields take full width of their grid cell */
+}
+
+.edit-notice-form .actions {
+    grid-column: 1 / -1;
+    /* Make actions span both columns */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+/* end of edit notice modal */
+
+
+/* For add student modal */
+
+.add-student-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black for blur effect */
+    z-index: 10;
+    /* Ensure it's above other content */
+    backdrop-filter: blur(5px);
+    /* Apply the blur effect */
+}
+
+.add-student-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Slightly increase width if needed */
+    max-height: 90%;
+    /* Allow for more vertical space */
+    overflow-y: auto;
+    /* Enable scrolling if content still overflows */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-student-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.add-student-card .subtitle {
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: 20px;
+}
+
+.add-student-form {
+    display: grid;
+    /* Use grid layout for better control */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns for larger screens */
+    gap: 15px 20px;
+    /* Row and column gap */
+}
+
+
+/* Make single column for smaller screens */
+
+@media (max-width: 600px) {
+    .add-student-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.add-student-form mat-form-field,
+.add-student-form>div {
+    /* Style the profile picture div */
+    width: 100%;
+    /* Make form fields take full width of their grid cell */
+}
+
+.add-student-form .actions {
+    grid-column: 1 / -1;
+    /* Make actions span both columns */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+/* end of add student modal */
+
+
+/* For edit student modal */
+
+.edit-student-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black for blur effect */
+    z-index: 10;
+    /* Ensure it's above other content */
+    backdrop-filter: blur(5px);
+    /* Apply the blur effect */
+}
+
+.edit-student-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Slightly increase width if needed */
+    max-height: 90%;
+    /* Allow for more vertical space */
+    overflow-y: auto;
+    /* Enable scrolling if content still overflows */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-student-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.edit-student-card .subtitle {
+    color: rgba(0, 0, 0, 0.54);
+    margin-bottom: 20px;
+}
+
+.edit-student-form {
+    display: grid;
+    /* Use grid layout for better control */
+    grid-template-columns: 1fr 1fr;
+    /* Two columns for larger screens */
+    gap: 15px 20px;
+    /* Row and column gap */
+}
+
+
+/* Make single column for smaller screens */
+
+@media (max-width: 600px) {
+    .edit-student-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.edit-student-form mat-form-field,
+.edit-student-form>div {
+    /* Style the profile picture div */
+    width: 100%;
+    /* Make form fields take full width of their grid cell */
+}
+
+.edit-student-form .actions {
+    grid-column: 1 / -1;
+    /* Make actions span both columns */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+/* end of edit student modal */
 
 .dark-theme {
     background-color: #212121;

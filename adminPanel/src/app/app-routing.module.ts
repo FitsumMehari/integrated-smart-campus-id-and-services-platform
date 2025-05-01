@@ -9,14 +9,20 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { GateComponent } from './pages/gate/gate.component';
 import { RegistrarComponent } from './pages/registrar/registrar.component';
 import { AdminsListComponent } from './pages/admins-list/admins-list.component';
-import { MessagesListComponent } from './pages/messages-list/messages-list.component';
-import { NoticesListComponent } from './pages/notices-list/notices-list.component';
-import { StudentsListComponent } from './pages/students-list/students-list.component';
+import { CafeMessagesListComponent } from './pages/cafe-messages-list/cafe-messages-list.component';
+import { CafeNoticesListComponent } from './pages/cafe-notices-list/cafe-notices-list.component';
+import { CafeStudentsListComponent } from './pages/cafe-students-list/cafe-students-list.component';
 import { CafeAdminsListComponent } from './pages/cafe-admins-list/cafe-admins-list.component';
+import { CreatenewpasswordComponent } from './pages/createnewpassword/createnewpassword.component';
+import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
+import { OTPVerificationComponent } from './pages/otpverification/otpverification.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'createnewpassword', component: CreatenewpasswordComponent },
+  { path: 'forgotpassword', component: ForgotpasswordComponent },
+  { path: 'verifyotp', component: OTPVerificationComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -26,11 +32,11 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         children: [
-          { path: 'students', component: StudentsListComponent },
+          { path: 'students', component: CafeStudentsListComponent },
           { path: 'admins', component: AdminsListComponent },
-          { path: 'notices', component: NoticesListComponent },
-          { path: 'messages', component: MessagesListComponent },
-          { path: '', redirectTo: 'students', pathMatch: 'full' }, // Default route
+          { path: 'notices', component: CafeNoticesListComponent },
+          { path: 'messages', component: CafeMessagesListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
         ],
       },
       {
@@ -38,11 +44,11 @@ const routes: Routes = [
         component: CafeComponent,
 
         children: [
-          { path: 'students', component: StudentsListComponent },
+          { path: 'students', component: CafeStudentsListComponent },
           { path: 'admins', component: CafeAdminsListComponent },
-          { path: 'notices', component: NoticesListComponent },
-          { path: 'messages', component: MessagesListComponent },
-          { path: '', redirectTo: 'students', pathMatch: 'full' }, // Default route
+          { path: 'notices', component: CafeNoticesListComponent },
+          { path: 'messages', component: CafeMessagesListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
         ],
       },
 

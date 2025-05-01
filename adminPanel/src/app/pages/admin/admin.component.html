@@ -1,9 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="side" opened class="sidenav">
         <mat-toolbar>
-            <span class="sidebar-title">
-        SMART <span class="id-blue">ID</span>
-            </span>
+            <span class="sidebar-title"> SMART <span class="id-blue">ID</span> </span>
         </mat-toolbar>
         <mat-nav-list class="side-nav-list">
             <mat-list-item *ngFor="let item of sideNavItems" routerLinkActive="active" [routerLink]="item.route" class="menu-item">
@@ -22,7 +20,7 @@
             <span class="spacer"></span>
 
             <button mat-icon-button (click)="toggleDarkMode()">
-        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        <mat-icon>{{ isDarkMode ? "light_mode" : "dark_mode" }}</mat-icon>
       </button>
 
             <button mat-button [matMenuTriggerFor]="languageMenu">
@@ -35,11 +33,15 @@
             </mat-menu>
 
             <button mat-button [matMenuTriggerFor]="profileMenu">
-        <mat-icon>account_circle</mat-icon> {{"Profile" | translate}}
+        <mat-icon>account_circle</mat-icon> {{ "Profile" | translate }}
       </button>
             <mat-menu #profileMenu="matMenu">
-                <button mat-menu-item (click)="openAccountDialog()">{{"Account" | translate}}</button>
-                <button mat-menu-item (click)="logout()">{{"Logout" | translate}}</button>
+                <button mat-menu-item (click)="openAccountDialog()">
+          {{ "Account" | translate }}
+        </button>
+                <button mat-menu-item (click)="logout()">
+          {{ "Logout" | translate }}
+        </button>
             </mat-menu>
         </mat-toolbar>
 
@@ -49,24 +51,25 @@
     </mat-sidenav-content>
 </mat-sidenav-container>
 
-<div class="add-admin-backdrop" *ngIf="modalService.showAddAdmin" (click)="modalService.close()"></div>
+<!-- add admin -->
+<div class="add-admin-backdrop" *ngIf="modalService.showAddAdmin" (click)="modalService.closeAdmin()"></div>
 <div class="add-admin-card" *ngIf="modalService.showAddAdmin">
     <h2>Add a New Administrator</h2>
     <p class="subtitle">Please fill the form</p>
     <div class="add-admin-form">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput type="text" name="name">
+            <input matInput type="text" name="name" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email">
+            <input matInput type="email" name="email" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" name="phone">
+            <input matInput type="tel" name="phone" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -80,17 +83,17 @@
 
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" name="password">
+            <input matInput type="password" name="password" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword">
+            <input matInput type="password" name="confirmPassword" />
         </mat-form-field>
 
         <div>
             <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic">
+            <input type="file" id="profilePic" name="profilePic" />
         </div>
 
         <mat-form-field appearance="outline">
@@ -104,7 +107,341 @@
 
         <div class="actions">
             <button mat-raised-button color="primary" type="submit">Add Admin</button>
-            <button mat-button type="button" (click)="modalService.close()">Cancel</button>
+            <button mat-button type="button" (click)="modalService.closeAdmin()">
+        Cancel
+      </button>
         </div>
     </div>
 </div>
+
+<!-- end of add admin -->
+
+<!-- add student -->
+<div class="add-student-backdrop" *ngIf="modalService.showAddStudent" (click)="modalService.closeAddStudent()"></div>
+<div class="add-student-card" *ngIf="modalService.showAddStudent">
+    <h2>Add a New Student</h2>
+    <p class="subtitle">Please fill the form</p>
+    <div class="add-student-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" name="phone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" />
+        </mat-form-field>
+
+        <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic" />
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <mat-select name="deparment" class="mat-select-panel">
+                <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
+                <mat-option value="mechanical">Mechanical Engineering</mat-option>
+                <mat-option value="industrial">Industrial Engineering</mat-option>
+                <mat-option value="manufacturing">Manufacturing Engineering</mat-option>
+                <mat-option value="civil">Civil Engineering</mat-option>
+                <mat-option value="urban">Urban Planning</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Add Student</button>
+            <button mat-button type="button" (click)="modalService.closeAddStudent()">
+        Cancel
+      </button>
+        </div>
+    </div>
+</div>
+<!-- end of add student -->
+
+<!-- edit student -->
+<div class="edit-student-backdrop" *ngIf="modalService.showEditStudent" (click)="modalService.closeEditStudent()"></div>
+<div class="edit-student-card" *ngIf="modalService.showEditStudent">
+    <h2>Update Student Profile</h2>
+    <p class="subtitle">Please fill the form</p>
+    <div class="edit-student-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" name="phone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" />
+        </mat-form-field>
+
+        <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic" />
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <mat-select name="deparment" class="mat-select-panel">
+                <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
+                <mat-option value="mechanical">Mechanical Engineering</mat-option>
+                <mat-option value="industrial">Industrial Engineering</mat-option>
+                <mat-option value="manufacturing">Manufacturing Engineering</mat-option>
+                <mat-option value="civil">Civil Engineering</mat-option>
+                <mat-option value="urban">Urban Planning</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-button type="button" (click)="modalService.closeEditStudent()">
+        Cancel
+      </button>
+        </div>
+    </div>
+</div>
+<!-- end of edit student -->
+
+
+<!-- edit profile -->
+<div class="edit-profile-backdrop" *ngIf="modalService.showEditProfile" (click)="modalService.closeEditProfile()"></div>
+<div class="edit-profile-card" *ngIf="modalService.showEditProfile">
+    <h2>Profile</h2>
+    <p class="subtitle">Edit your profile here</p>
+    <div class="edit-profile-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" name="phone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" />
+        </mat-form-field>
+
+        <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic" />
+        </div>
+
+        <!-- <mat-form-field appearance="outline">
+                <mat-label>Role</mat-label>
+                <mat-select name="role" class="mat-select-panel">
+                    <mat-option value="admin">Admin</mat-option>
+                    <mat-option value="manager">Manager</mat-option>
+                    <mat-option value="staff">Staff</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Update</button>
+            <button mat-button type="button" (click)="modalService.closeEditProfile()">
+          Cancel
+        </button>
+        </div>
+    </div>
+</div>
+
+<!-- end of edit profile -->
+
+<!-- add notice -->
+<div class="add-notice-backdrop" *ngIf="modalService.showAddNotice" (click)="modalService.closeAddNotice()"></div>
+<div class="add-notice-card" *ngIf="modalService.showAddNotice">
+    <h2>Add a New Notice</h2>
+    <p class="subtitle">Please fill the form</p>
+    <div class="add-notice-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput type="email" name="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput type="tel" name="phone" />
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" />
+        </mat-form-field> -->
+
+        <!-- <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic" />
+        </div> -->
+
+        <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select name="role" class="mat-select-panel">
+                <mat-option value="admin">Admin</mat-option>
+                <mat-option value="manager">Manager</mat-option>
+                <mat-option value="staff">Staff</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Add Notice</button>
+            <button mat-button type="button" (click)="modalService.closeAddNotice()">
+        Cancel
+      </button>
+        </div>
+    </div>
+</div>
+
+<!-- end of add notice -->
+
+<!-- edit notice -->
+<div class="edit-notice-backdrop" *ngIf="modalService.showEditNotice" (click)="modalService.closeEditNotice()"></div>
+<div class="edit-notice-card" *ngIf="modalService.showEditNotice">
+    <h2>Update Notice</h2>
+    <p class="subtitle">Please fill the form</p>
+    <div class="edit-notice-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput type="email" name="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput type="tel" name="phone" />
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select name="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" />
+        </mat-form-field> -->
+
+        <!-- <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input type="file" id="profilePic" name="profilePic" />
+        </div> -->
+
+        <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select name="role" class="mat-select-panel">
+                <mat-option value="admin">Admin</mat-option>
+                <mat-option value="manager">Manager</mat-option>
+                <mat-option value="staff">Staff</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="actions">
+            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-button type="button" (click)="modalService.closeEditNotice()">
+        Cancel
+      </button>
+        </div>
+    </div>
+</div>
+
+<!-- end of edit notice -->

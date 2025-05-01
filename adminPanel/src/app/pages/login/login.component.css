@@ -1,0 +1,133 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    background-color: #e9ecef;
+}
+
+.left-section {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #e9ecef;
+    padding-right: 20px;
+}
+
+.logo {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.id-blue {
+    color: blue;
+}
+
+.right-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    border-left: 1px solid #ced4da;
+    position: relative;
+}
+
+.right-section::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    /* Reduce from top */
+    bottom: 15%;
+    /* Reduce from bottom (effectively 70% height in the middle) */
+    left: 0;
+    width: 1px;
+    background-color: #ced4da;
+}
+
+.welcome {
+    font-size: 2em;
+    color: #343a40;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    /* Align to the left */
+    width: 70%;
+    /* Maintain consistent width */
+}
+
+.credentials-text {
+    color: #6c757d;
+    margin-bottom: 20px;
+    align-self: flex-start;
+    /* Align to the left */
+    width: 70%;
+    /* Maintain consistent width */
+}
+
+.input-field {
+    width: 70%;
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.actions button {
+    margin-bottom: 10px;
+    padding: 12px 24px;
+    font-size: 1em;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    align-self: flex-start;
+    /* Keep "Forgot password?" aligned left */
+}
+
+.forgot-password-text {
+    cursor: pointer;
+    color: inherit;
+}
+
+.forgot-password-text:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+
+/* Responsive adjustments */
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    .left-section,
+    .right-section {
+        flex: none;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+        border-left: none;
+    }
+    .left-section {
+        justify-content: center;
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+    .right-section::before {
+        display: none;
+    }
+    .welcome,
+    .credentials-text,
+    .input-field,
+    .actions,
+    .forgot-password {
+        width: 100%;
+        align-self: stretch;
+        /* Make them full width and left-aligned */
+    }
+}
