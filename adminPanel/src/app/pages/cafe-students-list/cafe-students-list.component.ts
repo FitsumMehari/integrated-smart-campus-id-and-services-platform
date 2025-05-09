@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatPaginator } from '@angular/material/paginator';
 import { ModalService } from '../../services/modal.service';
+import { DashboardService } from '../../services/dashboard.service';
+import { Subscription } from 'rxjs';
+
 
 export interface Student {
   id: number;
@@ -15,116 +18,6 @@ export interface Student {
   studentId: string;
 }
 
-const ELEMENT_DATA: Student[] = [
-  {
-    id: 1,
-    name: 'John Doe',
-    gender: 'Male',
-    cafeStatus: 'Active',
-    department: 'Computer Science',
-    studentId: 'eitm/ur123456/78'
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    gender: 'Female',
-    cafeStatus: 'Inactive',
-    department: 'Electrical Engineering',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 3,
-    name: 'Peter Jones',
-    gender: 'Male',
-    cafeStatus: 'Active',
-    department: 'Mechanical Engineering',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 4,
-    name: 'Alice Brown',
-    gender: 'Female',
-    cafeStatus: 'Active',
-    department: 'Civil Engineering',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 5,
-    name: 'Bob Green',
-    gender: 'Male',
-    cafeStatus: 'Inactive',
-    department: 'Chemical Engineering',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 6,
-    name: 'Eva White',
-    gender: 'Female',
-    cafeStatus: 'Active',
-    department: 'Physics',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 7,
-    name: 'David Black',
-    gender: 'Male',
-    cafeStatus: 'Inactive',
-    department: 'Mathematics',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 8,
-    name: 'Sophia Gray',
-    gender: 'Female',
-    cafeStatus: 'Active',
-    department: 'Biology',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 9,
-    name: 'Michael Blue',
-    gender: 'Male',
-    cafeStatus: 'Inactive',
-    department: 'Chemistry',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 10,
-    name: 'Olivia Red',
-    gender: 'Female',
-    cafeStatus: 'Active',
-    department: 'Economics',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 11,
-    name: 'Samuel Green',
-    gender: 'Male',
-    cafeStatus: 'Active',
-    department: 'History',
-    studentId: 'eitm/ur123456/78'
-
-  },
-  {
-    id: 12,
-    name: 'Grace Yellow',
-    gender: 'Female',
-    cafeStatus: 'Inactive',
-    department: 'Literature',
-    studentId: 'eitm/ur123456/78'
-
-  },
-];
-
 /**
  * @title Table with pagination
  */
@@ -134,26 +27,30 @@ const ELEMENT_DATA: Student[] = [
   templateUrl: './cafe-students-list.component.html',
   styleUrls: ['./cafe-students-list.component.css'],
 })
-export class CafeStudentsListComponent implements OnInit, AfterViewInit {
+export class CafeStudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
     'select',
-    'id',
+    // 'id',
     'name',
     'gender',
     'cafeStatus',
     'department',
     'studentId',
-    'manage',
+    // 'manage',
   ];
-  dataSource = new MatTableDataSource<Student>(ELEMENT_DATA);
-  selection = new SelectionModel<Student>(true, []);
+  students: any[] = [];
+
+  dataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<any>(true, []);
   pageSize = 5;
   filterValue = '';
+  private usersSubscription: Subscription | undefined; // Add this line
+  private openModalSubscription: Subscription | undefined;
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator; // Using the definite assignment assertion
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private modalService: ModalService) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private modalService: ModalService,private dashboardService: DashboardService, private ngZone: NgZone) {
     iconRegistry.addSvgIcon(
       'edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/edit.svg')
@@ -166,6 +63,10 @@ export class CafeStudentsListComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // No need to set the paginator here anymore
+    this.getUsers(); // Call this method
+    this.dataSource = new MatTableDataSource<any>(this.students);
+    this.ngZone.run(() => {});
+
   }
 
   ngAfterViewInit() {
@@ -196,11 +97,26 @@ export class CafeStudentsListComponent implements OnInit, AfterViewInit {
     }`;
   }
 
+
   editStudent(student: Student) {
     console.log('Edit student:', student);
     this.modalService.openEditStudent(student);
     // Implement your edit logic here
   }
+
+  getUsers(): void {
+    this.usersSubscription = this.dashboardService._users.subscribe((users: any) => {
+      this.students = users.allUsers.filter(
+        (user:any) => user.userType === 'student'
+      );
+      // console.log(this.administrators);
+
+
+      this.ngZone.run(() => {});
+    });
+    this.dashboardService.getUsers();
+  }
+
 
   deleteStudent(student: Student) {
     console.log('Delete student:', student);
@@ -219,5 +135,13 @@ export class CafeStudentsListComponent implements OnInit, AfterViewInit {
     console.log('Add new student');
     this.modalService.openAddStudent();
 
+  }
+  ngOnDestroy(): void {
+    if (this.openModalSubscription) {
+      this.openModalSubscription.unsubscribe();
+    }
+    if (this.usersSubscription) { // Add this
+      this.usersSubscription.unsubscribe();
+    }
   }
 }

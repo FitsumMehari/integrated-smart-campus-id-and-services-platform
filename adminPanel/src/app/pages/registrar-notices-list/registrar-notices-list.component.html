@@ -1,0 +1,54 @@
+<div class="notices-list-container">
+    <div class="search-and-add">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Search" [value]="filterValue">
+            <button *ngIf="filterValue" matSuffix mat-icon-button (click)="clearFilter()" aria-label="Clear">
+    <mat-icon>close</mat-icon>
+  </button>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="addNewNotice()">Add New</button>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container> -->
+        <ng-container matColumnDef="updatedAt">
+            <th mat-header-cell *matHeaderCellDef> Updated At </th>
+            <td mat-cell *matCellDef="let element"> {{element.updatedAt | date:'short'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef> Title </th>
+            <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="manage">
+            <th mat-header-cell *matHeaderCellDef> Manage </th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" (click)="editNotice(row)">
+        <mat-icon style="color: blue;">edit</mat-icon>
+      </button>
+                <button mat-icon-button color="warn" (click)="deleteNotice(row)">
+        <mat-icon style="color: red;">delete</mat-icon>
+      </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index;" [ngClass]="{'alternate-row': i % 2 !== 0}" [ngClass]="{'selected-row': selection.isSelected(row)}">
+        </tr>
+    </table>
+    <mat-paginator [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+</div>

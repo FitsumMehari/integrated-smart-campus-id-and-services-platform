@@ -1,0 +1,154 @@
+
+
+import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
+import { DashboardService } from '../../services/dashboard.service';
+
+export interface Message {
+  id: number;
+  message: string;
+  description: string;
+}
+
+
+@Component({
+  selector: 'app-school-messages-list',
+  templateUrl: './school-messages-list.component.html',
+  styleUrl: './school-messages-list.component.css'
+})
+export class SchoolMessagesListComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
+  displayedColumns: string[] = [
+    'select',
+    // 'id',
+    'updatedAt',
+    'message',
+    // 'description',
+    'manage',
+  ];
+  dataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<Message>(true, []);
+  pageSize = 5;
+  filterValue = '';
+
+  messages: any = [];
+  private dashboardSubscribtion: Subscription | undefined; // Add this line
+  private openModalSubscription: Subscription | undefined;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
+    private dashboardService: DashboardService,
+    private ngZone: NgZone,
+    private snackBar: MatSnackBar
+  ) {
+    iconRegistry.addSvgIcon(
+      'edit',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/edit.svg')
+    );
+    iconRegistry.addSvgIcon(
+      'delete',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/delete.svg')
+    );
+  }
+
+  ngOnInit() {
+    this.getMessages(); // Call this method
+    this.dataSource = new MatTableDataSource<any>(this.messages);
+    this.ngZone.run(() => {});
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: Message): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.id + 1
+    }`;
+  }
+
+  editMessage(message: Message) {
+    console.log('Edit message:', message);
+    // Implement your edit logic here
+  }
+
+  getMessages(): void {
+    this.dashboardService.getMessages();
+    this.dashboardSubscribtion = this.dashboardService._messages.subscribe(
+      (next: any) => {
+        console.log(next);
+
+        this.messages = next.messages.filter(
+          (message: any) => message.category === 'school'
+        );
+
+        this.ngZone.run(() => {});
+      }
+    );
+  }
+
+  deleteMessage(message: any) {
+    console.log('Delete message:', message);
+    this.dashboardService.deleteMessage(message._id);
+    this.dashboardService._response.subscribe((response) => {
+      console.log(response);
+      if (response && response.message) {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = 'top';
+        config.duration = 3000;
+        this.snackBar.open(response.message, 'Close', config);
+
+        this.getMessages();
+      }
+    });
+    // Implement your delete logic here
+  }
+
+  applyFilter(event: Event) {
+    this.filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = this.filterValue.trim().toLowerCase();
+  }
+
+  clearFilter() {
+    this.filterValue = '';
+    this.dataSource.filter = '';
+  }
+  addNewMessage() {
+    console.log('Add new Message');
+  }
+
+  ngOnDestroy(): void {
+    if (this.openModalSubscription) {
+      this.openModalSubscription.unsubscribe();
+    }
+    if (this.dashboardSubscribtion) {
+      // Add this
+      this.dashboardSubscribtion.unsubscribe();
+    }
+  }
+}

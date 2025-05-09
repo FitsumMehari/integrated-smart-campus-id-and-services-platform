@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ["school", "cafe", "gate", "student", "admin", "guest"],
+        enum: ["school", "cafe", "gate", "student", "registrar", "admin", "guest"],
         default: "student",
         required: false,
     },
@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema({
     },
     cafeStatus: {
         type: String,
-        enum: ["cafe", "noncafe", "selfsponsored"],
+        enum: ["cafe", "nonCafe", "selfsponsored"],
         required: false,
     },
     lastMeal: {

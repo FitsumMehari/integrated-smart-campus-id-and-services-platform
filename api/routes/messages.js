@@ -51,5 +51,24 @@ router.post("/", async(req, res, next) => {
         next(error)
     }
 })
-
+router.put("/:id", async(req, res, next) => {
+    try {
+        const updatedMessage = await Messages.findByIdAndUpdate(
+            req.params.id, {
+                $set: req.body,
+            }, { new: true }
+        );
+        res.status(200).json(updatedMessage);
+    } catch (error) {
+        next(error);
+    }
+});
+router.delete("/:id", async(req, res, next) => {
+    try {
+        await Messages.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Message deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+});
 module.exports = router;

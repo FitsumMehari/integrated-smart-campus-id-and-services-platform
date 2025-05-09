@@ -15,24 +15,21 @@ const cloudinaryFileUpload = require("./cloudinaryFileUpload");
 
 const { verifyTokenAndAuthorization, verifyToken } = require("./verifyToken");
 
-
-
 const jwtPrivateKey = process.env.JWTKEY;
 
-const Activity = require("../models/Activity")
+const Activity = require("../models/Activity");
 const User = require("../models/User");
 
 // Configure Multer for file upload handling
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/')
+        cb(null, "uploads/");
     },
     filename: function(req, file, cb) {
-        cb(null, file.originalname)
-    }
+        cb(null, file.originalname);
+    },
 });
-const upload = multer({ storage: storage })
-
+const upload = multer({ storage: storage });
 
 // Register
 // router.post("/register", async(req, res, next) => {
@@ -78,16 +75,22 @@ const upload = multer({ storage: storage })
 //     }
 // });
 
-// Add a new user 
+// Add a new user
 router.post("/user", upload.single("profilePic"), async(req, res, next) => {
-    if (!req.body.userId) return res.status(200).json({ message: "Please fill the required inputs" })
+    let user = JSON.parse(req.body.user);
+    // console.log(user);
+
+    if (!user.studentId)
+        return res.status(200).json({ message: "Please fill the required inputs" });
     else {
         try {
-
-            const existingUser = await User.findOne({ userId: req.body.userId });
+            // const existingUser = await User.findOne({ studentId: user.studentId });
+            const existingUser = await User.findOne({
+                $or: [{ studentId: user.studentId }, { email: user.email }],
+            });
 
             if (existingUser) {
-                return res.status(200).json({ message: "User Id is already taken" })
+                return res.status(200).json({ message: "User email or Id is already taken" });
             }
 
             if (req.file) {
@@ -107,20 +110,24 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
             }
 
             // Hash the new password
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            try {
+                var hashedPassword = await bcrypt.hash(user.password, 10);
+            } catch (error) {
+                next(error)
+            }
 
             const newUser = new User({
-                studentId: req.body.studentId,
-                username: req.body.username,
-                cafeStatus: req.body.cafeStatus,
-                department: req.body.department,
-                email: req.body.email,
-                gender: req.body.gender,
+                studentId: user.studentId,
+                username: user.username,
+                cafeStatus: user.cafeStatus,
+                department: user.department,
+                email: user.email,
+                gender: user.gender,
                 password: hashedPassword,
-                phone: req.body.phone,
-                userType: req.body.userType,
-                profilePic: tempsavedProfilePic.fileURL
-            })
+                phone: user.phone,
+                userType: user.userType,
+                profilePic: tempsavedProfilePic.fileURL,
+            });
 
             const savedUser = await newUser.save();
 
@@ -161,96 +168,264 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                     path.join(__dirname, digitalIdImageFileName)
                 );
 
-                savedUser.digitalId = tempsavedDigitalId.fileURL
-                const finalSavedUser = await savedUser.save()
+                savedUser.digitalId = tempsavedDigitalId.fileURL;
+                const finalSavedUser = await savedUser.save();
+                // console.log('temp path to file: ' + path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName));
+                // console.log('temp path to file: ' + path.join(__dirname, digitalIdImageFileName));
 
-                if (tempsavedProfilePic.fileName != "") {
-                    fs.rmSync(path.join(__dirname, '..', 'uploads', tempsavedProfilePic.fileName))
+                if (tempsavedProfilePic.fileName != "" && fs.existsSync(path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName))) {
+                    try {
+                        fs.rmSync(
+                            path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName)
+                        );
+                    } catch (error) {
+                        console.error("Error removing profile picture:", error);
+                    }
                 }
-                if (digitalIdImageFileName != "") {
-                    fs.rmSync(path.join(__dirname, digitalIdImageFileName))
+                if (digitalIdImageFileName != "" &&
+                    fs.existsSync(path.join(__dirname, digitalIdImageFileName))) {
+                    try {
+                        fs.rmSync(path.join(__dirname, digitalIdImageFileName));
+                    } catch (error) {
+                        console.error("Error removing digital ID:", error);
+                    }
                 }
 
-
-                res.status(200).json({ message: "User account created successfully", finalSavedUser })
+                res
+                    .status(200)
+                    .json({
+                        message: "User account created successfully",
+                        finalSavedUser,
+                    });
             } else {
-                res.status(200).json({ message: "Account creation failed" })
+                res.status(200).json({ message: "Account creation failed" });
             }
-
-
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
+});
+
+// Update user
+router.put("/user", upload.single("profilePic"), async(req, res, next) => {
+    let user = JSON.parse(req.body.user);
+    // console.log(user);
+
+    if (!user.studentId)
+        return res.status(200).json({ message: "Please fill the required inputs" });
+    else {
+        try {
+            const existingUser = await User.findById(user.id);
+            if (!existingUser) {
+                return res.status(200).json({ message: "User not found" });
+            }
+            // const existingUser = await User.findOne({ studentId: user.studentId });
+            // const existingUser = await User.findOne({
+            //     $or: [{ studentId: user.studentId }, { email: user.email }],
+            // });
 
 
-})
+            if (req.file) {
+                var tempfileName = req.file.originalname;
+                var tempfileURL = req.file.path;
+                var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                    tempfileName,
+                    tempfileURL
+                );
+            } else {
+                var tempfileName = "";
+                var tempfileURL = "";
+                var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                    tempfileName,
+                    tempfileURL
+                );
+            }
+
+            // Hash the new password
+            // try {
+            //     var hashedPassword = await bcrypt.hash(user.password, 10);
+            // } catch (error) {
+            //     next(error)
+            // }
+
+            const updatedUser = new User({
+                studentId: user.studentId,
+                username: user.username,
+                cafeStatus: user.cafeStatus,
+                department: user.department,
+                email: user.email,
+                gender: user.gender,
+                // password: hashedPassword,
+                phone: user.phone,
+                userType: user.userType,
+                profilePic: tempsavedProfilePic.fileURL,
+            });
+
+            existingUser.studentId = user.studentId
+            existingUser.username = user.username
+            existingUser.cafeStatus = user.cafeStatus
+            existingUser.department = user.department
+            existingUser.email = user.email
+            existingUser.gender = user.gender
+                // existingUser.password = hashedPassword
+            existingUser.phone = user.phone
+            existingUser.userType = user.userType
+            existingUser.profilePic = tempsavedProfilePic.fileURL
+
+
+            // const savedUser = await updatedUser.save();
+            const savedUser = await existingUser.save();
+
+            if (savedUser) {
+                // move this code to its own file
+                let data = JSON.stringify({
+                    username: savedUser.username,
+                    studentId: savedUser.studentId,
+                    userId: savedUser._id,
+                });
+
+                // Options for QR code generation
+                const options = {
+                    errorCorrectionLevel: "H",
+                    type: "image/png",
+                    quality: 0.92,
+                    margin: 1,
+                    color: {
+                        dark: "#000000",
+                        light: "#FFFFFF",
+                    },
+                };
+
+                var digitalIdImageFileName = `${savedUser._id}.png`;
+                // Generate QR code and save as image
+                QRCode.toFile(
+                    path.join(__dirname, digitalIdImageFileName),
+                    data,
+                    options,
+                    function(err) {
+                        if (err) throw err;
+                        console.log("QR code saved!");
+                    }
+                );
+
+                const tempsavedDigitalId = await cloudinaryFileUpload.setSavedFile(
+                    digitalIdImageFileName,
+                    path.join(__dirname, digitalIdImageFileName)
+                );
+
+                savedUser.digitalId = tempsavedDigitalId.fileURL;
+                const finalSavedUser = await savedUser.save();
+                // console.log('temp path to file: ' + path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName));
+                // console.log('temp path to file: ' + path.join(__dirname, digitalIdImageFileName));
+
+                if (tempsavedProfilePic.fileName != "" && fs.existsSync(path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName))) {
+                    try {
+                        fs.rmSync(
+                            path.join(__dirname, "..", "uploads", tempsavedProfilePic.fileName)
+                        );
+                    } catch (error) {
+                        console.error("Error removing profile picture:", error);
+                    }
+                }
+                if (digitalIdImageFileName != "" &&
+                    fs.existsSync(path.join(__dirname, digitalIdImageFileName))) {
+                    try {
+                        fs.rmSync(path.join(__dirname, digitalIdImageFileName));
+                    } catch (error) {
+                        console.error("Error removing digital ID:", error);
+                    }
+                }
+
+                res
+                    .status(200)
+                    .json({
+                        message: "User account updated successfully",
+                        finalSavedUser,
+                    });
+            } else {
+                res.status(200).json({ message: "Account update failed" });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+});
+
+router.delete("/user/:id", async(req, res, next) => {
+
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) {
+            return res.status(200).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+});
 
 // Get all users
 router.get("/users/:id", async(req, res, next) => {
     if (req.params.id == "all") {
         try {
-            var allUsers = await User.find()
-
+            var allUsers = await User.find();
         } catch (error) {
-            next(error)
+            next(error);
         }
     } else {
         try {
-            var allUsers = await User.findOne({ _id: req.params.id })
-
+            var allUsers = await User.findOne({ _id: req.params.id });
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
+    if (!allUsers) return res.status(200).json({ message: "No users found" });
 
-    if (!allUsers) return res.status(200).json({ "message": "No users found" })
-
-
-    res.status(200).json({ "message": "Users found", allUsers })
-})
+    res.status(200).json({ message: "Users found", allUsers });
+});
 
 // Get Digital ID
 router.post("/digitalid", async(req, res, next) => {
     try {
-        var user = await User.findOne({ studentId: req.body.userId }).select("-password")
-
+        var user = await User.findOne({ studentId: req.body.userId }).select(
+            "-password"
+        );
     } catch (error) {
-        next(error)
+        next(error);
     }
 
-    if (!user) return res.status(200).json({ "message": "No users found" })
+    if (!user) return res.status(200).json({ message: "No users found" });
 
-    var digitalId = user.digitalId
-        // var { password, ...otherUserInfo } = user
-    res.status(200).json({ "message": "User found", digitalId, user })
-})
+    var digitalId = user.digitalId;
+    // var { password, ...otherUserInfo } = user
+    res.status(200).json({ message: "User found", digitalId, user });
+});
 
 // Add a guest
 router.post("/guest", async(req, res, next) => {
-    if (!req.body.username || !req.body.phone) return res.status(200).json({ message: "Please fill the required inputs" })
+    if (!req.body.username || !req.body.phone)
+        return res.status(200).json({ message: "Please fill the required inputs" });
     try {
         const newUser = new User({
             username: req.body.username,
             phone: req.body.phone,
             gender: req.body.gender,
-            userType: "guest"
-        })
+            userType: "guest",
+        });
 
         await newUser.save();
 
         console.log("New user saved as a guest");
 
-        res.status(200).json({ message: "New user saved successfully" })
+        res.status(200).json({ message: "New user saved successfully" });
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 // Student Login
 router.post("/studentlogin", async(req, res, next) => {
-
     if (!req.body.id || !req.body.password) {
         res.status(400).json("Please fill the required inputs!");
     } else {
@@ -291,7 +466,6 @@ router.post("/studentlogin", async(req, res, next) => {
                 }
             );
 
-
             var timeElapsed = Date.now();
             var today = new Date(timeElapsed);
 
@@ -299,10 +473,10 @@ router.post("/studentlogin", async(req, res, next) => {
                 userId: user._id,
                 title: "Login",
                 description: `The person is loggin in at ${today.toLocaleString()}`,
-                category: 'other'
-            })
+                category: "other",
+            });
 
-            await newActivity.save()
+            await newActivity.save();
             console.log(`A person called  ${user.username} has logged in `);
             console.log("New activity added.");
 
@@ -312,7 +486,6 @@ router.post("/studentlogin", async(req, res, next) => {
         }
     }
 });
-
 
 // Login
 router.post("/login", async(req, res, next) => {
@@ -337,7 +510,7 @@ router.post("/login", async(req, res, next) => {
 
             const accessToken = jwt.sign({
                     _id: user._id,
-                    studentId: user.studentId || '',
+                    studentId: user.studentId || "",
                     username: user.username,
                     email: user.email,
                     phone: user.phone,
@@ -362,10 +535,10 @@ router.post("/login", async(req, res, next) => {
                 userId: user._id,
                 title: "Login",
                 description: `The person is loggin in at ${today.toLocaleString()}`,
-                category: 'other'
-            })
+                category: "other",
+            });
 
-            await newActivity.save()
+            await newActivity.save();
             console.log(`A person called  ${user.username} has logged in `);
             console.log("New activity added.");
             res.status(200).json({ message: "Log In Successful!", accessToken });
@@ -378,15 +551,25 @@ router.post("/login", async(req, res, next) => {
 // Update
 // router.put("/updateprofile", verifyToken, async(req, res, next) => {
 //     try {
+//         // Hash the new password
+//         // try {
+//         //     var hashedPassword = await bcrypt.hash(req.body.password, 10);
+//         // } catch (error) {
+//         //     next(error)
+//         // }
 //         const user = await User.findByIdAndUpdate(req.body._id, {
-//             username: req.body.username,
 //             email: req.body.email,
 //             phone: req.body.phone,
 //             userType: req.body.userType,
-//             clubs: req.body.clubs,
-//             profilePic: req.body.profilePic,
+//             // password: req.body.hashedPassword,
+//             gender: req.body.gender,
 //         });
-
+//         if (!user) {
+//             res.status(201).json({
+//                 message: "No Match Found!",
+//                 accessToken,
+//             });
+//         }
 //         const accessToken = jwt.sign({
 //                 id: user._id,
 //                 username: user.username,
@@ -418,10 +601,11 @@ router.post("/forgot-password", async(req, res, next) => {
 
         const createdPasswordResetOTP = await sendPasswordResetOTP(email, res);
 
-        console.log(`Password reset request sent for a user with the following email: ${email}`);
+        console.log(
+            `Password reset request sent for a user with the following email: ${email}`
+        );
 
-
-        res.status(200).json({ "message": "OTP sent" });
+        res.status(200).json({ message: "OTP sent" });
     } catch (error) {
         next(error);
     }
@@ -462,8 +646,9 @@ const sendOTP = async(otpDetails) => {
         await transporter.sendMail(mailOptions);
         await User.findOneAndUpdate({ email: otpDetails.email }, { generatedOTP: otpDetails.generatedOTP });
 
-        console.log(`OTP for resetting password has been sent to the following email: ${mailOptions.to}`);
-
+        console.log(
+            `OTP for resetting password has been sent to the following email: ${mailOptions.to}`
+        );
     } catch (error) {
         console.error("Error sending OTP:", error);
         throw error;
@@ -504,11 +689,13 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
             userId: existingUser._id,
             title: "Password Change",
             description: `The person is has changed their password at ${today.toLocaleString()}`,
-            category: 'other'
-        })
+            category: "other",
+        });
 
-        await newActivity.save()
-        console.log(`A person called  ${existingUser.username} has changed their password. `);
+        await newActivity.save();
+        console.log(
+            `A person called  ${existingUser.username} has changed their password. `
+        );
         console.log("New activity added.");
 
         res.json({ message: "Password reset successfully" });
@@ -517,39 +704,5 @@ router.post("/reset-password", verifyOTP, async(req, res, next) => {
     }
 });
 
-// router.get(
-//     "/organizers",
-//     verifyTokenAndAuthorization,
-//     async(req, res, next) => {
-//         const organizers = await User.find();
-
-//         const updatedOrganizers = [];
-
-//         for (const organizer of organizers) {
-//             let theirClub = await Club.findById(organizer.clubs[0]);
-//             if (theirClub) {
-//                 console.log(theirClub.name);
-//                 const updatedOrganizer = {...organizer._doc, club: theirClub.name }; // Create a *new* object
-//                 updatedOrganizers.push(updatedOrganizer);
-//             } else {
-//                 updatedOrganizers.push(organizer); // Keep the original if no club is found
-//             }
-//         }
-
-//         res.status(200).json(updatedOrganizers);
-//     }
-// );
-
-// router.delete(
-//     "/organizers/:organizerId",
-//     verifyTokenAndAuthorization,
-//     async(req, res, next) => {
-//         const organizers = await User.deleteOne({
-//             _id: req.params.organizerId,
-//         });
-
-//         res.status(200).json({ message: "Account Deleted Successfully!" });
-//     }
-// );
 
 module.exports = router;

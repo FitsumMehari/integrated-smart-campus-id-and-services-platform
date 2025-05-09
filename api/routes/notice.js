@@ -30,7 +30,6 @@ router.get("/:category", async(req, res, next) => {
 
 router.post("/", async(req, res, next) => {
     if (!req.body.title ||
-        !req.body.owner ||
         !req.body.description ||
         !req.body.category
     ) {
@@ -40,7 +39,6 @@ router.post("/", async(req, res, next) => {
         var newNotice = new Notice({
             category: req.body.category,
             description: req.body.description,
-            owner: req.body.owner,
             title: req.body.title,
         })
 
@@ -48,11 +46,35 @@ router.post("/", async(req, res, next) => {
 
         console.log("New notices has been added.");
 
-        res.status(200).json({ "message": "Notice saved successfully" })
+        res.status(200).json({
+            "message": "Notice saved successfully",
+            newNotice
+
+        })
 
     } catch (error) {
         next(error)
     }
 })
+router.put("/", async(req, res, next) => {
+    try {
+        const updatedNotice = await Notice.findByIdAndUpdate(
+            req.body.id, {
+                $set: req.body,
+            }, { new: true }
+        );
+        res.status(200).json({ message: "Notice updated successfully", updatedNotice });
+    } catch (error) {
+        next(error);
+    }
+});
+router.delete("/:id", async(req, res, next) => {
+    try {
+        await Notice.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Notice deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;

@@ -16,6 +16,18 @@ import { CafeAdminsListComponent } from './pages/cafe-admins-list/cafe-admins-li
 import { CreatenewpasswordComponent } from './pages/createnewpassword/createnewpassword.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { OTPVerificationComponent } from './pages/otpverification/otpverification.component';
+import { GateAdminsListComponent } from './pages/gate-admins-list/gate-admins-list.component';
+import { GateNoticesListComponent } from './pages/gate-notices-list/gate-notices-list.component';
+import { GateMessagesListComponent } from './pages/gate-messages-list/gate-messages-list.component';
+import { SchoolComponent } from './pages/school/school.component';
+import { SchoolAdminsListComponent } from './pages/school-admins-list/school-admins-list.component';
+import { SchoolNoticesListComponent } from './pages/school-notices-list/school-notices-list.component';
+import { SchoolMessagesListComponent } from './pages/school-messages-list/school-messages-list.component';
+import { SchoolStudentsListComponent } from './pages/school-students-list/school-students-list.component';
+import { RegistrarStudentsListComponent } from './pages/registrar-students-list/registrar-students-list.component';
+import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/registrar-admins-list.component';
+import { RegistrarNoticesListComponent } from './pages/registrar-notices-list/registrar-notices-list.component';
+import { RegistrarMessagesListComponent } from './pages/registrar-messages-list/registrar-messages-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
@@ -52,10 +64,31 @@ const routes: Routes = [
         ],
       },
 
-      { path: 'gate', component: GateComponent },
+      { path: 'gate', component: GateComponent, children: [
+        // { path: 'students', component: CafeStudentsListComponent },
+        { path: 'admins', component: GateAdminsListComponent },
+        { path: 'notices', component: GateNoticesListComponent },
+        { path: 'messages', component: GateMessagesListComponent },
+        { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+      ], },
+      { path: 'school', component: SchoolComponent, children: [
+        { path: 'students', component: SchoolStudentsListComponent },
+        { path: 'admins', component: SchoolAdminsListComponent },
+        { path: 'notices', component: SchoolNoticesListComponent },
+        { path: 'messages', component: SchoolMessagesListComponent },
+        { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+      ], },
       {
         path: 'registrar',
         component: RegistrarComponent,
+        children: [
+          { path: 'students', component: RegistrarStudentsListComponent },
+          { path: 'admins', component: RegistrarAdminsListComponent },
+          { path: 'notices', component: RegistrarNoticesListComponent },
+          { path: 'messages', component: RegistrarMessagesListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+        ],
+
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: '**', component: NotFoundComponent },

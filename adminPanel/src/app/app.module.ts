@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BaseChartDirective } from 'ng2-charts';
+import { FileUploadModule } from 'ng2-file-upload';
+
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'i18n/', '.json');
@@ -32,6 +35,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator'; // Import MatPaginatorModule
+import {  MatSnackBarModule } from '@angular/material/snack-bar'; // Import MatSnackBarModule
 
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +54,18 @@ import { CafeAdminsListComponent } from './pages/cafe-admins-list/cafe-admins-li
 import { CreatenewpasswordComponent } from './pages/createnewpassword/createnewpassword.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { OTPVerificationComponent } from './pages/otpverification/otpverification.component';
+import { GateAdminsListComponent } from './pages/gate-admins-list/gate-admins-list.component';
+import { GateNoticesListComponent } from './pages/gate-notices-list/gate-notices-list.component';
+import { GateMessagesListComponent } from './pages/gate-messages-list/gate-messages-list.component';
+import { SchoolMessagesListComponent } from './pages/school-messages-list/school-messages-list.component';
+import { SchoolNoticesListComponent } from './pages/school-notices-list/school-notices-list.component';
+import { SchoolAdminsListComponent } from './pages/school-admins-list/school-admins-list.component';
+import { SchoolStudentsListComponent } from './pages/school-students-list/school-students-list.component';
+import { SchoolComponent } from './pages/school/school.component';
+import { RegistrarMessagesListComponent } from './pages/registrar-messages-list/registrar-messages-list.component';
+import { RegistrarStudentsListComponent } from './pages/registrar-students-list/registrar-students-list.component';
+import { RegistrarNoticesListComponent } from './pages/registrar-notices-list/registrar-notices-list.component';
+import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/registrar-admins-list.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +85,18 @@ import { OTPVerificationComponent } from './pages/otpverification/otpverificatio
     CreatenewpasswordComponent,
     ForgotpasswordComponent,
     OTPVerificationComponent,
+    GateAdminsListComponent,
+    GateNoticesListComponent,
+    GateMessagesListComponent,
+    SchoolMessagesListComponent,
+    SchoolNoticesListComponent,
+    SchoolAdminsListComponent,
+    SchoolStudentsListComponent,
+    SchoolComponent,
+    RegistrarMessagesListComponent,
+    RegistrarStudentsListComponent,
+    RegistrarNoticesListComponent,
+    RegistrarAdminsListComponent,
   ],
   imports: [
     BrowserModule,
@@ -101,7 +129,9 @@ import { OTPVerificationComponent } from './pages/otpverification/otpverificatio
     MatButtonModule,
     MatTableModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    FileUploadModule
   ],
   providers: [
     provideAnimationsAsync(),

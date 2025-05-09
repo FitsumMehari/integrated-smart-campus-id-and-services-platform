@@ -19,9 +19,9 @@
             <span>Admin Panel</span>
             <span class="spacer"></span>
 
-            <button mat-icon-button (click)="toggleDarkMode()">
+            <!-- <button mat-icon-button (click)="toggleDarkMode()">
         <mat-icon>{{ isDarkMode ? "light_mode" : "dark_mode" }}</mat-icon>
-      </button>
+      </button> -->
 
             <button mat-button [matMenuTriggerFor]="languageMenu">
         {{ currentLanguage.toUpperCase() }}
@@ -56,63 +56,108 @@
 <div class="add-admin-card" *ngIf="modalService.showAddAdmin">
     <h2>Add a New Administrator</h2>
     <p class="subtitle">Please fill the form</p>
-    <div class="add-admin-form">
+    <form [formGroup]="addNewAdminFormGroup" class="add-admin-form" (ngSubmit)="addNewAdmin()">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
+            <input matInput type="text" name="username" formControlName="username" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('username')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>User ID</mat-label>
+            <input matInput type="text" name="studentId" formControlName="studentId" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('studentId')?.hasError('required')">
+                User ID is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="email" name="email" formControlName="email" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('email')?.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="addNewAdminFormGroup.get('email')?.hasError('email')">
+                Invalid email address
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="tel" name="phone" formControlName="phone" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('phone')?.hasError('required')">
+                Phone is required
+            </mat-error>
+            <mat-error *ngIf="addNewAdminFormGroup.get('phone')?.hasError('pattern')">
+                Invalid phone number (e.g., 10 digits)
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select name="gender">
+            <mat-select formControlName="gender" required>
                 <mat-option value="male">Male</mat-option>
                 <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
             </mat-select>
+            <mat-error *ngIf="addNewAdminFormGroup.get('gender')?.hasError('required')">
+                Gender is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Admin Type</mat-label>
+            <mat-select formControlName="userType" required>
+                <mat-option value="cafe">Cafe Admin</mat-option>
+                <mat-option value="school">School Admin</mat-option>
+                <mat-option value="gate">Gate Admin</mat-option>
+                <mat-option value="registrar">Registrar Admin</mat-option>
+                <mat-option value="admin">Super Admin</mat-option>
+            </mat-select>
+            <mat-error *ngIf="addNewAdminFormGroup.get('userType')?.hasError('required')">
+                Admin Type is required is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
+            <input matInput type="password" name="password" formControlName="password" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('password')?.hasError('required')">
+                Password is required
+            </mat-error>
+            <mat-error *ngIf="addNewAdminFormGroup.get('password')?.hasError('minlength')">
+                Password must be at least 8 characters long
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
+            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
+            <mat-error *ngIf="addNewAdminFormGroup.get('confirmPassword')?.hasError('required')">
+                Confirm Password is required
+            </mat-error>
+            <mat-error *ngIf="addNewAdminFormGroup.hasError('mismatch')">
+                Passwords do not match
+            </mat-error>
         </mat-form-field>
 
         <div>
             <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
+            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
         </div>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Role</mat-label>
-            <mat-select name="role" class="mat-select-panel">
-                <mat-option value="admin">Admin</mat-option>
-                <mat-option value="manager">Manager</mat-option>
-                <mat-option value="staff">Staff</mat-option>
-            </mat-select>
-        </mat-form-field>
-
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Add Admin</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="addNewAdminFormGroup.invalid">
+        Add Admin
+      </button>
             <button mat-button type="button" (click)="modalService.closeAdmin()">
         Cancel
       </button>
         </div>
-    </div>
+    </form>
 </div>
+
 
 <!-- end of add admin -->
 
@@ -121,49 +166,98 @@
 <div class="add-student-card" *ngIf="modalService.showAddStudent">
     <h2>Add a New Student</h2>
     <p class="subtitle">Please fill the form</p>
-    <div class="add-student-form">
+    <form [formGroup]="addNewStudentFormGroup" class="add-student-form" (ngSubmit)="addNewStudent()">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
+            <input matInput type="text" name="username" formControlName="username" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('username')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Student ID</mat-label>
+            <input matInput type="text" name="studentId" formControlName="studentId" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('studentId')?.hasError('required')">
+                Student ID is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="email" name="email" formControlName="email" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('email')?.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="addNewStudentFormGroup.get('email')?.hasError('email')">
+                Invalid email address
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="tel" name="phone" formControlName="phone" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('phone')?.hasError('required')">
+                Phone is required
+            </mat-error>
+            <mat-error *ngIf="addNewStudentFormGroup.get('phone')?.hasError('pattern')">
+                Invalid phone number (e.g., 10 digits)
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select name="gender">
+            <mat-select formControlName="gender" required>
                 <mat-option value="male">Male</mat-option>
                 <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
             </mat-select>
+            <mat-error *ngIf="addNewStudentFormGroup.get('gender')?.hasError('required')">
+                Gender is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Cafe Status</mat-label>
+            <mat-select formControlName="cafeStatus" required>
+                <mat-option value="cafe">Cafe</mat-option>
+                <mat-option value="nonCafe">Non Cafe</mat-option>
+                <mat-option value="selfSponsored">Self Sponsored</mat-option>
+            </mat-select>
+            <mat-error *ngIf="addNewStudentFormGroup.get('cafeStatus')?.hasError('required')">
+                Cafe Status is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
+            <input matInput type="password" name="password" formControlName="password" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('password')?.hasError('required')">
+                Password is required
+            </mat-error>
+            <mat-error *ngIf="addNewStudentFormGroup.get('password')?.hasError('minlength')">
+                Password must be at least 8 characters long
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
+            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
+            <mat-error *ngIf="addNewStudentFormGroup.get('confirmPassword')?.hasError('required')">
+                Confirm Password is required
+            </mat-error>
+            <mat-error *ngIf="addNewStudentFormGroup.hasError('mismatch')">
+                Passwords do not match
+            </mat-error>
         </mat-form-field>
 
         <div>
             <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
+            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
         </div>
 
         <mat-form-field appearance="outline">
             <mat-label>Department</mat-label>
-            <mat-select name="deparment" class="mat-select-panel">
+            <mat-select formControlName="department" required>
                 <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
                 <mat-option value="mechanical">Mechanical Engineering</mat-option>
                 <mat-option value="industrial">Industrial Engineering</mat-option>
@@ -171,16 +265,22 @@
                 <mat-option value="civil">Civil Engineering</mat-option>
                 <mat-option value="urban">Urban Planning</mat-option>
             </mat-select>
+            <mat-error *ngIf="addNewStudentFormGroup.get('department')?.hasError('required')">
+                Department is required
+            </mat-error>
         </mat-form-field>
 
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Add Student</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="addNewStudentFormGroup.invalid">
+        Add Student
+      </button>
             <button mat-button type="button" (click)="modalService.closeAddStudent()">
         Cancel
       </button>
         </div>
-    </div>
+    </form>
 </div>
+
 <!-- end of add student -->
 
 <!-- edit student -->
@@ -188,49 +288,98 @@
 <div class="edit-student-card" *ngIf="modalService.showEditStudent">
     <h2>Update Student Profile</h2>
     <p class="subtitle">Please fill the form</p>
-    <div class="edit-student-form">
+    <form [formGroup]="editStudentFormGroup" class="edit-student-form" (ngSubmit)="editStudent()">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
+            <input matInput type="text" name="username" formControlName="username" required />
+            <mat-error *ngIf="editStudentFormGroup.get('username')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Student ID</mat-label>
+            <input matInput type="text" name="studentId" formControlName="studentId" required />
+            <mat-error *ngIf="editStudentFormGroup.get('studentId')?.hasError('required')">
+                Student ID is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="email" name="email" formControlName="email" required />
+            <mat-error *ngIf="editStudentFormGroup.get('email')?.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="editStudentFormGroup.get('email')?.hasError('email')">
+                Invalid email address
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="tel" name="phone" formControlName="phone" required />
+            <mat-error *ngIf="editStudentFormGroup.get('phone')?.hasError('required')">
+                Phone is required
+            </mat-error>
+            <mat-error *ngIf="editStudentFormGroup.get('phone')?.hasError('pattern')">
+                Invalid phone number (e.g., 10 digits)
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select name="gender">
+            <mat-select formControlName="gender" required>
                 <mat-option value="male">Male</mat-option>
                 <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
             </mat-select>
+            <mat-error *ngIf="editStudentFormGroup.get('gender')?.hasError('required')">
+                Gender is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+            <mat-label>Cafe Status</mat-label>
+            <mat-select formControlName="cafeStatus" required>
+                <mat-option value="cafe">Cafe</mat-option>
+                <mat-option value="nonCafe">Non Cafe</mat-option>
+                <mat-option value="selfSponsored">Self Sponsored</mat-option>
+            </mat-select>
+            <mat-error *ngIf="editStudentFormGroup.get('cafeStatus')?.hasError('required')">
+                Cafe Status is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
-        </mat-form-field>
+            <input matInput type="password" name="password" formControlName="password" required />
+            <mat-error *ngIf="editStudentFormGroup.get('password')?.hasError('required')">
+                Password is required
+            </mat-error>
+            <mat-error *ngIf="editStudentFormGroup.get('password')?.hasError('minlength')">
+                Password must be at least 8 characters long
+            </mat-error>
+        </mat-form-field> -->
 
-        <mat-form-field appearance="outline">
+        <!-- <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
-        </mat-form-field>
+            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
+            <mat-error *ngIf="editStudentFormGroup.get('confirmPassword')?.hasError('required')">
+                Confirm Password is required
+            </mat-error>
+            <mat-error *ngIf="editStudentFormGroup.hasError('mismatch')">
+                Passwords do not match
+            </mat-error>
+        </mat-form-field> -->
 
         <div>
             <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
+            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
         </div>
 
         <mat-form-field appearance="outline">
             <mat-label>Department</mat-label>
-            <mat-select name="deparment" class="mat-select-panel">
+            <mat-select formControlName="department" required>
                 <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
                 <mat-option value="mechanical">Mechanical Engineering</mat-option>
                 <mat-option value="industrial">Industrial Engineering</mat-option>
@@ -238,15 +387,20 @@
                 <mat-option value="civil">Civil Engineering</mat-option>
                 <mat-option value="urban">Urban Planning</mat-option>
             </mat-select>
+            <mat-error *ngIf="editStudentFormGroup.get('department')?.hasError('required')">
+                Department is required
+            </mat-error>
         </mat-form-field>
 
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="editStudentFormGroup.invalid">
+    Update Student
+  </button>
             <button mat-button type="button" (click)="modalService.closeEditStudent()">
-        Cancel
-      </button>
+    Cancel
+  </button>
         </div>
-    </div>
+    </form>
 </div>
 <!-- end of edit student -->
 
@@ -256,62 +410,120 @@
 <div class="edit-profile-card" *ngIf="modalService.showEditProfile">
     <h2>Profile</h2>
     <p class="subtitle">Edit your profile here</p>
-    <div class="edit-profile-form">
+    <form [formGroup]="editAdminFormGroup" class="edit-profile-form" (ngSubmit)="editAdmin()">
         <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
+            <input matInput type="text" name="username" formControlName="username" required />
+            <mat-error *ngIf="editAdminFormGroup.get('username')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>User ID</mat-label>
+            <input matInput type="text" name="studentId" formControlName="studentId" required />
+            <mat-error *ngIf="editAdminFormGroup.get('studentId')?.hasError('required')">
+                User ID is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="email" name="email" formControlName="email" required />
+            <mat-error *ngIf="editAdminFormGroup.get('email')?.hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="editAdminFormGroup.get('email')?.hasError('email')">
+                Invalid email address
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="tel" name="phone" formControlName="phone" required />
+            <mat-error *ngIf="editAdminFormGroup.get('phone')?.hasError('required')">
+                Phone is required
+            </mat-error>
+            <mat-error *ngIf="editAdminFormGroup.get('phone')?.hasError('pattern')">
+                Invalid phone number (e.g., 10 digits)
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select name="gender">
+            <mat-select formControlName="gender" required>
                 <mat-option value="male">Male</mat-option>
                 <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
             </mat-select>
+            <mat-error *ngIf="editAdminFormGroup.get('gender')?.hasError('required')">
+                Gender is required
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
+            <mat-label>Admin Type</mat-label>
+            <mat-select formControlName="userType" required>
+                <mat-option value="cafe">Cafe Admin</mat-option>
+                <mat-option value="school">School Admin</mat-option>
+                <mat-option value="gate">Gate Admin</mat-option>
+                <mat-option value="registrar">Registrar Admin</mat-option>
+                <mat-option value="admin">Super Admin</mat-option>
+            </mat-select>
+            <mat-error *ngIf="editAdminFormGroup.get('userType')?.hasError('required')">
+                Admin Type is required is required
+            </mat-error>
         </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
-        </mat-form-field>
-
-        <div>
-            <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
-        </div>
 
         <!-- <mat-form-field appearance="outline">
-                <mat-label>Role</mat-label>
-                <mat-select name="role" class="mat-select-panel">
-                    <mat-option value="admin">Admin</mat-option>
-                    <mat-option value="manager">Manager</mat-option>
-                    <mat-option value="staff">Staff</mat-option>
-                </mat-select>
-            </mat-form-field> -->
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" formControlName="password" required />
+            <mat-error *ngIf="editAdminFormGroup.get('password')?.hasError('required')">
+                Password is required
+            </mat-error>
+            <mat-error *ngIf="editAdminFormGroup.get('password')?.hasError('minlength')">
+                Password must be at least 8 characters long
+            </mat-error>
+        </mat-form-field> -->
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
+            <mat-error *ngIf="editAdminFormGroup.get('confirmPassword')?.hasError('required')">
+                Confirm Password is required
+            </mat-error>
+            <mat-error *ngIf="editAdminFormGroup.hasError('mismatch')">
+                Passwords do not match
+            </mat-error>
+        </mat-form-field> -->
+
+        <!-- <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
+        </div> -->
+        <div>
+            <label for="profilePic">Profile Picture:</label>
+            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
+
+            <div *ngIf="profilePicUrl" style="margin-top: 10px;">
+                <img [src]="profilePicUrl" alt="Current Profile Picture Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; object-fit: cover;">
+            </div>
+            <div *ngIf="!profilePicUrl && (addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
+                No new profile picture selected.
+            </div>
+            <div *ngIf="!profilePicUrl && !(addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
+                No profile picture selected.
+            </div>
+        </div>
 
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Update</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="editAdminFormGroup.invalid">
+    Update Profile
+  </button>
             <button mat-button type="button" (click)="modalService.closeEditProfile()">
-          Cancel
-        </button>
+    Cancel
+  </button>
         </div>
-    </div>
+    </form>
 </div>
 
 <!-- end of edit profile -->
@@ -321,20 +533,20 @@
 <div class="add-notice-card" *ngIf="modalService.showAddNotice">
     <h2>Add a New Notice</h2>
     <p class="subtitle">Please fill the form</p>
-    <div class="add-notice-form">
-        <mat-form-field appearance="outline">
+    <form [formGroup]="addNewNoticeFormGroup" class="add-notice-form" (ngSubmit)="addNewNotice()">
+        <!-- <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput type="text" name="name" />
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="text" name="title" formControlName="title" required/>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
 
         <!-- <mat-form-field appearance="outline">
@@ -362,11 +574,12 @@
         </div> -->
 
         <mat-form-field appearance="outline">
-            <mat-label>Role</mat-label>
-            <mat-select name="role" class="mat-select-panel">
-                <mat-option value="admin">Admin</mat-option>
-                <mat-option value="manager">Manager</mat-option>
-                <mat-option value="staff">Staff</mat-option>
+            <mat-label>Category</mat-label>
+            <mat-select name="category" class="mat-select-panel" formControlName="category" required>
+                <mat-option value="cafe">Cafe</mat-option>
+                <mat-option value="gate">Gate</mat-option>
+                <mat-option value="school">School</mat-option>
+                <mat-option value="registrar">Registrar</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -376,7 +589,7 @@
         Cancel
       </button>
         </div>
-    </div>
+    </form>
 </div>
 
 <!-- end of add notice -->
@@ -386,20 +599,20 @@
 <div class="edit-notice-card" *ngIf="modalService.showEditNotice">
     <h2>Update Notice</h2>
     <p class="subtitle">Please fill the form</p>
-    <div class="edit-notice-form">
-        <mat-form-field appearance="outline">
+    <form [formGroup]="editNoticeFormGroup" class="edit-notice-form" (ngSubmit)="editNotice()">
+        <!-- <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput type="text" name="name" />
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="email" name="email" />
+            <input matInput type="text" name="title" formControlName="title" required/>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
-            <input matInput type="tel" name="phone" />
+            <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
 
         <!-- <mat-form-field appearance="outline">
@@ -427,11 +640,12 @@
         </div> -->
 
         <mat-form-field appearance="outline">
-            <mat-label>Role</mat-label>
-            <mat-select name="role" class="mat-select-panel">
-                <mat-option value="admin">Admin</mat-option>
-                <mat-option value="manager">Manager</mat-option>
-                <mat-option value="staff">Staff</mat-option>
+            <mat-label>Category</mat-label>
+            <mat-select name="category" class="mat-select-panel" formControlName="category" required>
+                <mat-option value="cafe">Cafe</mat-option>
+                <mat-option value="gate">Gate</mat-option>
+                <mat-option value="school">School</mat-option>
+                <mat-option value="registrar">Registrar</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -441,7 +655,7 @@
         Cancel
       </button>
         </div>
-    </div>
+    </form>
 </div>
 
 <!-- end of edit notice -->

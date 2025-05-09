@@ -9,10 +9,10 @@ const NoticeSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    owner: {
-        type: String,
-        required: false,
-    },
+    // owner: {
+    //     type: String,
+    //     required: false,
+    // },
     category: {
         type: String,
         enum: ["cafe", "gate", "school"],
