@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-// app.use(express.static("browser"));
+app.use(express.static("browser"));
 
 app.use(cors()); // Use the cors middleware with your options
 
