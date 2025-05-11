@@ -4,6 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DashboardService } from '../../services/dashboard.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 interface DashboardCard {
   title: string;
@@ -18,13 +19,9 @@ interface DashboardCard {
   styleUrl: './gate.component.css',
 })
 export class GateComponent implements OnInit, OnDestroy {
-  cards: DashboardCard[] = [
-    { title: 'Admins', icon: 'supervisor_account', count: 0, route: 'admins' },
-    // { title: 'Students', icon: 'school', count: 0, route: 'students' },
-    { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
-    { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
-  ];
+  cards: DashboardCard[] = [];
 
+  account: any = {};
   admins: any[] = []; // Changed to arrays
   allUsers: any[] = []; // Changed to array
   allNotices: any[] = [];
@@ -40,7 +37,8 @@ export class GateComponent implements OnInit, OnDestroy {
     private router: Router,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private authService: AuthService
   ) {
     // Register custom icons if needed
     this.matIconRegistry.addSvgIcon(
@@ -52,9 +50,30 @@ export class GateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setAccount();
     // In a real application, you would fetch these counts from your backend API
+    if (this.account.userType === 'gate') {
+      this.cards = [
+        { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
+        { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
+      ];
+    } else {
+      this.cards = [
+        {
+          title: 'Admins',
+          icon: 'supervisor_account',
+          count: 0,
+          route: 'admins',
+        },
+        { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
+        { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
+      ];
+    }
     this.initDashboardCards();
     this.fetchData();
+  }
+  setAccount() {
+    this.account = this.authService.getLoggedInUserDetails();
   }
 
   initDashboardCards(): void {
@@ -73,7 +92,6 @@ export class GateComponent implements OnInit, OnDestroy {
       this.allUsers = next.allUsers; // Corrected: Assign the new array
       this.admins = []; // Clear existing data
 
-
       if (this.allUsers) {
         //check if it is not null or undefined
         this.allUsers.forEach((user: any) => {
@@ -82,7 +100,9 @@ export class GateComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.cards[0].count = this.admins.length;
+      if (this.account.userType !== 'gate') {
+        this.cards[0].count = this.admins.length;
+      }
     });
 
     this.noticesSubscription = this.dashboardService._notices.subscribe(
@@ -98,7 +118,11 @@ export class GateComponent implements OnInit, OnDestroy {
             }
           });
         }
-        this.cards[1].count = this.notices.length;
+        if (this.account.userType !== 'gate') {
+          this.cards[1].count = this.notices.length;
+        } else {
+          this.cards[0].count = this.notices.length;
+        }
       }
     );
 
@@ -114,8 +138,11 @@ export class GateComponent implements OnInit, OnDestroy {
             }
           });
         }
-        this.cards[2].count = this.messages.length;
-      }
+        if (this.account.userType !== 'gate') {
+          this.cards[2].count = this.messages.length;
+        } else {
+          this.cards[1].count = this.messages.length;
+        }      }
     );
   }
 

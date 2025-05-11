@@ -70,6 +70,8 @@ import { RegistrarStudentsListComponent } from './pages/registrar-students-list/
 import { RegistrarNoticesListComponent } from './pages/registrar-notices-list/registrar-notices-list.component';
 import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/registrar-admins-list.component';
 import { ConfirmationDialogComponent } from './pages/confirmation-dialog/confirmation-dialog.component';
+import { CafeScanComponent } from './pages/cafe-scan/cafe-scan.component';
+import { GateScanComponent } from './pages/gate-scan/gate-scan.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { ConfirmationDialogComponent } from './pages/confirmation-dialog/confirm
     RegistrarNoticesListComponent,
     RegistrarAdminsListComponent,
     ConfirmationDialogComponent,
+    CafeScanComponent,
+    GateScanComponent,
   ],
   imports: [
     BrowserModule,

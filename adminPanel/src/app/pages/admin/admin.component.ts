@@ -104,13 +104,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   // editProfileFormGroup: FormGroup;
   account: any = {};
 
-  sideNavItems: SideNavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
-    { label: 'Cafe', icon: 'restaurant', route: '/admin/cafe' },
-    { label: 'Gate', icon: 'meeting_room', route: '/admin/gate' },
-    { label: 'School', icon: 'school', route: '/admin/school' },
-    { label: 'Registrar', icon: 'how_to_reg', route: '/admin/registrar' },
-  ];
+  sideNavItems: any[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -163,30 +157,26 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       category: ['', [Validators.required]],
     });
 
-    this.editStudentFormGroup = this.fb.group(
-      {
-        username: ['', Validators.required],
-        studentId: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
-        gender: ['', Validators.required],
-        cafeStatus: ['', Validators.required],
-        department: ['', Validators.required],
-        profilePic: [''], // Add a form control for the profile picture
-      },
-    );
+    this.editStudentFormGroup = this.fb.group({
+      username: ['', Validators.required],
+      studentId: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
+      gender: ['', Validators.required],
+      cafeStatus: ['', Validators.required],
+      department: ['', Validators.required],
+      profilePic: [''], // Add a form control for the profile picture
+    });
 
-    this.editAdminFormGroup = this.fb.group(
-      {
-        username: ['', Validators.required],
-        studentId: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
-        gender: ['', Validators.required],
-        userType: ['', Validators.required],
-        profilePic: [''], // Add a form control for the profile picture
-      },
-    );
+    this.editAdminFormGroup = this.fb.group({
+      username: ['', Validators.required],
+      studentId: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
+      gender: ['', Validators.required],
+      userType: ['', Validators.required],
+      profilePic: [''], // Add a form control for the profile picture
+    });
 
     this.editNoticeFormGroup = this.fb.group({
       // Initialize edit form
@@ -200,6 +190,48 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setAccount();
     this.currentLanguage = localStorage.getItem('currentLanguage') || 'en';
     this.translateService.use(this.currentLanguage);
+    switch (this.account.userType) {
+      case 'admin':
+        this.sideNavItems = [
+          { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
+          { label: 'Cafe', icon: 'restaurant', route: '/admin/cafe' },
+          { label: 'Gate', icon: 'meeting_room', route: '/admin/gate' },
+          { label: 'School', icon: 'school', route: '/admin/school' },
+          { label: 'Registrar', icon: 'how_to_reg', route: '/admin/registrar' },
+        ];
+        break;
+      case 'cafe':
+        this.sideNavItems = [
+          { label: 'Scan QR Code', icon: 'meeting_room', route: '/admin/cafescan' },
+          { label: 'Cafe', icon: 'restaurant', route: '/admin/cafe' },
+        ];
+        break;
+      case 'gate':
+        this.sideNavItems = [
+          { label: 'Scan QR Code', icon: 'restaurant', route: '/admin/gatescan' },
+          { label: 'Gate', icon: 'meeting_room', route: '/admin/gate' },
+        ];
+        break;
+      case 'school':
+        this.sideNavItems = [
+          { label: 'School', icon: 'school', route: '/admin/school' },
+        ];
+        break;
+      case 'registrar':
+        this.sideNavItems = [
+          { label: 'Registrar', icon: 'how_to_reg', route: '/admin/registrar' },
+        ];
+        break;
+      default:
+        this.sideNavItems = [
+          { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
+          { label: 'Cafe', icon: 'restaurant', route: '/admin/cafe' },
+          { label: 'Gate', icon: 'meeting_room', route: '/admin/gate' },
+          { label: 'School', icon: 'school', route: '/admin/school' },
+          { label: 'Registrar', icon: 'how_to_reg', route: '/admin/registrar' },
+        ];
+        break;
+    }
     // this.initializeProfileForm()
     this.openEditNoticeSubscription = this.openEditNoticeSubscriptionMethod();
     this.openEditAdminSubscription = this.openEditAdminSubsciptionMethod();
@@ -521,7 +553,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.dashboardService.updateNotice(updatedNotice);
     this.editNoticeFormGroup.reset();
-
   }
   ngOnDestroy(): any {
     // if (this.selectedAdminSubscription) {

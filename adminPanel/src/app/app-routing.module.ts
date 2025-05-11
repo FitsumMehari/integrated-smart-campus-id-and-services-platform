@@ -28,6 +28,9 @@ import { RegistrarStudentsListComponent } from './pages/registrar-students-list/
 import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/registrar-admins-list.component';
 import { RegistrarNoticesListComponent } from './pages/registrar-notices-list/registrar-notices-list.component';
 import { RegistrarMessagesListComponent } from './pages/registrar-messages-list/registrar-messages-list.component';
+import { CafeScanComponent } from './pages/cafe-scan/cafe-scan.component';
+import { GateScanComponent } from './pages/gate-scan/gate-scan.component';
+import { dashboardGuard } from './guards/dashboard.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
@@ -43,6 +46,7 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [dashboardGuard],
         children: [
           { path: 'students', component: CafeStudentsListComponent },
           { path: 'admins', component: AdminsListComponent },
@@ -54,7 +58,6 @@ const routes: Routes = [
       {
         path: 'cafe',
         component: CafeComponent,
-
         children: [
           { path: 'students', component: CafeStudentsListComponent },
           { path: 'admins', component: CafeAdminsListComponent },
@@ -63,21 +66,27 @@ const routes: Routes = [
           { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
         ],
       },
-
-      { path: 'gate', component: GateComponent, children: [
-        // { path: 'students', component: CafeStudentsListComponent },
-        { path: 'admins', component: GateAdminsListComponent },
-        { path: 'notices', component: GateNoticesListComponent },
-        { path: 'messages', component: GateMessagesListComponent },
-        { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
-      ], },
-      { path: 'school', component: SchoolComponent, children: [
-        { path: 'students', component: SchoolStudentsListComponent },
-        { path: 'admins', component: SchoolAdminsListComponent },
-        { path: 'notices', component: SchoolNoticesListComponent },
-        { path: 'messages', component: SchoolMessagesListComponent },
-        { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
-      ], },
+      {
+        path: 'gate',
+        component: GateComponent,
+        children: [
+          { path: 'admins', component: GateAdminsListComponent },
+          { path: 'notices', component: GateNoticesListComponent },
+          { path: 'messages', component: GateMessagesListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+        ],
+      },
+      {
+        path: 'school',
+        component: SchoolComponent,
+        children: [
+          { path: 'students', component: SchoolStudentsListComponent },
+          { path: 'admins', component: SchoolAdminsListComponent },
+          { path: 'notices', component: SchoolNoticesListComponent },
+          { path: 'messages', component: SchoolMessagesListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+        ],
+      },
       {
         path: 'registrar',
         component: RegistrarComponent,
@@ -88,8 +97,9 @@ const routes: Routes = [
           { path: 'messages', component: RegistrarMessagesListComponent },
           { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
         ],
-
       },
+      { path: 'cafescan', component: CafeScanComponent },
+      { path: 'gatescan', component: GateScanComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: '**', component: NotFoundComponent },
     ],
@@ -98,7 +108,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

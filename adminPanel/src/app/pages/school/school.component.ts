@@ -4,6 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DashboardService } from '../../services/dashboard.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 interface DashboardCard {
   title: string;
@@ -18,30 +19,26 @@ interface DashboardCard {
   styleUrl: './school.component.css',
 })
 export class SchoolComponent implements OnInit, OnDestroy {
-  cards: DashboardCard[] = [
-    { title: 'Admins', icon: 'supervisor_account', count: 0, route: 'admins' },
-    { title: 'Students', icon: 'school', count: 0, route: 'students' },
-    { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
-    { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
-  ];
+  cards: DashboardCard[] = [];
 
+  account: any = {};
   admins: any[] = []; // Changed to arrays
-    students: any[] = []; // Changed to arrays
-    allUsers: any[] = []; // Changed to array
-    allNotices: any[] = [];
-    allMessages: any[] = [];
-    notices: any = [];
-    messages: any = [];
-    private usersSubscription: Subscription | undefined;
-    private noticesSubscription: Subscription | undefined;
-    private messagesSubscription: Subscription | undefined;
+  students: any[] = []; // Changed to arrays
+  allUsers: any[] = []; // Changed to array
+  allNotices: any[] = [];
+  allMessages: any[] = [];
+  notices: any = [];
+  messages: any = [];
+  private usersSubscription: Subscription | undefined;
+  private noticesSubscription: Subscription | undefined;
+  private messagesSubscription: Subscription | undefined;
 
   constructor(
     private router: Router,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-        private dashboardService: DashboardService
-
+    private dashboardService: DashboardService,
+    private authService: AuthService
   ) {
     // Register custom icons if needed
     this.matIconRegistry.addSvgIcon(
@@ -53,9 +50,32 @@ export class SchoolComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setAccount();
+    if (this.account.userType === 'school') {
+      this.cards = [
+        { title: 'Students', icon: 'school', count: 0, route: 'students' },
+        { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
+        { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
+      ];
+    } else {
+      this.cards = [
+        {
+          title: 'Admins',
+          icon: 'supervisor_account',
+          count: 0,
+          route: 'admins',
+        },
+        { title: 'Students', icon: 'school', count: 0, route: 'students' },
+        { title: 'Notices', icon: 'notifications', count: 0, route: 'notices' },
+        { title: 'Messages', icon: 'email', count: 0, route: 'messages' },
+      ];
+    }
     // In a real application, you would fetch these counts from your backend API
     this.initDashboardCards();
     this.fetchData();
+  }
+  setAccount() {
+    this.account = this.authService.getLoggedInUserDetails();
   }
 
   initDashboardCards(): void {
@@ -75,7 +95,6 @@ export class SchoolComponent implements OnInit, OnDestroy {
       this.admins = []; // Clear existing data
       this.students = []; // Clear existing data
 
-
       if (this.allUsers) {
         //check if it is not null or undefined
         this.allUsers.forEach((user: any) => {
@@ -86,8 +105,14 @@ export class SchoolComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.cards[0].count = this.admins.length;
-      this.cards[1].count = this.students.length;
+      if (this.account.userType !== 'cafe') {
+        this.cards[0].count = this.admins.length;
+      }
+      if (this.account.userType !== 'cafe') {
+        this.cards[1].count = this.students.length;
+      } else {
+        this.cards[0].count = this.students.length;
+      }
     });
 
     this.noticesSubscription = this.dashboardService._notices.subscribe(
@@ -102,7 +127,11 @@ export class SchoolComponent implements OnInit, OnDestroy {
             }
           });
         }
-        this.cards[2].count = this.notices.length;
+        if (this.account.userType !== 'school') {
+          this.cards[2].count = this.notices.length;
+        } else {
+          this.cards[1].count = this.notices.length;
+        }
       }
     );
 
@@ -119,8 +148,11 @@ export class SchoolComponent implements OnInit, OnDestroy {
             }
           });
         }
-        this.cards[3].count = this.messages.length;
-      }
+        if (this.account.userType !== 'school') {
+          this.cards[3].count = this.messages.length;
+        } else {
+          this.cards[2].count = this.messages.length;
+        }      }
     );
   }
 
