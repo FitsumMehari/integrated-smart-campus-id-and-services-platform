@@ -227,7 +227,7 @@
             <mat-select formControlName="cafeStatus" required>
                 <mat-option value="cafe">Cafe</mat-option>
                 <mat-option value="nonCafe">Non Cafe</mat-option>
-                <mat-option value="selfSponsored">Self Sponsored</mat-option>
+                <mat-option value="selfsponsored">Self Sponsored</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewStudentFormGroup.get('cafeStatus')?.hasError('required')">
                 Cafe Status is required
@@ -355,7 +355,7 @@
             <mat-select formControlName="cafeStatus" required>
                 <mat-option value="cafe">Cafe</mat-option>
                 <mat-option value="nonCafe">Non Cafe</mat-option>
-                <mat-option value="selfSponsored">Self Sponsored</mat-option>
+                <mat-option value="selfsponsored">Self Sponsored</mat-option>
             </mat-select>
             <mat-error *ngIf="editStudentFormGroup.get('cafeStatus')?.hasError('required')">
                 Cafe Status is required
@@ -387,6 +387,16 @@
         <div>
             <label for="profilePic">Profile Picture:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
+
+            <div *ngIf="profilePicUrl" style="margin-top: 10px;">
+                <img [src]="profilePicUrl" alt="Current Profile Picture Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; object-fit: cover;">
+            </div>
+            <div *ngIf="!profilePicUrl && (addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
+                No new profile picture selected.
+            </div>
+            <div *ngIf="!profilePicUrl && !(addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
+                No profile picture selected.
+            </div>
         </div>
 
         <mat-form-field appearance="outline">
