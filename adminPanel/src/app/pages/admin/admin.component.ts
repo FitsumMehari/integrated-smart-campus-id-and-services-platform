@@ -187,7 +187,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         department: ['', Validators.required],
         profilePic: [''], // Add a form control for the profile picture
       },
-      { validators: this.passwordMatchValidator }
+      // { validators: this.passwordMatchValidator }
     );
 
     this.editAdminFormGroup = this.fb.group(
@@ -203,7 +203,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: ['', Validators.required],
         profilePic: [''], // Add a form control for the profile picture
       },
-      { validators: this.passwordMatchValidator }
+      // { validators: this.passwordMatchValidator }
     ); // Custom validator for password matching
 
     this.editNoticeFormGroup = this.fb.group({
@@ -265,9 +265,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
             email: profile.email,
             phone: profile.phone,
             gender: profile.gender,
-            cafeStatus: profile.cafeStatus,
-            password: profile.password,
-            confirmPassword: profile.confirmPassword,
+            // cafeStatus: profile.cafeStatus,
+            // password: profile.password,
+            // confirmPassword: profile.confirmPassword,
             userType: profile.userType,
             profilePic: profile.profilePic,
           });
@@ -296,9 +296,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
             phone: profile.phone,
             gender: profile.gender,
             cafeStatus: profile.cafeStatus,
-            password: profile.password,
-            confirmPassword: profile.confirmPassword,
-            userType: profile.userType,
+            // password: profile.password,
+            // confirmPassword: profile.confirmPassword,
+            // userType: profile.userType,
             profilePic: profile.profilePic,
             department: profile.department,
           });
