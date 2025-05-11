@@ -49,12 +49,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('editStudentForm') editStudentForm!: NgForm;
   @ViewChild('editAdminForm') editAdminForm!: NgForm;
 
-  private openModalSubscription: Subscription | undefined;
   private openEditNoticeSubscription: Subscription | undefined;
   private openEditStudentSubscription: Subscription | undefined;
   private openEditAdminSubscription: Subscription | undefined;
-
-  // private selectedAdminSubscription: Subscription | undefined;
 
   isDarkMode = false;
   currentLanguage = 'en';
@@ -151,7 +148,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         email: ['', [Validators.required, Validators.email]],
         phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
         gender: ['', Validators.required],
-        // cafeStatus: ['', Validators.required],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', Validators.required],
         userType: ['', Validators.required],
@@ -165,13 +161,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       category: ['', [Validators.required]],
-      // phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
-      // gender: ['', Validators.required],
-      // cafeStatus: ['', Validators.required],
-      // password: ['', [Validators.required, Validators.minLength(8)]],
-      // confirmPassword: ['', Validators.required],
-      // userType: ['', Validators.required],
-      // profilePic: [''], // Add a form control for the profile picture
     });
 
     this.editStudentFormGroup = this.fb.group(
@@ -182,12 +171,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
         gender: ['', Validators.required],
         cafeStatus: ['', Validators.required],
-        // password: ['', [Validators.required, Validators.minLength(8)]],
-        // confirmPassword: ['', Validators.required],
         department: ['', Validators.required],
         profilePic: [''], // Add a form control for the profile picture
       },
-      // { validators: this.passwordMatchValidator }
     );
 
     this.editAdminFormGroup = this.fb.group(
@@ -197,14 +183,10 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         email: ['', [Validators.required, Validators.email]],
         phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]], // Example: 10-digit phone number
         gender: ['', Validators.required],
-        // cafeStatus: ['', Validators.required],
-        // password: ['', [Validators.required, Validators.minLength(8)]],
-        // confirmPassword: ['', Validators.required],
         userType: ['', Validators.required],
         profilePic: [''], // Add a form control for the profile picture
       },
-      // { validators: this.passwordMatchValidator }
-    ); // Custom validator for password matching
+    );
 
     this.editNoticeFormGroup = this.fb.group({
       // Initialize edit form
@@ -231,10 +213,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   openEditNoticeSubscriptionMethod() {
     return this.modalService.openEditNoticeModal.subscribe(
       (notice: any | null) => {
-        // Receive the Notice object or null
         if (notice) {
-          // console.log(notice);
-
           // Populate the form with the notice data
           this.editNoticeFormGroup.patchValue({
             id: this.modalService.selectedNotice._id, // Get the ID from the service.
@@ -255,8 +234,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       (profile: any | null) => {
         // Receive the Notice object or null
         if (profile) {
-          // console.log(profile);
-
           // Populate the form with the profile data
           this.editAdminFormGroup.patchValue({
             id: this.modalService.selectedAdmin.id, // Get the ID from the service.
@@ -265,9 +242,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
             email: profile.email,
             phone: profile.phone,
             gender: profile.gender,
-            // cafeStatus: profile.cafeStatus,
-            // password: profile.password,
-            // confirmPassword: profile.confirmPassword,
             userType: profile.userType,
             profilePic: profile.profilePic,
           });
@@ -283,10 +257,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   openEditStudentSubsciptionMethod() {
     return this.modalService.openEditStudentModal.subscribe(
       (profile: any | null) => {
-        // Receive the Notice object or null
         if (profile) {
-          // console.log(profile);
-
           // Populate the form with the profile data
           this.editStudentFormGroup.patchValue({
             id: this.modalService.selectedStudent.id, // Get the ID from the service.
@@ -296,9 +267,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
             phone: profile.phone,
             gender: profile.gender,
             cafeStatus: profile.cafeStatus,
-            // password: profile.password,
-            // confirmPassword: profile.confirmPassword,
-            // userType: profile.userType,
             profilePic: profile.profilePic,
             department: profile.department,
           });
@@ -361,9 +329,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addNewStudent() {
-    // console.log(this.addNewStudentFormGroup.value);
-    // console.log(this.selectedProfilePic);
-
     if (this.addNewStudentFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -391,24 +356,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    // this.authService._response.subscribe((response) => {
-    //   console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.finalSavedUser) {
-    //       this.modalService.closeAddStudent();
-    //       this.addNewStudentFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.addNewStudentFormGroup.reset();
   }
   editStudent() {
-    // console.log(this.editStudentFormGroup.value);
-
     if (this.editStudentFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -436,19 +386,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    // this.authService._response.subscribe((response) => {
-    //   // console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.finalSavedUser) {
-    //       this.modalService.closeAddStudent();
-    //       this.addNewStudentFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.addNewStudentFormGroup.reset();
   }
   onFileChange(e: any) {
@@ -478,9 +415,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addNewAdmin() {
-    // console.log(this.addNewAdminFormGroup.value);
-    // console.log(this.selectedProfilePic);
-
     if (this.addNewAdminFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -507,25 +441,10 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    // this.authService._response.subscribe((response) => {
-    //   console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.finalSavedUser) {
-    //       this.modalService.closeAdmin();
-    //       this.addNewAdminFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.addNewAdminFormGroup.reset();
   }
 
   editAdmin() {
-    // console.log(this.editAdminFormGroup.value);
-
     if (this.editAdminFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -553,26 +472,10 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    // this.authService._response.subscribe((response) => {
-    //   console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.finalSavedUser) {
-    //       this.modalService.closeAddStudent();
-    //       this.addNewStudentFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.addNewStudentFormGroup.reset();
   }
 
   addNewNotice() {
-    // console.log(this.addNewNoticeFormGroup.value);
-    // console.log(this.selectedProfilePic);
-
     if (this.addNewNoticeFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -594,24 +497,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.newNotice);
 
     this.dashboardService.addNotice(this.newNotice); // Send the data
-    // this.dashboardService._response.subscribe((response) => {
-    //   console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.newNotice) {
-    //       this.modalService.closeAddNotice();
-    //       this.addNewNoticeFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.addNewNoticeFormGroup.reset();
   }
   editNotice() {
-    // console.log(this.editNoticeFormGroup.value);
-
     if (this.editNoticeFormGroup.invalid) {
       this.snackBar.open(
         'Please fill in all required fields correctly.',
@@ -626,31 +514,12 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const updatedNotice: any = {
       id: this.modalService.selectedNotice._id, // Get the ID from the service.
-      // name: this.dashboardService.selectedNotice.name,
       title: this.editNoticeFormGroup.get('title')?.value,
       description: this.editNoticeFormGroup.get('description')?.value,
       category: this.editNoticeFormGroup.get('category')?.value,
     };
 
-    // console.log('From admin component: ' + updatedNotice.id);
-    // console.log('From admin component: ' + updatedNotice.title);
-    // console.log('From admin component: ' + updatedNotice.description);
-    // console.log('From admin component: ' + updatedNotice.category);
-
     this.dashboardService.updateNotice(updatedNotice);
-    // this.dashboardService._response.subscribe((response) => {
-    //   console.log(response);
-    //   if (response && response.message) {
-    //     const config = new MatSnackBarConfig();
-    //     config.verticalPosition = 'top';
-    //     config.duration = 3000;
-    //     this.snackBar.open(response.message, 'Close', config);
-    //     if (response.updatedNotice) {
-    //       this.modalService.closeEditNotice();
-    //       this.editNoticeFormGroup.reset();
-    //     }
-    //   }
-    // });
     this.editNoticeFormGroup.reset();
 
   }
