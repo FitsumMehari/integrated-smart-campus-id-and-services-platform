@@ -69,10 +69,12 @@ export class DashboardService {
   getMessages() {
     this.http.get(this.messagesUrl + '/all').subscribe(
       (messages) => {
+        // console.log(messages);
+
         this._messages.next('');
         this._messages.next(messages);
-        // console.log(notice);
-        this.router.navigateByUrl(this.router.url)
+        // console.log(this._messages.value);
+        // this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
