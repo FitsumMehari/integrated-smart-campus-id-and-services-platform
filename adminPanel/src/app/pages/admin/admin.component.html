@@ -123,9 +123,9 @@
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" name="password" formControlName="password" required />
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+            <!-- <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
+              <mat-icon style="width: 0.5rem;margin-;">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button> -->
             <mat-error *ngIf="addNewAdminFormGroup.get('password')?.hasError('required')">
                 Password is required
             </mat-error>
@@ -137,9 +137,9 @@
         <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
+            <!-- <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
               <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+            </button> -->
             <mat-error *ngIf="addNewAdminFormGroup.get('confirmPassword')?.hasError('required')">
                 Confirm Password is required
             </mat-error>
@@ -237,9 +237,9 @@
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" name="password" formControlName="password" required />
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
+            <!-- <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
               <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+            </button> -->
             <mat-error *ngIf="addNewStudentFormGroup.get('password')?.hasError('required')">
                 Password is required
             </mat-error>
@@ -251,9 +251,9 @@
         <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
             <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
+            <!-- <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
               <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+            </button> -->
             <mat-error *ngIf="addNewStudentFormGroup.get('confirmPassword')?.hasError('required')">
                 Confirm Password is required
             </mat-error>
