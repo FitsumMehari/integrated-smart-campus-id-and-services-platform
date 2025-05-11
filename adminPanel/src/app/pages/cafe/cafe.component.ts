@@ -107,7 +107,6 @@ export class CafeComponent implements OnInit, OnDestroy {
     this.messagesSubscription = this.dashboardService._messages.subscribe(
       (next) => {
         this.messages = []; // Clear existing data
-
         this.allMessages = next.messages;
         if (this.allMessages) {
           //check if it is not null or undefined
