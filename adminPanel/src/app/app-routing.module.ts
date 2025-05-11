@@ -52,7 +52,7 @@ const routes: Routes = [
           { path: 'admins', component: AdminsListComponent },
           { path: 'notices', component: CafeNoticesListComponent },
           { path: 'messages', component: CafeMessagesListComponent },
-          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
         ],
       },
       {
@@ -63,7 +63,7 @@ const routes: Routes = [
           { path: 'admins', component: CafeAdminsListComponent },
           { path: 'notices', component: CafeNoticesListComponent },
           { path: 'messages', component: CafeMessagesListComponent },
-          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
         ],
       },
       {
@@ -73,7 +73,7 @@ const routes: Routes = [
           { path: 'admins', component: GateAdminsListComponent },
           { path: 'notices', component: GateNoticesListComponent },
           { path: 'messages', component: GateMessagesListComponent },
-          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
         ],
       },
       {
@@ -84,7 +84,7 @@ const routes: Routes = [
           { path: 'admins', component: SchoolAdminsListComponent },
           { path: 'notices', component: SchoolNoticesListComponent },
           { path: 'messages', component: SchoolMessagesListComponent },
-          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
         ],
       },
       {
@@ -95,7 +95,7 @@ const routes: Routes = [
           { path: 'admins', component: RegistrarAdminsListComponent },
           { path: 'notices', component: RegistrarNoticesListComponent },
           { path: 'messages', component: RegistrarMessagesListComponent },
-          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
+          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
         ],
       },
       { path: 'cafescan', component: CafeScanComponent },
