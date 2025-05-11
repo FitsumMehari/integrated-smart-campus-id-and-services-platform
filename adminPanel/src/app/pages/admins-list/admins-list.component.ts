@@ -141,6 +141,7 @@ export class AdminsListComponent implements OnInit, OnDestroy {
             user.userType === 'cafe' ||
             user.userType === 'gate' ||
             user.userType === 'school' ||
+            user.userType === 'registrar' ||
             user.userType === 'admin'
         );
       }
