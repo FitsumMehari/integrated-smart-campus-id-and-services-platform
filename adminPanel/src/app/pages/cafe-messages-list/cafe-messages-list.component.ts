@@ -14,18 +14,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-
-
 
 export interface Message {
   id: number;
   message: string;
   description: string;
 }
-
 
 @Component({
   selector: 'app-cafe-message-list',
@@ -60,8 +56,7 @@ export class CafeMessagesListComponent
     private dashboardService: DashboardService,
     private ngZone: NgZone,
     private snackBar: MatSnackBar,
-            private dialog: MatDialog
-
+    private dialog: MatDialog
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -114,8 +109,7 @@ export class CafeMessagesListComponent
     this.dashboardService.getMessages();
     this.dashboardSubscribtion = this.dashboardService._messages.subscribe(
       (next: any) => {
-
-        if(next.messages && next.messages.length > 0) {
+        if (next.messages && next.messages.length > 0) {
           this.messages = next.messages.filter(
             (message: any) => message.category === 'cafe'
           );
@@ -145,9 +139,7 @@ export class CafeMessagesListComponent
       width: '400px',
       data: {
         title: 'Confirm Removal',
-        message: `Are you sure you want to remove the message: ${
-          message.message
-        }? This action cannot be undone.`,
+        message: `Are you sure you want to remove the message: ${message.message}? This action cannot be undone.`,
         confirmButtonText: 'Remove',
         cancelButtonText: 'Cancel',
       },
