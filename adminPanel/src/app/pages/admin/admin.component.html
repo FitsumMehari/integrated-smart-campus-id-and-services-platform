@@ -362,28 +362,6 @@
             </mat-error>
         </mat-form-field>
 
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" formControlName="password" required />
-            <mat-error *ngIf="editStudentFormGroup.get('password')?.hasError('required')">
-                Password is required
-            </mat-error>
-            <mat-error *ngIf="editStudentFormGroup.get('password')?.hasError('minlength')">
-                Password must be at least 8 characters long
-            </mat-error>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <mat-error *ngIf="editStudentFormGroup.get('confirmPassword')?.hasError('required')">
-                Confirm Password is required
-            </mat-error>
-            <mat-error *ngIf="editStudentFormGroup.hasError('mismatch')">
-                Passwords do not match
-            </mat-error>
-        </mat-form-field> -->
-
         <div>
             <label for="profilePic">Profile Picture:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
@@ -496,32 +474,6 @@
             </mat-error>
         </mat-form-field>
 
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" formControlName="password" required />
-            <mat-error *ngIf="editAdminFormGroup.get('password')?.hasError('required')">
-                Password is required
-            </mat-error>
-            <mat-error *ngIf="editAdminFormGroup.get('password')?.hasError('minlength')">
-                Password must be at least 8 characters long
-            </mat-error>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <mat-error *ngIf="editAdminFormGroup.get('confirmPassword')?.hasError('required')">
-                Confirm Password is required
-            </mat-error>
-            <mat-error *ngIf="editAdminFormGroup.hasError('mismatch')">
-                Passwords do not match
-            </mat-error>
-        </mat-form-field> -->
-
-        <!-- <div>
-            <label for="profilePic">Profile Picture:</label>
-            <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
-        </div> -->
         <div>
             <label for="profilePic">Profile Picture:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
@@ -556,10 +508,6 @@
     <h2>Add a New Notice</h2>
     <p class="subtitle">Please fill the form</p>
     <form [formGroup]="addNewNoticeFormGroup" class="add-notice-form" (ngSubmit)="addNewNotice()">
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
-        </mat-form-field> -->
 
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
@@ -570,30 +518,6 @@
             <mat-label>Description</mat-label>
             <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
-            <mat-select name="gender">
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
-            </mat-select>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
-        </mat-form-field> -->
-
-        <!-- <div>
-            <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
-        </div> -->
 
         <mat-form-field appearance="outline">
             <mat-label>Category</mat-label>
@@ -622,11 +546,6 @@
     <h2>Update Notice</h2>
     <p class="subtitle">Please fill the form</p>
     <form [formGroup]="editNoticeFormGroup" class="edit-notice-form" (ngSubmit)="editNotice()">
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" name="name" />
-        </mat-form-field> -->
-
         <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
             <input matInput type="text" name="title" formControlName="title" required/>
@@ -636,30 +555,6 @@
             <mat-label>Description</mat-label>
             <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
-            <mat-select name="gender">
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
-                <mat-option value="other">Other</mat-option>
-            </mat-select>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" name="password" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" name="confirmPassword" />
-        </mat-form-field> -->
-
-        <!-- <div>
-            <label for="profilePic">Profile Picture:</label>
-            <input type="file" id="profilePic" name="profilePic" />
-        </div> -->
 
         <mat-form-field appearance="outline">
             <mat-label>Category</mat-label>
