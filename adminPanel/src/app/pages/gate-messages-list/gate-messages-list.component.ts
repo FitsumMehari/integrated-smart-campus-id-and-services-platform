@@ -101,7 +101,7 @@ export class GateMessagesListComponent
 
   editMessage(message: Message) {
     console.log('Edit message:', message);
-    this.getMessages()
+    this.getMessages();
     // Implement your edit logic here
   }
 
