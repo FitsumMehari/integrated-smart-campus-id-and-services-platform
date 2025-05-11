@@ -165,7 +165,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
 // Update user
 router.put("/user", upload.single("profilePic"), async(req, res, next) => {
     let user = JSON.parse(req.body.user);
-    // console.log(user);
+    console.log(user);
 
     if (!user.studentId)
         return res.status(200).json({ message: "Please fill the required inputs" });
