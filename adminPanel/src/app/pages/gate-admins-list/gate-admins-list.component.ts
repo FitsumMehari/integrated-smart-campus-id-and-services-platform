@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 interface GateAdmin {
   id: number;
@@ -81,7 +83,9 @@ export class GateAdminsListComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private authService: AuthService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+        private dialog: MatDialog
+
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +100,7 @@ export class GateAdminsListComponent implements OnInit, OnDestroy {
 
   openAddAdminCard(): void {
     this.modalService.openAddAdmin();
+    this.getUsers()
   }
 
   closeAddAdminCard(): void {
@@ -105,17 +110,17 @@ export class GateAdminsListComponent implements OnInit, OnDestroy {
   editAdmin(admin: any): void {
     console.log('Edit admin:', admin);
     this.modalService.openEditProfile(admin);
+    this.getUsers()
     // Implement your edit functionality here
   }
   getUsers(): void {
     this.usersSubscription = this.dashboardService._users.subscribe(
       (users: any) => {
-        if(users) {
+        if(users.allUsers && users.allUsers.length > 0) {
           this.gateAdministrators = users.allUsers.filter(
             (user: any) => user.userType === 'gate'
           );
         }
-        // console.log(this.administrators);
 
         this.ngZone.run(() => {});
       }
@@ -123,22 +128,34 @@ export class GateAdminsListComponent implements OnInit, OnDestroy {
     this.dashboardService.getUsers();
   }
 
-  removeAdmin(admin: any): void {
-    console.log('Remove admin:', admin);
-    this.authService.removeUser(admin._id);
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
+    removeAdmin(admin: any): void {
+      // Implement your remove functionality here
 
-        this.getUsers();
-      }
-    });
-    // Implement your remove functionality here
-  }
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Confirm Removal',
+          message: `Are you sure you want to remove the admin: ${
+            admin.username || admin.email
+          }? This action cannot be undone.`,
+          confirmButtonText: 'Remove',
+          cancelButtonText: 'Cancel',
+        },
+      });
+      // User cancelled, do nothing or log it
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          // User confirmed, proceed with removal
+          this.authService.removeUser(admin._id);
+          this.getUsers()
+        } else {
+          // User cancelled, do nothing or log it
+          console.log('Admin removal cancelled');
+        }
+      });
+
+      this.getUsers();
+    }
 
   ngOnDestroy(): void {
     if (this.openModalSubscription) {

@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   admins: any[] = []; // Changed to arrays
   students: any[] = []; // Changed to arrays
-  allUsers: any[] = [];  // Changed to array
+  allUsers: any[] = []; // Changed to array
   allNotices: any[] = [];
   allMessages: any[] = [];
 
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   initDashboardCards(): void {
-    this.cards.forEach(card => card.count = 0);
+    this.cards.forEach((card) => (card.count = 0));
   }
 
   fetchData(): void {
@@ -71,32 +71,44 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscribeToData(): void {
     this.usersSubscription = this.dashboardService._users.subscribe((next) => {
-      this.allUsers = next.allUsers; // Corrected: Assign the new array
-      this.admins = [];       // Clear existing data
-      this.students = [];     // Clear existing data
+      this.admins = []; // Clear existing data
+      this.students = [];
+      if (next.allUsers) {
+        this.allUsers = next.allUsers; // Corrected: Assign the new array
+        // Clear existing data
 
-      if (this.allUsers) { //check if it is not null or undefined
-        this.allUsers.forEach((user: any) => {
-          if (user.userType === 'student') {
-            this.students.push(user);
-          } else if (user.userType !== 'guest') {
-            this.admins.push(user);
-          }
-        });
+        if (this.allUsers) {
+          //check if it is not null or undefined
+          this.allUsers.forEach((user: any) => {
+            if (user.userType === 'student') {
+              this.students.push(user);
+            } else if (user.userType !== 'guest') {
+              this.admins.push(user);
+            }
+          });
+        }
+        this.cards[0].count = this.admins.length;
+        this.cards[1].count = this.students.length;
       }
-      this.cards[0].count = this.admins.length;
-      this.cards[1].count = this.students.length;
     });
 
-    this.noticesSubscription = this.dashboardService._notices.subscribe((next) => {
-      this.allNotices = next.notices;
-      this.cards[2].count = this.allNotices.length;
-    });
+    this.noticesSubscription = this.dashboardService._notices.subscribe(
+      (next) => {
+        if (next.notices !== undefined) {
+          this.allNotices = next.notices;
+          this.cards[2].count = this.allNotices.length;
+        }
+      }
+    );
 
-    this.messagesSubscription = this.dashboardService._messages.subscribe((next) => {
-      this.allMessages = next.messages;
-      this.cards[3].count = this.allMessages.length;
-    });
+    this.messagesSubscription = this.dashboardService._messages.subscribe(
+      (next) => {
+        if (next.messages !== undefined) {
+          this.allMessages = next.messages;
+          this.cards[3].count = this.allMessages.length;
+        }
+      }
+    );
   }
 
   unsubscribeSubscriptions(): void {
@@ -111,4 +123,3 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 }
-

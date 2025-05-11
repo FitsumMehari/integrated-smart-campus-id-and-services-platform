@@ -1,8 +1,11 @@
-
-
-
-
-import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -12,6 +15,8 @@ import { ModalService } from '../../services/modal.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export interface Notice {
   id: number;
@@ -20,15 +25,14 @@ export interface Notice {
   description: string;
 }
 
-
-
-
 @Component({
   selector: 'app-registrar-notices-list',
   templateUrl: './registrar-notices-list.component.html',
-  styleUrl: './registrar-notices-list.component.css'
+  styleUrl: './registrar-notices-list.component.css',
 })
-export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RegistrarNoticesListComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   displayedColumns: string[] = [
     'select',
     // 'id',
@@ -54,7 +58,9 @@ export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnD
     private modalService: ModalService,
     private dashboardService: DashboardService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+            private dialog: MatDialog
+
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -100,11 +106,13 @@ export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnD
 
   addNewNotice() {
     this.modalService.openAddNotice();
+    this.getNotices();
   }
 
   editNotice(notice: Notice) {
     console.log('Edit notice:', notice);
     this.modalService.openEditNotice(notice);
+    this.getNotices();
     // Implement your edit logic here
   }
 
@@ -112,11 +120,11 @@ export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnD
     this.dashboardService.getNotices();
     this.dashboardSubscribtion = this.dashboardService._notices.subscribe(
       (next: any) => {
-        console.log(next);
-
-        this.notices = next.notices.filter(
-          (notice: any) => notice.category === 'registrar'
-        );
+        if (next.notices && next.notices.length > 0) {
+          this.notices = next.notices.filter(
+            (notice: any) => notice.category === 'registrar'
+          );
+        }
 
         this.ngZone.run(() => {});
       }
@@ -125,19 +133,30 @@ export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnD
 
   deleteNotice(notice: any) {
     console.log('Delete notice:', notice);
-    this.dashboardService.deleteNotice(notice._id);
-        this.dashboardService._response.subscribe((response) => {
-          console.log(response);
-          if (response && response.message) {
-            const config = new MatSnackBarConfig();
-            config.verticalPosition = 'top';
-            config.duration = 3000;
-            this.snackBar.open(response.message, 'Close', config);
-            if (response.finalSavedUser) {
-              this.getNotices();
-            }
-          }
-        });
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+              width: '400px',
+              data: {
+                title: 'Confirm Removal',
+                message: `Are you sure you want to remove the notice: ${
+                  notice.title || notice.description
+                }? This action cannot be undone.`,
+                confirmButtonText: 'Remove',
+                cancelButtonText: 'Cancel',
+              },
+            });
+            // User cancelled, do nothing or log it
+            dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                // User confirmed, proceed with removal
+                this.dashboardService.deleteNotice(notice._id);
+                this.getNotices();
+              } else {
+                // User cancelled, do nothing or log it
+                console.log('Admin removal cancelled');
+              }
+            });
+
+            this.getNotices();
     // Implement your delete logic here
   }
 
@@ -161,5 +180,3 @@ export class RegistrarNoticesListComponent implements OnInit, AfterViewInit, OnD
     }
   }
 }
-
-

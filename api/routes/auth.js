@@ -31,50 +31,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Register
-// router.post("/register", async(req, res, next) => {
-//     if (!req.body.username ||
-//         !req.body.password ||
-//         !req.body.email ||
-//         !req.body.phone ||
-//         !req.body.userType
-//     ) {
-//         res.status(200).json({ message: "Please fill the required inputs!" });
-//     } else {
-//         // Check if user email exists
-//         const existingUser = await User.findOne({
-//             email: req.body.email,
-//         });
-
-//         if (!!existingUser) {
-//             return res.status(200).json({ message: "Email already taken!" });
-//         }
-
-//         const saltRounds = 10;
-//         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-
-//         const newUser = new User({
-//             username: req.body.username,
-//             password: hashedPassword,
-//             email: req.body.email,
-//             phone: req.body.phone,
-//             userType: req.body.userType,
-//             clubs: req.body.clubs,
-//             profilePic: req.body.profilePic,
-//         });
-//         try {
-//             const savedUser = await newUser.save();
-
-//             const { password, ...otherUserInfo } = savedUser._doc;
-//             res
-//                 .status(201)
-//                 .json({ message: "Account Created Successfully!", otherUserInfo });
-//         } catch (err) {
-//             return next(err);
-//         }
-//     }
-// });
-
 // Add a new user
 router.post("/user", upload.single("profilePic"), async(req, res, next) => {
     let user = JSON.parse(req.body.user);
@@ -489,6 +445,7 @@ router.post("/studentlogin", async(req, res, next) => {
 
 // Login
 router.post("/login", async(req, res, next) => {
+
     if (!req.body.email || !req.body.password) {
         res.status(400).json("Please fill the required inputs!");
     } else {
@@ -497,103 +454,67 @@ router.post("/login", async(req, res, next) => {
 
             if (!user) {
                 return res.status(200).json({ message: "Wrong Credientials!" });
-            }
+            } else {
+                const passwordMatch = await bcrypt.compare(
+                    req.body.password,
+                    user.password
+                );
 
-            const passwordMatch = await bcrypt.compare(
-                req.body.password,
-                user.password
-            );
+                console.log(passwordMatch);
 
-            if (!passwordMatch) {
-                return res.status(200).json({ message: "Wrong Credientials!" });
-            }
+                if (!passwordMatch) {
+                    // await console.log(bcrypt.hash(req.body.password, 10));
+                    // console.log(user.password);
 
-            const accessToken = jwt.sign({
-                    _id: user._id,
-                    studentId: user.studentId || "",
-                    username: user.username,
-                    email: user.email,
-                    phone: user.phone,
-                    isAdmin: user.userType === "admin",
-                    isCafe: user.userType === "cafe",
-                    isGate: user.userType === "gate",
-                    isSchool: user.userType === "school",
-                    userType: user.userType,
-                    gender: user.gender,
-                    department: user.department,
-                    profilePic: user.profilePic,
-                    isLoggedIn: true,
-                },
-                jwtPrivateKey, {
-                    expiresIn: "7d",
+                    return res.status(200).json({ message: "Wrong Credientials!" });
+                } else {
+                    const accessToken = jwt.sign({
+                            _id: user._id,
+                            studentId: user.studentId || "",
+                            username: user.username,
+                            email: user.email,
+                            phone: user.phone,
+                            isAdmin: user.userType === "admin",
+                            isCafe: user.userType === "cafe",
+                            isGate: user.userType === "gate",
+                            isSchool: user.userType === "school",
+                            isRegistrar: user.userType === "registrar",
+                            userType: user.userType,
+                            gender: user.gender,
+                            department: user.department,
+                            profilePic: user.profilePic,
+                            isLoggedIn: true,
+                        },
+                        jwtPrivateKey, {
+                            expiresIn: "7d",
+                        }
+                    );
+                    var timeElapsed = Date.now();
+                    var today = new Date(timeElapsed);
+
+                    var newActivity = new Activity({
+                        userId: user._id,
+                        title: "Login",
+                        description: `The person is loggin in at ${today.toLocaleString()}`,
+                        category: "other",
+                    });
+
+                    await newActivity.save();
+                    console.log(`A person called  ${user.username} has logged in `);
+                    console.log("New activity added.");
+                    res.status(200).json({ message: "Log In Successful!", accessToken });
                 }
-            );
-            var timeElapsed = Date.now();
-            var today = new Date(timeElapsed);
+            }
 
-            var newActivity = new Activity({
-                userId: user._id,
-                title: "Login",
-                description: `The person is loggin in at ${today.toLocaleString()}`,
-                category: "other",
-            });
 
-            await newActivity.save();
-            console.log(`A person called  ${user.username} has logged in `);
-            console.log("New activity added.");
-            res.status(200).json({ message: "Log In Successful!", accessToken });
         } catch (err) {
             return next(err);
         }
     }
 });
 
-// Update
-// router.put("/updateprofile", verifyToken, async(req, res, next) => {
-//     try {
-//         // Hash the new password
-//         // try {
-//         //     var hashedPassword = await bcrypt.hash(req.body.password, 10);
-//         // } catch (error) {
-//         //     next(error)
-//         // }
-//         const user = await User.findByIdAndUpdate(req.body._id, {
-//             email: req.body.email,
-//             phone: req.body.phone,
-//             userType: req.body.userType,
-//             // password: req.body.hashedPassword,
-//             gender: req.body.gender,
-//         });
-//         if (!user) {
-//             res.status(201).json({
-//                 message: "No Match Found!",
-//                 accessToken,
-//             });
-//         }
-//         const accessToken = jwt.sign({
-//                 id: user._id,
-//                 username: user.username,
-//                 email: user.email,
-//                 phone: user.phone,
-//                 userType: user.userType,
-//                 clubs: user.clubs,
-//                 profilePic: user.profilePic,
-//                 isLoggedIn: true,
-//             },
-//             jwtPrivateKey, {
-//                 expiresIn: "7d",
-//             }
-//         );
-//         res.status(201).json({
-//             message: "Update Successful!",
-//             accessToken,
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
-// Reset Password
+// Forgot Password
 router.post("/forgot-password", async(req, res, next) => {
     try {
         const { email } = req.body;
@@ -605,7 +526,7 @@ router.post("/forgot-password", async(req, res, next) => {
             `Password reset request sent for a user with the following email: ${email}`
         );
 
-        res.status(200).json({ message: "OTP sent" });
+        res.status(200).json({ message: "OTP sent to your email!" });
     } catch (error) {
         next(error);
     }
@@ -664,8 +585,31 @@ function generateOTP() {
     }
     return otp;
 }
+// Reset Password
+// Verify OTP and reset password
 
-router.post("/reset-password", verifyOTP, async(req, res, next) => {
+
+router.post("/verify-otp", async(req, res, next) => {
+    const { email, otp } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
+            return res.status(200).json({ message: "User not found" });
+        }
+
+        if (existingUser.generatedOTP !== otp) {
+            return res.status(200).json({ message: "Invalid or expired OTP" });
+        }
+
+        res.status(200).json({ message: 'OTP verified' });
+
+    } catch (error) {
+        next(error)
+    }
+});
+
+router.post("/reset-password", async(req, res, next) => {
     const { email, newPassword } = req.body;
 
     try {

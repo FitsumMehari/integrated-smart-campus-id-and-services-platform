@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { ModalService } from './modal.service';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 interface DashboardData {
   adminsCount: number;
@@ -30,53 +33,58 @@ export class DashboardService {
   _messages: BehaviorSubject<any> = new BehaviorSubject([]);
   _activities: BehaviorSubject<any> = new BehaviorSubject([]);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+    private modalService: ModalService,
+    private router: Router
+  ) {}
 
   getUsers() {
-    this.http.get(this.authUrl+'/users/all').subscribe(
+    this.http.get(this.authUrl + '/users/all').subscribe(
       (allUsers) => {
         this._users.next([]);
-        if(allUsers) {
+        if (allUsers) {
           this._users.next(allUsers);
         }
         // console.log(users);
-
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
 
   getNotices() {
-    this.http.get(this.noticesUrl+'/all').subscribe(
+    this.http.get(this.noticesUrl + '/all').subscribe(
       (notices) => {
         this._notices.next('');
         this._notices.next(notices);
         // console.log(notice);
-
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
 
   getMessages() {
-    this.http.get(this.messagesUrl+'/all').subscribe(
+    this.http.get(this.messagesUrl + '/all').subscribe(
       (messages) => {
         this._messages.next('');
         this._messages.next(messages);
         // console.log(notice);
-
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
 
   getActivities() {
-    this.http.get(this.activitiesUrl+'/all').subscribe(
+    this.http.get(this.activitiesUrl + '/all').subscribe(
       (activities) => {
         this._activities.next('');
         this._activities.next(activities);
         // console.log(notice);
-
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
@@ -87,6 +95,17 @@ export class DashboardService {
       (next) => {
         this._response.next('');
         this._response.next(next);
+        //
+        this._response.subscribe((response) => {
+          // console.log(response);
+          if (response && response.message) {
+            const config = new MatSnackBarConfig();
+            config.verticalPosition = 'top';
+            config.duration = 3000;
+            this.snackBar.open(response.message, 'Close', config);
+          }
+        });
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
@@ -97,32 +116,70 @@ export class DashboardService {
       (next) => {
         this._response.next('');
         this._response.next(next);
+        //
+        this._response.subscribe((response) => {
+          // console.log(response);
+          if (response && response.message) {
+            const config = new MatSnackBarConfig();
+            config.verticalPosition = 'top';
+            config.duration = 3000;
+            this.snackBar.open(response.message, 'Close', config);
+          }
+        });
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
 
   addNotice(notice: any) {
-    console.log(notice);
+    // console.log(notice);
 
     this.http.post(this.noticesUrl, notice).subscribe(
       (next) => {
         this._response.next('');
         this._response.next(next);
+         //
+         this._response.subscribe((response) => {
+          // console.log(response);
+          if (response && response.message) {
+            const config = new MatSnackBarConfig();
+            config.verticalPosition = 'top';
+            config.duration = 3000;
+            this.snackBar.open(response.message, 'Close', config);
+            if (response.newNotice) {
+              this.modalService.closeAllModals();
+            }
+          }
+        });
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
   updateNotice(notice: any) {
-    console.log("From Dashboard Service: " + notice);
+    // console.log('From Dashboard Service: ' + notice);
 
     this.http.put(this.noticesUrl, notice).subscribe(
       (next) => {
         this._response.next('');
         this._response.next(next);
+        //
+        this._response.subscribe((response) => {
+          console.log(response);
+          if (response && response.message) {
+            const config = new MatSnackBarConfig();
+            config.verticalPosition = 'top';
+            config.duration = 3000;
+            this.snackBar.open(response.message, 'Close', config);
+            if (response.newNotice) {
+              this.modalService.closeAllModals();
+            }
+          }
+        });
+        this.router.navigateByUrl(this.router.url)
       },
       (error) => {}
     );
   }
-
 }

@@ -1,5 +1,6 @@
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-createnewpassword',
@@ -11,6 +12,9 @@ export class CreatenewpasswordComponent {
   hideConfirmPassword = true;
   passwordFormControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
   confirmPasswordFormControl = new FormControl('', [Validators.required, this.mustMatch(this.passwordFormControl)]);
+
+
+  constructor(private authService: AuthService) {}
 
   mustMatch(controlToMatch: FormControl): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -25,6 +29,7 @@ export class CreatenewpasswordComponent {
     if (this.passwordFormControl.valid && this.confirmPasswordFormControl.valid && this.passwordFormControl.value === this.confirmPasswordFormControl.value) {
       console.log('Password reset initiated:', this.passwordFormControl.value);
       // In a real application, you would send this data to your backend
+      this.authService.resetPassword(this.passwordFormControl.value)
     }
   }
 }

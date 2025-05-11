@@ -54,7 +54,7 @@ export class ModalService {
   openAddAdmin(): void {
     this.showAddAdmin = true;
     this.openAddAdminModal.emit();
-    console.log(this.showAddAdmin);
+    // console.log(this.showAddAdmin);
 
   }
 
@@ -65,8 +65,8 @@ export class ModalService {
 
   openAddStudent(): void {
     this.showAddStudent = true;
+    // console.log(this.showAddStudent);
     this.openAddStudentModal.emit();
-    console.log(this.showAddStudent);
 
   }
 
@@ -75,12 +75,12 @@ export class ModalService {
     this.closeAddStudentModal.emit();
   }
   openEditStudent(student:any): void {
+    this.selectedStudent = student;
     this.showEditStudent = true;
     // this.openEditStudentModal.emit();
     this.openEditStudentModal.emit(student); // Emit the notice data
-    this.selectedStudent = student;
-    console.log(this.showEditStudent);
-    console.log(student);
+    // console.log(this.showEditStudent);
+    // console.log(student);
   }
 
   closeEditStudent(): void {
@@ -91,7 +91,7 @@ export class ModalService {
   openAddNotice(): void {
     this.showAddNotice = true;
     this.openAddNoticeModal.emit();
-    console.log(this.showAddNotice);
+    // console.log(this.showAddNotice);
 
   }
 
@@ -101,9 +101,9 @@ export class ModalService {
   }
   openEditNotice(notice:any): void {
    // Change the parameter type to Notice
+   this.selectedNotice = notice; // Store the notice data.  No longer used here.
    this.showEditNotice = true;
    this.openEditNoticeModal.emit(notice); // Emit the notice data
-   this.selectedNotice = notice; // Store the notice data.  No longer used here.
   //  console.log(this.showEditNotice);
   //  console.log(notice);
 
@@ -118,16 +118,26 @@ export class ModalService {
 
 
   openEditProfile(admin:any): void {
-    this.showEditProfile = true;
-    this.openEditProfileModal.emit();
-    this.openEditProfileModal.emit(admin); // Emit the notice data
     this.selectedAdmin = admin;
-    console.log(this.showEditProfile);
+    this.showEditProfile = true;
+    // this.openEditProfileModal.emit();
+    this.openEditProfileModal.emit(admin); // Emit the notice data
+    // console.log(this.showEditProfile);
 
   }
 
   closeEditProfile(): void {
     this.showEditProfile = false;
     this.closeEditProfileModal.emit();
+  }
+
+  closeAllModals(): void {
+    this.closeAdmin();
+    this.closeAddStudent();
+    this.closeAddNotice();
+    this.closeEditNotice();
+    this.closeEditStudent();
+    this.closeEditProfile();
+    
   }
 }

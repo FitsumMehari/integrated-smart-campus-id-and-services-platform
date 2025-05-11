@@ -59,6 +59,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   isDarkMode = false;
   currentLanguage = 'en';
   profilePicUrl: any;
+  hidePassword = true;
+  hideConfirmPassword = true;
   newUser: any = {
     username: '',
     studentId: '',
@@ -223,18 +225,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setAccount() {
-    this.account = {
-      id: 'fsfsffsfsfsf', // Get the ID from the service.
-      username: 'fsfsffsfsfsf',
-      studentId: 'fsfsffsfsfsf',
-      email: 'fsfsffsfsfsf',
-      phone: 'fsfsffsfsfsf',
-      gender: 'fsfsffsfsfsf',
-      cafeStatus: 'fsfsffsfsfsf',
-      password: 'fsfsffsfsfsf',
-      confirmPassword: 'fsfsffsfsfsf',
-      userType: 'fsfsffsfsfsf',
-    };
+    this.account = this.authService.getLoggedInUserDetails();
   }
 
   openEditNoticeSubscriptionMethod() {
@@ -242,7 +233,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       (notice: any | null) => {
         // Receive the Notice object or null
         if (notice) {
-          console.log(notice);
+          // console.log(notice);
 
           // Populate the form with the notice data
           this.editNoticeFormGroup.patchValue({
@@ -264,7 +255,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       (profile: any | null) => {
         // Receive the Notice object or null
         if (profile) {
-          console.log(profile);
+          // console.log(profile);
 
           // Populate the form with the profile data
           this.editAdminFormGroup.patchValue({
@@ -294,7 +285,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       (profile: any | null) => {
         // Receive the Notice object or null
         if (profile) {
-          console.log(profile);
+          // console.log(profile);
 
           // Populate the form with the profile data
           this.editStudentFormGroup.patchValue({
@@ -370,8 +361,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addNewStudent() {
-    console.log(this.addNewStudentFormGroup.value);
-    console.log(this.selectedProfilePic);
+    // console.log(this.addNewStudentFormGroup.value);
+    // console.log(this.selectedProfilePic);
 
     if (this.addNewStudentFormGroup.invalid) {
       this.snackBar.open(
@@ -400,22 +391,23 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.finalSavedUser) {
-          this.modalService.closeAddStudent();
-          this.addNewStudentFormGroup.reset();
-        }
-      }
-    });
+    // this.authService._response.subscribe((response) => {
+    //   console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.finalSavedUser) {
+    //       this.modalService.closeAddStudent();
+    //       this.addNewStudentFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.addNewStudentFormGroup.reset();
   }
   editStudent() {
-    console.log(this.editStudentFormGroup.value);
+    // console.log(this.editStudentFormGroup.value);
 
     if (this.editStudentFormGroup.invalid) {
       this.snackBar.open(
@@ -444,19 +436,20 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.finalSavedUser) {
-          this.modalService.closeAddStudent();
-          this.addNewStudentFormGroup.reset();
-        }
-      }
-    });
+    // this.authService._response.subscribe((response) => {
+    //   // console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.finalSavedUser) {
+    //       this.modalService.closeAddStudent();
+    //       this.addNewStudentFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.addNewStudentFormGroup.reset();
   }
   onFileChange(e: any) {
     this.selectedProfilePic = e.target.files[0] || null;
@@ -469,7 +462,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editStudentFormGroup
       .get('profilePic')
       ?.setValue(this.selectedProfilePic); // Update form control
-      this.editAdminFormGroup
+    this.editAdminFormGroup
       .get('profilePic')
       ?.setValue(this.selectedProfilePic); // Update form control
 
@@ -485,8 +478,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addNewAdmin() {
-    console.log(this.addNewAdminFormGroup.value);
-    console.log(this.selectedProfilePic);
+    // console.log(this.addNewAdminFormGroup.value);
+    // console.log(this.selectedProfilePic);
 
     if (this.addNewAdminFormGroup.invalid) {
       this.snackBar.open(
@@ -514,23 +507,24 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.finalSavedUser) {
-          this.modalService.closeAdmin();
-          this.addNewAdminFormGroup.reset();
-        }
-      }
-    });
+    // this.authService._response.subscribe((response) => {
+    //   console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.finalSavedUser) {
+    //       this.modalService.closeAdmin();
+    //       this.addNewAdminFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.addNewAdminFormGroup.reset();
   }
 
   editAdmin() {
-    console.log(this.editAdminFormGroup.value);
+    // console.log(this.editAdminFormGroup.value);
 
     if (this.editAdminFormGroup.invalid) {
       this.snackBar.open(
@@ -559,23 +553,24 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.finalSavedUser) {
-          this.modalService.closeAddStudent();
-          this.addNewStudentFormGroup.reset();
-        }
-      }
-    });
+    // this.authService._response.subscribe((response) => {
+    //   console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.finalSavedUser) {
+    //       this.modalService.closeAddStudent();
+    //       this.addNewStudentFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.addNewStudentFormGroup.reset();
   }
 
   addNewNotice() {
-    console.log(this.addNewNoticeFormGroup.value);
+    // console.log(this.addNewNoticeFormGroup.value);
     // console.log(this.selectedProfilePic);
 
     if (this.addNewNoticeFormGroup.invalid) {
@@ -599,22 +594,23 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.newNotice);
 
     this.dashboardService.addNotice(this.newNotice); // Send the data
-    this.dashboardService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.newNotice) {
-          this.modalService.closeAddNotice();
-          this.addNewNoticeFormGroup.reset();
-        }
-      }
-    });
+    // this.dashboardService._response.subscribe((response) => {
+    //   console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.newNotice) {
+    //       this.modalService.closeAddNotice();
+    //       this.addNewNoticeFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.addNewNoticeFormGroup.reset();
   }
   editNotice() {
-    console.log(this.editNoticeFormGroup.value);
+    // console.log(this.editNoticeFormGroup.value);
 
     if (this.editNoticeFormGroup.invalid) {
       this.snackBar.open(
@@ -636,25 +632,27 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       category: this.editNoticeFormGroup.get('category')?.value,
     };
 
-    console.log('From admin component: ' + updatedNotice.id);
-    console.log('From admin component: ' + updatedNotice.title);
-    console.log('From admin component: ' + updatedNotice.description);
-    console.log('From admin component: ' + updatedNotice.category);
+    // console.log('From admin component: ' + updatedNotice.id);
+    // console.log('From admin component: ' + updatedNotice.title);
+    // console.log('From admin component: ' + updatedNotice.description);
+    // console.log('From admin component: ' + updatedNotice.category);
 
     this.dashboardService.updateNotice(updatedNotice);
-    this.dashboardService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-        if (response.updatedNotice) {
-          this.modalService.closeEditNotice();
-          this.editNoticeFormGroup.reset();
-        }
-      }
-    });
+    // this.dashboardService._response.subscribe((response) => {
+    //   console.log(response);
+    //   if (response && response.message) {
+    //     const config = new MatSnackBarConfig();
+    //     config.verticalPosition = 'top';
+    //     config.duration = 3000;
+    //     this.snackBar.open(response.message, 'Close', config);
+    //     if (response.updatedNotice) {
+    //       this.modalService.closeEditNotice();
+    //       this.editNoticeFormGroup.reset();
+    //     }
+    //   }
+    // });
+    this.editNoticeFormGroup.reset();
+
   }
   ngOnDestroy(): any {
     // if (this.selectedAdminSubscription) {
@@ -677,6 +675,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   logout() {
     console.log('Logout clicked');
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 }

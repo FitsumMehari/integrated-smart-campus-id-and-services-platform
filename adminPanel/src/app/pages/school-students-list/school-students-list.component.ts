@@ -1,5 +1,11 @@
-
-import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -18,8 +24,6 @@ export interface Student {
   studentId: string;
 }
 
-
-
 /**
  * @title Table with pagination
  */
@@ -27,10 +31,11 @@ export interface Student {
 @Component({
   selector: 'app-school-students-list',
   templateUrl: './school-students-list.component.html',
-  styleUrl: './school-students-list.component.css'
+  styleUrl: './school-students-list.component.css',
 })
-
-export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SchoolStudentsListComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   displayedColumns: string[] = [
     'select',
     // 'id',
@@ -50,10 +55,15 @@ export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDes
   private usersSubscription: Subscription | undefined; // Add this line
   private openModalSubscription: Subscription | undefined;
 
-
   @ViewChild(MatPaginator) paginator!: MatPaginator; // Using the definite assignment assertion
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private modalService: ModalService,private dashboardService: DashboardService, private ngZone: NgZone) {
+  constructor(
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
+    private modalService: ModalService,
+    private dashboardService: DashboardService,
+    private ngZone: NgZone
+  ) {
     iconRegistry.addSvgIcon(
       'edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/edit.svg')
@@ -69,7 +79,6 @@ export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDes
     this.getUsers(); // Call this method
     this.dataSource = new MatTableDataSource<any>(this.students);
     this.ngZone.run(() => {});
-
   }
 
   ngAfterViewInit() {
@@ -100,7 +109,6 @@ export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDes
     }`;
   }
 
-
   editStudent(student: Student) {
     console.log('Edit student:', student);
     this.modalService.openEditStudent(student);
@@ -108,18 +116,19 @@ export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getUsers(): void {
-    this.usersSubscription = this.dashboardService._users.subscribe((users: any) => {
-      this.students = users.allUsers.filter(
-        (user:any) => user.userType === 'student'
-      );
-      // console.log(this.administrators);
+    this.usersSubscription = this.dashboardService._users.subscribe(
+      (users: any) => {
+        if (users.allUsers && users.allUsers.length > 0) {
+          this.students = users.allUsers.filter(
+            (user: any) => user.userType === 'student'
+          );
+        }
 
-
-      this.ngZone.run(() => {});
-    });
+        this.ngZone.run(() => {});
+      }
+    );
     this.dashboardService.getUsers();
   }
-
 
   deleteStudent(student: Student) {
     console.log('Delete student:', student);
@@ -137,15 +146,14 @@ export class SchoolStudentsListComponent implements OnInit, AfterViewInit, OnDes
   addNewStudent() {
     console.log('Add new student');
     this.modalService.openAddStudent();
-
   }
   ngOnDestroy(): void {
     if (this.openModalSubscription) {
       this.openModalSubscription.unsubscribe();
     }
-    if (this.usersSubscription) { // Add this
+    if (this.usersSubscription) {
+      // Add this
       this.usersSubscription.unsubscribe();
     }
   }
 }
-

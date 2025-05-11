@@ -15,6 +15,8 @@ import { ModalService } from '../../services/modal.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export interface Notice {
   id: number;
@@ -23,13 +25,14 @@ export interface Notice {
   description: string;
 }
 
-
 @Component({
   selector: 'app-gate-notices-list',
   templateUrl: './gate-notices-list.component.html',
   styleUrl: './gate-notices-list.component.css',
 })
-export class GateNoticesListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GateNoticesListComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   displayedColumns: string[] = [
     'select',
     // 'id',
@@ -55,7 +58,9 @@ export class GateNoticesListComponent implements OnInit, AfterViewInit, OnDestro
     private modalService: ModalService,
     private dashboardService: DashboardService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+            private dialog: MatDialog
+
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -101,11 +106,13 @@ export class GateNoticesListComponent implements OnInit, AfterViewInit, OnDestro
 
   addNewNotice() {
     this.modalService.openAddNotice();
+    this.getNotices();
   }
 
   editNotice(notice: Notice) {
     console.log('Edit notice:', notice);
     this.modalService.openEditNotice(notice);
+    this.getNotices();
     // Implement your edit logic here
   }
 
@@ -113,11 +120,11 @@ export class GateNoticesListComponent implements OnInit, AfterViewInit, OnDestro
     this.dashboardService.getNotices();
     this.dashboardSubscribtion = this.dashboardService._notices.subscribe(
       (next: any) => {
-        console.log(next);
-
-        this.notices = next.notices.filter(
-          (notice: any) => notice.category === 'gate'
-        );
+        if (next.notices && next.notices.length > 0) {
+          this.notices = next.notices.filter(
+            (notice: any) => notice.category === 'gate'
+          );
+        }
 
         this.ngZone.run(() => {});
       }
@@ -126,19 +133,30 @@ export class GateNoticesListComponent implements OnInit, AfterViewInit, OnDestro
 
   deleteNotice(notice: any) {
     console.log('Delete notice:', notice);
-    this.dashboardService.deleteNotice(notice._id);
-        this.dashboardService._response.subscribe((response) => {
-          console.log(response);
-          if (response && response.message) {
-            const config = new MatSnackBarConfig();
-            config.verticalPosition = 'top';
-            config.duration = 3000;
-            this.snackBar.open(response.message, 'Close', config);
-            if (response.finalSavedUser) {
-              this.getNotices();
-            }
-          }
-        });
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+              width: '400px',
+              data: {
+                title: 'Confirm Removal',
+                message: `Are you sure you want to remove the notice: ${
+                  notice.title || notice.description
+                }? This action cannot be undone.`,
+                confirmButtonText: 'Remove',
+                cancelButtonText: 'Cancel',
+              },
+            });
+            // User cancelled, do nothing or log it
+            dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                // User confirmed, proceed with removal
+                this.dashboardService.deleteNotice(notice._id);
+                this.getNotices();
+              } else {
+                // User cancelled, do nothing or log it
+                console.log('Admin removal cancelled');
+              }
+            });
+
+            this.getNotices();
     // Implement your delete logic here
   }
 

@@ -15,6 +15,9 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+
 
 
 export interface Message {
@@ -56,7 +59,9 @@ export class CafeMessagesListComponent
     sanitizer: DomSanitizer,
     private dashboardService: DashboardService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+            private dialog: MatDialog
+
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -101,6 +106,7 @@ export class CafeMessagesListComponent
 
   editMessage(message: Message) {
     console.log('Edit message:', message);
+    this.getMessages();
     // Implement your edit logic here
   }
 
@@ -108,11 +114,12 @@ export class CafeMessagesListComponent
     this.dashboardService.getMessages();
     this.dashboardSubscribtion = this.dashboardService._messages.subscribe(
       (next: any) => {
-        console.log(next);
 
-        this.messages = next.messages.filter(
-          (message: any) => message.category === 'cafe'
-        );
+        if(next.messages && next.messages.length > 0) {
+          this.messages = next.messages.filter(
+            (message: any) => message.category === 'cafe'
+          );
+        }
 
         this.ngZone.run(() => {});
       }
@@ -121,7 +128,7 @@ export class CafeMessagesListComponent
 
   deleteMessage(message: any) {
     console.log('Delete message:', message);
-    this.dashboardService.deleteMessage(message._id);
+
     this.dashboardService._response.subscribe((response) => {
       console.log(response);
       if (response && response.message) {
@@ -134,6 +141,30 @@ export class CafeMessagesListComponent
       }
     });
     // Implement your delete logic here
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Removal',
+        message: `Are you sure you want to remove the message: ${
+          message.message
+        }? This action cannot be undone.`,
+        confirmButtonText: 'Remove',
+        cancelButtonText: 'Cancel',
+      },
+    });
+    // User cancelled, do nothing or log it
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // User confirmed, proceed with removal
+        this.dashboardService.deleteMessage(message._id);
+        this.getMessages();
+      } else {
+        // User cancelled, do nothing or log it
+        // console.log('Admin removal cancelled');
+      }
+    });
+
+    this.getMessages();
   }
 
   applyFilter(event: Event) {

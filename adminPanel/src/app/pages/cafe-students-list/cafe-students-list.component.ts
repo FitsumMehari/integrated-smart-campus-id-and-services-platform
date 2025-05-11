@@ -106,10 +106,11 @@ export class CafeStudentsListComponent implements OnInit, AfterViewInit, OnDestr
 
   getUsers(): void {
     this.usersSubscription = this.dashboardService._users.subscribe((users: any) => {
-      this.students = users.allUsers.filter(
-        (user:any) => user.userType === 'student'
-      );
-      // console.log(this.administrators);
+      if(users.allUsers && users.allUsers.length > 0) {
+        this.students = users.allUsers.filter(
+          (user:any) => user.userType === 'student'
+        );
+      }
 
 
       this.ngZone.run(() => {});

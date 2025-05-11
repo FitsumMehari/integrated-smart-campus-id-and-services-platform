@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export interface Student {
   id: number;
@@ -66,7 +68,9 @@ export class RegistrarStudentsListComponent
     private dashboardService: DashboardService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+                private dialog: MatDialog
+
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -116,15 +120,18 @@ export class RegistrarStudentsListComponent
   editStudent(student: Student) {
     console.log('Edit student:', student);
     this.modalService.openEditStudent(student);
+    this.getUsers();
     // Implement your edit logic here
   }
 
   getUsers(): void {
     this.usersSubscription = this.dashboardService._users.subscribe(
       (users: any) => {
-        this.students = users.allUsers.filter(
-          (user: any) => user.userType === 'student'
-        );
+        if(users.allUsers && users.allUsers.length > 0) {
+          this.students = users.allUsers.filter(
+            (user: any) => user.userType === 'student'
+          );
+        }
         // console.log(this.administrators);
 
         this.ngZone.run(() => {});
@@ -136,18 +143,30 @@ export class RegistrarStudentsListComponent
   deleteStudent(student: any) {
     console.log('Delete student:', student);
     // Implement your delete logic here
-    this.authService.removeUser(student._id);
-    this.authService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
-
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Removal',
+        message: `Are you sure you want to remove the student: ${
+          student.username
+        }? This action cannot be undone.`,
+        confirmButtonText: 'Remove',
+        cancelButtonText: 'Cancel',
+      },
+    });
+    // User cancelled, do nothing or log it
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // User confirmed, proceed with removal
+        this.authService.removeUser(student._id);
         this.getUsers();
+      } else {
+        // User cancelled, do nothing or log it
+        // console.log('Admin removal cancelled');
       }
     });
+
+    this.getUsers();
   }
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value;
@@ -161,6 +180,7 @@ export class RegistrarStudentsListComponent
   addNewStudent() {
     console.log('Add new student');
     this.modalService.openAddStudent();
+    this.getUsers();
   }
   ngOnDestroy(): void {
     if (this.openModalSubscription) {

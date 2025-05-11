@@ -1,7 +1,11 @@
-
-
-
-import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -10,6 +14,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export interface Message {
   id: number;
@@ -17,11 +23,10 @@ export interface Message {
   description: string;
 }
 
-
 @Component({
   selector: 'app-registrar-messages-list',
   templateUrl: './registrar-messages-list.component.html',
-  styleUrl: './registrar-messages-list.component.css'
+  styleUrl: './registrar-messages-list.component.css',
 })
 export class RegistrarMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy
@@ -50,7 +55,9 @@ export class RegistrarMessagesListComponent
     sanitizer: DomSanitizer,
     private dashboardService: DashboardService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+                private dialog: MatDialog
+
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -95,6 +102,7 @@ export class RegistrarMessagesListComponent
 
   editMessage(message: Message) {
     console.log('Edit message:', message);
+    this.getMessages();
     // Implement your edit logic here
   }
 
@@ -102,33 +110,57 @@ export class RegistrarMessagesListComponent
     this.dashboardService.getMessages();
     this.dashboardSubscribtion = this.dashboardService._messages.subscribe(
       (next: any) => {
-        console.log(next);
-
-        this.messages = next.messages.filter(
-          (message: any) => message.category === 'registrar'
-        );
+        if (next.messages && next.messages.length > 0) {
+          this.messages = next.messages.filter(
+            (message: any) => message.category === 'registrar'
+          );
+        }
 
         this.ngZone.run(() => {});
       }
     );
   }
 
-  deleteMessage(message: any) {
-    console.log('Delete message:', message);
-    this.dashboardService.deleteMessage(message._id);
-    this.dashboardService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
+    deleteMessage(message: any) {
+      console.log('Delete message:', message);
 
-        this.getMessages();
-      }
-    });
-    // Implement your delete logic here
-  }
+      this.dashboardService._response.subscribe((response) => {
+        console.log(response);
+        if (response && response.message) {
+          const config = new MatSnackBarConfig();
+          config.verticalPosition = 'top';
+          config.duration = 3000;
+          this.snackBar.open(response.message, 'Close', config);
+
+          this.getMessages();
+        }
+      });
+      // Implement your delete logic here
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Confirm Removal',
+          message: `Are you sure you want to remove the message: ${
+            message.message
+          }? This action cannot be undone.`,
+          confirmButtonText: 'Remove',
+          cancelButtonText: 'Cancel',
+        },
+      });
+      // User cancelled, do nothing or log it
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          // User confirmed, proceed with removal
+          this.dashboardService.deleteMessage(message._id);
+          this.getMessages();
+        } else {
+          // User cancelled, do nothing or log it
+          // console.log('Admin removal cancelled');
+        }
+      });
+
+      this.getMessages();
+    }
 
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value;
@@ -153,4 +185,3 @@ export class RegistrarMessagesListComponent
     }
   }
 }
-

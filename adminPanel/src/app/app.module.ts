@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Very important for Material
+
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -38,6 +40,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'; // Import MatP
 import {  MatSnackBarModule } from '@angular/material/snack-bar'; // Import MatSnackBarModule
 
 
+
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClient, provideHttpClient } from '@angular/common/http';
@@ -66,6 +69,7 @@ import { RegistrarMessagesListComponent } from './pages/registrar-messages-list/
 import { RegistrarStudentsListComponent } from './pages/registrar-students-list/registrar-students-list.component';
 import { RegistrarNoticesListComponent } from './pages/registrar-notices-list/registrar-notices-list.component';
 import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/registrar-admins-list.component';
+import { ConfirmationDialogComponent } from './pages/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -97,9 +101,11 @@ import { RegistrarAdminsListComponent } from './pages/registrar-admins-list/regi
     RegistrarStudentsListComponent,
     RegistrarNoticesListComponent,
     RegistrarAdminsListComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule, // Make sure this is here!
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,

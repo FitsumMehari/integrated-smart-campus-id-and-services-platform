@@ -1,6 +1,11 @@
-
-
-import { Component, OnInit, ViewChild, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -9,6 +14,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export interface Message {
   id: number;
@@ -16,12 +23,10 @@ export interface Message {
   description: string;
 }
 
-
-
 @Component({
   selector: 'app-gate-messages-list',
   templateUrl: './gate-messages-list.component.html',
-  styleUrl: './gate-messages-list.component.css'
+  styleUrl: './gate-messages-list.component.css',
 })
 export class GateMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy
@@ -50,7 +55,8 @@ export class GateMessagesListComponent
     sanitizer: DomSanitizer,
     private dashboardService: DashboardService,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -95,6 +101,7 @@ export class GateMessagesListComponent
 
   editMessage(message: Message) {
     console.log('Edit message:', message);
+    this.getMessages()
     // Implement your edit logic here
   }
 
@@ -102,11 +109,11 @@ export class GateMessagesListComponent
     this.dashboardService.getMessages();
     this.dashboardSubscribtion = this.dashboardService._messages.subscribe(
       (next: any) => {
-        console.log(next);
-
-        this.messages = next.messages.filter(
-          (message: any) => message.category === 'gate'
-        );
+        if (next.messages && next.messages.length > 0) {
+          this.messages = next.messages.filter(
+            (message: any) => message.category === 'gate'
+          );
+        }
 
         this.ngZone.run(() => {});
       }
@@ -115,7 +122,7 @@ export class GateMessagesListComponent
 
   deleteMessage(message: any) {
     console.log('Delete message:', message);
-    this.dashboardService.deleteMessage(message._id);
+
     this.dashboardService._response.subscribe((response) => {
       console.log(response);
       if (response && response.message) {
@@ -128,6 +135,28 @@ export class GateMessagesListComponent
       }
     });
     // Implement your delete logic here
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Removal',
+        message: `Are you sure you want to remove the message: ${message.message}? This action cannot be undone.`,
+        confirmButtonText: 'Remove',
+        cancelButtonText: 'Cancel',
+      },
+    });
+    // User cancelled, do nothing or log it
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // User confirmed, proceed with removal
+        this.dashboardService.deleteMessage(message._id);
+        this.getMessages();
+      } else {
+        // User cancelled, do nothing or log it
+        // console.log('Admin removal cancelled');
+      }
+    });
+
+    this.getMessages();
   }
 
   applyFilter(event: Event) {
@@ -153,5 +182,3 @@ export class GateMessagesListComponent
     }
   }
 }
-
-

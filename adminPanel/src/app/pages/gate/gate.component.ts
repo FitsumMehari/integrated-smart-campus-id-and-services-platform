@@ -93,7 +93,7 @@ export class GateComponent implements OnInit, OnDestroy {
         if (this.allNotices) {
           //check if it is not null or undefined
           this.allNotices.forEach((notice: any) => {
-            if (notice.owner === 'gate') {
+            if (notice.category === 'gate') {
               this.notices.push(notice);
             }
           });
