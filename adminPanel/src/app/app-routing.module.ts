@@ -48,11 +48,11 @@ const routes: Routes = [
         component: DashboardComponent,
         canActivate: [dashboardGuard],
         children: [
-          { path: 'students', component: CafeStudentsListComponent },
+          { path: 'students', component: AdminsListComponent },
           { path: 'admins', component: AdminsListComponent },
-          { path: 'notices', component: CafeNoticesListComponent },
-          { path: 'messages', component: CafeMessagesListComponent },
-          { path: '', redirectTo: 'messages', pathMatch: 'full' }, // Default route
+          { path: 'notices', component: AdminsListComponent },
+          { path: 'messages', component: AdminsListComponent },
+          { path: '', redirectTo: 'admins', pathMatch: 'full' }, // Default route
         ],
       },
       {
