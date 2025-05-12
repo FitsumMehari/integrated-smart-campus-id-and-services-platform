@@ -36,8 +36,9 @@
     min-width: 200px;
     cursor: pointer;
     transition: box-shadow 0.3s ease-in-out;
-    background-color: rgba(131, 131, 131, .5);
-    background-color: rgba(138, 132, 132, 0.4);
+    /* background-color: rgba(131, 131, 131, .5); */
+    /* background-color: rgba(138, 132, 132, 0.4); */
+    background-color: rgba(13, 31, 45, 0.1);
 }
 
 .dashboard-card:hover {
