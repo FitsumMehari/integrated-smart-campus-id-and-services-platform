@@ -31,45 +31,47 @@ router.get("/:filter", async(req, res, next) => {
 });
 
 router.post("/", async(req, res, next) => {
-    if (!req.body.userId ||
-        !req.body.serialKey
-    ) {
-        return res.status(200).json({ "message": "Please fill the required inputs" })
+    if (!req.body.userId || !req.body.serialKey) {
+        return res.status(200).json({ message: "Please fill the required inputs" });
     }
     try {
         var newBelongings = new Belongings({
             userId: req.body.userId,
-            serialKey: req.body.serialKey
-        })
+            serialKey: req.body.serialKey,
+        });
 
-        await newBelongings.save()
+        await newBelongings.save();
 
         console.log("New Items added.");
 
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 
-
-        const foundUser = await User.findById(req.params.userId)
+        const foundUser = await User.findById(req.params.userId);
 
         if (foundUser) {
             var newActivity = new Activity({
                 userId: foundUser._id,
                 title: "Belonging Added",
-                description: `The person has registered a new item with the serial number: ${req.body.serialKey} at ${today.toLocaleString()}`,
-                category: 'other'
-            })
+                description: `${
+          foundUser.username
+        } has registered a new item with the serial number: ${
+          req.body.serialKey
+        } at ${today.toLocaleString()}`,
+                category: "other",
+            });
 
-            await newActivity.save()
-            console.log(`An item has been registerd as a belonging under a person called  ${foundUser.username} `);
+            await newActivity.save();
+            console.log(
+                `An item has been registerd as a belonging under a person called  ${foundUser.username} `
+            );
             console.log("New activity added.");
         }
 
-        res.status(200).json({ "message": "Item saved successfully" })
-
+        res.status(200).json({ message: "Item saved successfully" });
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 module.exports = router;
