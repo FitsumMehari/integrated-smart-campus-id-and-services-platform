@@ -122,7 +122,8 @@
 }
 
 .menu-item.active {
-    background-color: #263238;
+    /* background-color: #263238; */
+    background-color: rgba(13, 31, 45, 1);
 }
 
 .menu-item:hover .menu-label,
