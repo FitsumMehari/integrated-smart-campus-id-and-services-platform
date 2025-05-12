@@ -36,6 +36,7 @@ export class CafeStudentsListComponent implements OnInit, AfterViewInit, OnDestr
     'cafeStatus',
     'department',
     'studentId',
+    'lastMeal',
     // 'manage',
   ];
   students: any[] = [];
