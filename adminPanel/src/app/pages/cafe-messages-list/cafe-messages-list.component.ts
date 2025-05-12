@@ -33,11 +33,9 @@ export class CafeMessagesListComponent
 {
   displayedColumns: string[] = [
     'select',
-    // 'id',
     'updatedAt',
     'from',
     'message',
-    // 'description',
     'manage',
   ];
   dataSource = new MatTableDataSource<any>();
@@ -114,6 +112,7 @@ export class CafeMessagesListComponent
           this.messages = next.messages.filter(
             (message: any) => message.category === 'cafe'
           );
+          this.messages.reverse();
         }
 
         this.ngZone.run(() => {});
