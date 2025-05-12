@@ -35,6 +35,7 @@ export class SchoolMessagesListComponent
     'select',
     // 'id',
     'updatedAt',
+    'from',
     'message',
     // 'description',
     'manage',

@@ -27,6 +27,17 @@ export class AuthService {
   getLoggedInUserDetails() {
     const token = localStorage.getItem('token');
     this._loggedUser.next(jwtDecode(token || ''));
+    this.http.get(this.authUrl + '/users/' + this._loggedUser.value._id).subscribe(
+      (allUsers) => {
+        this._response.next([]);
+        if (allUsers) {
+          this._loggedUser.next(this._response.value.allUsers);
+        }
+        console.log(this._loggedUser.value);
+        this.router.navigateByUrl(this.router.url)
+      },
+      (error) => {}
+    );
     return {
       id: this._loggedUser.value._id,
       username: this._loggedUser.value.username,
@@ -111,6 +122,9 @@ export class AuthService {
     formData.append('user', JSON.stringify(user));
     formData.append('profilePic', profilePic);
 
+    // console.log("from authservice updateuser function: ", formData);
+
+
     this.http.put(this.authUrl + '/user', formData).subscribe(
       (next) => {
         this._response.next('');
@@ -119,6 +133,10 @@ export class AuthService {
         this._response.subscribe((response) => {
           // console.log(response);
           if (response && response.message) {
+            if(localStorage.getItem('fromEditProfile') === 'true') {
+              console.log("From Edit OWn Profile");
+              this.logout()
+            }
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
             config.duration = 3000;
@@ -126,10 +144,13 @@ export class AuthService {
             if (response.finalSavedUser) {
               this.modalService.closeAllModals();
             }
+
+
           }
         });
         this.router.navigateByUrl(this.router.url);
-        console.log(this.router.url);
+        // console.log(this.router.url);
+
       },
       (error) => {}
     );
@@ -235,5 +256,14 @@ export class AuthService {
       },
       (error) => {}
     );
+  }
+
+  logout() {
+    console.log('Logout clicked');
+    this.router.navigate(['/login']);
+    window.location.reload();
+    localStorage.removeItem('fromEditProfile');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
   }
 }

@@ -38,7 +38,8 @@ router.post("/", async(req, res, next) => {
     try {
         var newMessage = new Messages({
             message: req.body.message,
-            category: req.body.category
+            category: req.body.category,
+            from: req.body.from,
         })
 
         await newMessage.save()

@@ -35,6 +35,7 @@ export class CafeMessagesListComponent
     'select',
     // 'id',
     'updatedAt',
+    'from',
     'message',
     // 'description',
     'manage',

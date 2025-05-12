@@ -122,12 +122,16 @@ export class ModalService {
     this.showEditProfile = true;
     // this.openEditProfileModal.emit();
     this.openEditProfileModal.emit(admin); // Emit the notice data
+    // console.log(this.selectedAdmin);
+
     // console.log(this.showEditProfile);
 
   }
 
   closeEditProfile(): void {
     this.showEditProfile = false;
+    localStorage.setItem('fromEditProfile', 'false');
+
     this.closeEditProfileModal.emit();
   }
 
@@ -138,6 +142,10 @@ export class ModalService {
     this.closeEditNotice();
     this.closeEditStudent();
     this.closeEditProfile();
-    
+
+  }
+
+  getSelectedAdmin(): any {
+    return this.selectedAdmin
   }
 }

@@ -35,6 +35,7 @@ export class RegistrarMessagesListComponent
     'select',
     // 'id',
     'updatedAt',
+    'from',
     'message',
     // 'description',
     'manage',

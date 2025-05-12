@@ -104,6 +104,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   // editProfileFormGroup: FormGroup;
   account: any = {};
 
+  public fromEditProfile: boolean = false;
+
   sideNavItems: any[] = [];
 
   constructor(
@@ -187,6 +189,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.fromEditProfile = false;
+    localStorage.setItem('fromEditProfile', 'false');
+
     this.setAccount();
     this.currentLanguage = localStorage.getItem('currentLanguage') || 'en';
     this.translateService.use(this.currentLanguage);
@@ -240,6 +245,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setAccount() {
     this.account = this.authService.getLoggedInUserDetails();
+    // console.log(this.account);
+
   }
 
   openEditNoticeSubscriptionMethod() {
@@ -268,7 +275,8 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         if (profile) {
           // Populate the form with the profile data
           this.editAdminFormGroup.patchValue({
-            id: this.modalService.selectedAdmin.id, // Get the ID from the service.
+            // id: this.modalService.selectedAdmin.id, // Get the ID from the service.
+            // id: this.account.id,
             username: profile.username,
             studentId: profile.studentId,
             email: profile.email,
@@ -346,6 +354,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openAccountDialog() {
+
+    this.setAccount()
+    localStorage.setItem('fromEditProfile', 'true');
     this.modalService.openEditProfile(this.account);
   }
 
@@ -418,7 +429,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.addNewStudentFormGroup.reset();
+    this.editStudentFormGroup.reset();
   }
   onFileChange(e: any) {
     this.selectedProfilePic = e.target.files[0] || null;
@@ -491,7 +502,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Prepare the data to send in the this.newUser format
     this.updatedUser = {
-      id: this.modalService.selectedAdmin._id, // Get the ID from the service.
+      id: this.modalService.selectedAdmin.id || this.modalService.selectedAdmin._id , // Get the ID from the service.
       username: this.editAdminFormGroup.get('username')?.value,
       studentId: this.editAdminFormGroup.get('studentId')?.value,
       email: this.editAdminFormGroup.get('email')?.value,
@@ -503,8 +514,9 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: this.editAdminFormGroup.get('userType')?.value,
     };
 
+    // console.log(this.updatedUser);
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.addNewStudentFormGroup.reset();
+    this.editAdminFormGroup.reset();
   }
 
   addNewNotice() {

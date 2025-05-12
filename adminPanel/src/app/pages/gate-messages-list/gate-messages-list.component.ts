@@ -35,6 +35,7 @@ export class GateMessagesListComponent
     'select',
     // 'id',
     'updatedAt',
+    'from',
     'message',
     // 'description',
     'manage',
