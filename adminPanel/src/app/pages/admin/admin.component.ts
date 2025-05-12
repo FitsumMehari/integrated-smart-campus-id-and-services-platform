@@ -207,13 +207,13 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       case 'cafe':
         this.sideNavItems = [
-          { label: 'Scan QR Code', icon: 'meeting_room', route: '/admin/cafescan' },
+          { label: 'Scan QR Code', icon: 'qr_code_scanner', route: '/admin/cafescan' },
           { label: 'Cafe', icon: 'restaurant', route: '/admin/cafe' },
         ];
         break;
       case 'gate':
         this.sideNavItems = [
-          { label: 'Scan QR Code', icon: 'restaurant', route: '/admin/gatescan' },
+          { label: 'Scan QR Code', icon: 'qr_code_scanner', route: '/admin/gatescan' },
           { label: 'Gate', icon: 'meeting_room', route: '/admin/gate' },
         ];
         break;
