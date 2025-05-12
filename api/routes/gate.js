@@ -26,13 +26,13 @@ router.post("/enter", async(req, res, next) => {
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 
-        if (!foundUser) return res.status(200).json({ message: "You may NOT enter" });
+        if (!foundUser) return res.status(200).json({ message: "You may NOT enter", foundUser: foundUser });
 
 
         var newActivity = new Activity({
             userId: foundUser._id,
             title: "Entering the campus",
-            description: `The person is entering the campus at ${today.toLocaleString()}`,
+            description: `${foundUser.username} is entering the campus at ${today.toLocaleString()}`,
             category: 'gate'
         })
 
@@ -41,7 +41,7 @@ router.post("/enter", async(req, res, next) => {
         console.log(`A person called  ${foundUser.username} has enterd the campus `);
         console.log("New activity added.");
 
-        res.status(200).json({ message: "You may enter" });
+        res.status(200).json({ message: "You may enter", foundUser: foundUser });
     } catch (error) {
         next(error);
     }
@@ -60,7 +60,7 @@ router.post("/leave", async(req, res, next) => {
         var newActivity = new Activity({
             userId: foundUser._id,
             title: "Leaving the campus",
-            description: `The person is leaving the campus at ${today.toLocaleString()}`,
+            description: `${foundUser.username} is leaving the campus at ${today.toLocaleString()}`,
             category: 'gate'
         })
 
@@ -68,7 +68,7 @@ router.post("/leave", async(req, res, next) => {
         console.log(`A person called  ${foundUser.username} has left the campus `);
         console.log("New activity added.");
 
-        res.status(200).json({ message: "You may leave" });
+        res.status(200).json({ message: "You may leave", foundUser: foundUser });
     } catch (error) {
         next(error);
     }

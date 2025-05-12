@@ -25,13 +25,13 @@ router.post("/enter", async(req, res, next) => {
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 
-        if (!foundUser) return res.status(200).json({ message: "You may NOT enter. You are not in the system." });
+        if (!foundUser) return res.status(200).json({ message: "You may NOT enter. You are not in the system.", foundUser: foundUser });
 
-        if (foundUser.cafeStatus == "noncafe" || foundUser.cafeStatus == "selfsponsored") return res.status(200).json({ message: "You may NOT enter. You are not a cafe user." });
+        if (foundUser.cafeStatus == "noncafe" || foundUser.cafeStatus == "selfsponsored") return res.status(200).json({ message: "You may NOT enter. You are not a cafe user.", foundUser: foundUser });
 
         if (foundUser.lastMeal) {
             var mealGap = timeElapsed - foundUser.lastMeal
-            if (mealGap < 10800000) return res.status(200).json({ message: "You can not enter twice for the same meal time." });
+            if (mealGap < 10800000) return res.status(200).json({ message: "You can not enter twice for the same meal time.", foundUser: foundUser });
         }
 
 
@@ -44,7 +44,7 @@ router.post("/enter", async(req, res, next) => {
         var newActivity = new Activity({
             userId: foundUser._id,
             title: "Entering the cafe",
-            description: `The person is entering the cafe at ${today.toLocaleString()}`,
+            description: `${foundUser.username} is entering the cafe at ${today.toLocaleString()}`,
             category: 'cafe'
         })
 
@@ -53,7 +53,7 @@ router.post("/enter", async(req, res, next) => {
         console.log(`A person called  ${foundUser.username} has enterd the cafe `);
         console.log("New activity added.");
 
-        res.status(200).json({ message: "You may enter" });
+        res.status(200).json({ message: "You may enter", foundUser: foundUser });
     } catch (error) {
         next(error);
     }
