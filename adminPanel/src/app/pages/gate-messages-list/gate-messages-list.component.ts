@@ -33,11 +33,9 @@ export class GateMessagesListComponent
 {
   displayedColumns: string[] = [
     'select',
-    // 'id',
     'updatedAt',
     'from',
     'message',
-    // 'description',
     'manage',
   ];
   dataSource = new MatTableDataSource<any>();
@@ -114,6 +112,8 @@ export class GateMessagesListComponent
           this.messages = next.messages.filter(
             (message: any) => message.category === 'gate'
           );
+          this.messages.reverse();
+
         }
 
         this.ngZone.run(() => {});

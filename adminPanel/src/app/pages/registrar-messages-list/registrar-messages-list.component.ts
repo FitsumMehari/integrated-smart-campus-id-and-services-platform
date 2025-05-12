@@ -33,11 +33,9 @@ export class RegistrarMessagesListComponent
 {
   displayedColumns: string[] = [
     'select',
-    // 'id',
     'updatedAt',
     'from',
     'message',
-    // 'description',
     'manage',
   ];
   dataSource = new MatTableDataSource<any>();
@@ -57,8 +55,7 @@ export class RegistrarMessagesListComponent
     private dashboardService: DashboardService,
     private ngZone: NgZone,
     private snackBar: MatSnackBar,
-                private dialog: MatDialog
-
+    private dialog: MatDialog
   ) {
     iconRegistry.addSvgIcon(
       'edit',
@@ -115,6 +112,7 @@ export class RegistrarMessagesListComponent
           this.messages = next.messages.filter(
             (message: any) => message.category === 'registrar'
           );
+          this.messages.reverse();
         }
 
         this.ngZone.run(() => {});
@@ -122,46 +120,44 @@ export class RegistrarMessagesListComponent
     );
   }
 
-    deleteMessage(message: any) {
-      console.log('Delete message:', message);
+  deleteMessage(message: any) {
+    console.log('Delete message:', message);
 
-      this.dashboardService._response.subscribe((response) => {
-        console.log(response);
-        if (response && response.message) {
-          const config = new MatSnackBarConfig();
-          config.verticalPosition = 'top';
-          config.duration = 3000;
-          this.snackBar.open(response.message, 'Close', config);
+    this.dashboardService._response.subscribe((response) => {
+      console.log(response);
+      if (response && response.message) {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = 'top';
+        config.duration = 3000;
+        this.snackBar.open(response.message, 'Close', config);
 
-          this.getMessages();
-        }
-      });
-      // Implement your delete logic here
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        data: {
-          title: 'Confirm Removal',
-          message: `Are you sure you want to remove the message: ${
-            message.message
-          }? This action cannot be undone.`,
-          confirmButtonText: 'Remove',
-          cancelButtonText: 'Cancel',
-        },
-      });
-      // User cancelled, do nothing or log it
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          // User confirmed, proceed with removal
-          this.dashboardService.deleteMessage(message._id);
-          this.getMessages();
-        } else {
-          // User cancelled, do nothing or log it
-          // console.log('Admin removal cancelled');
-        }
-      });
+        this.getMessages();
+      }
+    });
+    // Implement your delete logic here
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Removal',
+        message: `Are you sure you want to remove the message: ${message.message}? This action cannot be undone.`,
+        confirmButtonText: 'Remove',
+        cancelButtonText: 'Cancel',
+      },
+    });
+    // User cancelled, do nothing or log it
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // User confirmed, proceed with removal
+        this.dashboardService.deleteMessage(message._id);
+        this.getMessages();
+      } else {
+        // User cancelled, do nothing or log it
+        // console.log('Admin removal cancelled');
+      }
+    });
 
-      this.getMessages();
-    }
+    this.getMessages();
+  }
 
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value;

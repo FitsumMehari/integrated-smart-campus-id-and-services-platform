@@ -33,11 +33,9 @@ export class SchoolMessagesListComponent
 {
   displayedColumns: string[] = [
     'select',
-    // 'id',
     'updatedAt',
     'from',
     'message',
-    // 'description',
     'manage',
   ];
   dataSource = new MatTableDataSource<any>();
@@ -115,6 +113,8 @@ export class SchoolMessagesListComponent
           this.messages = next.messages.filter(
             (message: any) => message.category === 'school'
           );
+          this.messages.reverse();
+
         }
 
         this.ngZone.run(() => {});
