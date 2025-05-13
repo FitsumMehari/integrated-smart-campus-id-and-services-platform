@@ -13,14 +13,13 @@ interface ApiResponse {
   providedIn: 'root',
 })
 export class CafeScanService {
-  private apiUrl = `${environment}cafe/enter`; // Your API endpoint
+  private apiUrl = `${environment.apiURL}cafe/enter`; // Your API endpoint.  Make sure environment.apiUrl is correctly configured
 
   constructor(private http: HttpClient) {}
 
   sendQrCodeId(qrCodeId: any): Observable<ApiResponse> {
-    // const userId = JSON.parse(qrCode)
-    console.log(qrCodeId);
-
-    return this.http.post<ApiResponse>(this.apiUrl, { id: qrCodeId });
+    qrCodeId = JSON.parse(qrCodeId)
+    console.log(qrCodeId.userId);
+    return this.http.post<ApiResponse>(this.apiUrl, { id: qrCodeId.userId });
   }
 }
