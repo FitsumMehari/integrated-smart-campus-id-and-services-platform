@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Very important for Material
 
 
@@ -9,6 +9,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BaseChartDirective } from 'ng2-charts';
 import { FileUploadModule } from 'ng2-file-upload';
 
+import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -105,13 +106,13 @@ import { GateScanComponent } from './pages/gate-scan/gate-scan.component';
     RegistrarAdminsListComponent,
     ConfirmationDialogComponent,
     CafeScanComponent,
-    GateScanComponent,
-  ],
+    GateScanComponent  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule, // Make sure this is here!
     AppRoutingModule,
     FormsModule,
+    NgxScannerQrcodeModule,
     ReactiveFormsModule,
     BaseChartDirective,
     TranslateModule.forRoot({
