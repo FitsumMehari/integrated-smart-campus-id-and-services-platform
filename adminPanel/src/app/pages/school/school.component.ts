@@ -14,9 +14,10 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: 'app-school',
-  templateUrl: './school.component.html',
-  styleUrl: './school.component.css',
+    selector: 'app-school',
+    templateUrl: './school.component.html',
+    styleUrl: './school.component.css',
+    standalone: false
 })
 export class SchoolComponent implements OnInit, OnDestroy {
   cards: DashboardCard[] = [];

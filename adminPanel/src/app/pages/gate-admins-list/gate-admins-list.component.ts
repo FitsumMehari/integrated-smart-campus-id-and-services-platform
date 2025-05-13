@@ -16,9 +16,10 @@ interface GateAdmin {
 }
 
 @Component({
-  selector: 'app-gate-admins-list',
-  templateUrl: './gate-admins-list.component.html',
-  styleUrl: './gate-admins-list.component.css',
+    selector: 'app-gate-admins-list',
+    templateUrl: './gate-admins-list.component.html',
+    styleUrl: './gate-admins-list.component.css',
+    standalone: false
 })
 export class GateAdminsListComponent implements OnInit, OnDestroy {
   gateAdministrators: any[] = [];

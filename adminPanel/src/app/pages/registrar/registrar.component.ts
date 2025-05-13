@@ -14,9 +14,10 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: 'app-registrar',
-  templateUrl: './registrar.component.html',
-  styleUrl: './registrar.component.css',
+    selector: 'app-registrar',
+    templateUrl: './registrar.component.html',
+    styleUrl: './registrar.component.css',
+    standalone: false
 })
 export class RegistrarComponent implements OnInit, OnDestroy {
   cards: DashboardCard[] = [];

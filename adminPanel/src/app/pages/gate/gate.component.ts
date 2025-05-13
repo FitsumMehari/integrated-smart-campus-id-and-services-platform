@@ -14,9 +14,10 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: 'app-gate',
-  templateUrl: './gate.component.html',
-  styleUrl: './gate.component.css',
+    selector: 'app-gate',
+    templateUrl: './gate.component.html',
+    styleUrl: './gate.component.css',
+    standalone: false
 })
 export class GateComponent implements OnInit, OnDestroy {
   cards: DashboardCard[] = [];

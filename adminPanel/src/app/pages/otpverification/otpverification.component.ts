@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-otpverification',
-  templateUrl: './otpverification.component.html',
-  styleUrls: ['./otpverification.component.css'],
+    selector: 'app-otpverification',
+    templateUrl: './otpverification.component.html',
+    styleUrls: ['./otpverification.component.css'],
+    standalone: false
 })
 export class OTPVerificationComponent implements OnInit {
   otpForm!: FormGroup; // Using the definite assignment assertion operator

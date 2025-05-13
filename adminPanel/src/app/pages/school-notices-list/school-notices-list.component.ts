@@ -26,9 +26,10 @@ export interface Notice {
 }
 
 @Component({
-  selector: 'app-school-notices-list',
-  templateUrl: './school-notices-list.component.html',
-  styleUrl: './school-notices-list.component.css',
+    selector: 'app-school-notices-list',
+    templateUrl: './school-notices-list.component.html',
+    styleUrl: './school-notices-list.component.css',
+    standalone: false
 })
 export class SchoolNoticesListComponent
   implements OnInit, AfterViewInit, OnDestroy

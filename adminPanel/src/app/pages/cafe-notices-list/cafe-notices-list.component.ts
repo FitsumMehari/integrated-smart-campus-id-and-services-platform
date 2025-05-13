@@ -27,9 +27,10 @@ export interface Notice {
 
 
 @Component({
-  selector: 'app-cafe-notices-list',
-  templateUrl: './cafe-notices-list.component.html',
-  styleUrls: ['./cafe-notices-list.component.css'],
+    selector: 'app-cafe-notices-list',
+    templateUrl: './cafe-notices-list.component.html',
+    styleUrls: ['./cafe-notices-list.component.css'],
+    standalone: false
 })
 export class CafeNoticesListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [

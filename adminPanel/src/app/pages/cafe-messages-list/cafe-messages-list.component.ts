@@ -24,9 +24,10 @@ export interface Message {
 }
 
 @Component({
-  selector: 'app-cafe-message-list',
-  templateUrl: './cafe-messages-list.component.html',
-  styleUrls: ['./cafe-messages-list.component.css'],
+    selector: 'app-cafe-message-list',
+    templateUrl: './cafe-messages-list.component.html',
+    styleUrls: ['./cafe-messages-list.component.css'],
+    standalone: false
 })
 export class CafeMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy

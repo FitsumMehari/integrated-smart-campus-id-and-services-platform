@@ -24,9 +24,10 @@ export interface Message {
 }
 
 @Component({
-  selector: 'app-school-messages-list',
-  templateUrl: './school-messages-list.component.html',
-  styleUrl: './school-messages-list.component.css',
+    selector: 'app-school-messages-list',
+    templateUrl: './school-messages-list.component.html',
+    styleUrl: './school-messages-list.component.css',
+    standalone: false
 })
 export class SchoolMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy

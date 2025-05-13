@@ -24,9 +24,10 @@ export interface Message {
 }
 
 @Component({
-  selector: 'app-gate-messages-list',
-  templateUrl: './gate-messages-list.component.html',
-  styleUrl: './gate-messages-list.component.css',
+    selector: 'app-gate-messages-list',
+    templateUrl: './gate-messages-list.component.html',
+    styleUrl: './gate-messages-list.component.css',
+    standalone: false
 })
 export class GateMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy

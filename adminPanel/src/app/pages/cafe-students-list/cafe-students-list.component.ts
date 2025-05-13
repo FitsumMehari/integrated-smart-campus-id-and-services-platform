@@ -23,9 +23,10 @@ export interface Student {
  */
 
 @Component({
-  selector: 'app-cafe-students-list',
-  templateUrl: './cafe-students-list.component.html',
-  styleUrls: ['./cafe-students-list.component.css'],
+    selector: 'app-cafe-students-list',
+    templateUrl: './cafe-students-list.component.html',
+    styleUrls: ['./cafe-students-list.component.css'],
+    standalone: false
 })
 export class CafeStudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [

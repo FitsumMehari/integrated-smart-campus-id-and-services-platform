@@ -29,9 +29,10 @@ export interface Student {
  */
 
 @Component({
-  selector: 'app-school-students-list',
-  templateUrl: './school-students-list.component.html',
-  styleUrl: './school-students-list.component.css',
+    selector: 'app-school-students-list',
+    templateUrl: './school-students-list.component.html',
+    styleUrl: './school-students-list.component.css',
+    standalone: false
 })
 export class SchoolStudentsListComponent
   implements OnInit, AfterViewInit, OnDestroy

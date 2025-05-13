@@ -26,9 +26,10 @@ export interface Notice {
 }
 
 @Component({
-  selector: 'app-registrar-notices-list',
-  templateUrl: './registrar-notices-list.component.html',
-  styleUrl: './registrar-notices-list.component.css',
+    selector: 'app-registrar-notices-list',
+    templateUrl: './registrar-notices-list.component.html',
+    styleUrl: './registrar-notices-list.component.css',
+    standalone: false
 })
 export class RegistrarNoticesListComponent
   implements OnInit, AfterViewInit, OnDestroy

@@ -16,9 +16,10 @@ interface SchoolAdmin {
 }
 
 @Component({
-  selector: 'app-school-admins-list',
-  templateUrl: './school-admins-list.component.html',
-  styleUrl: './school-admins-list.component.css',
+    selector: 'app-school-admins-list',
+    templateUrl: './school-admins-list.component.html',
+    styleUrl: './school-admins-list.component.css',
+    standalone: false
 })
 export class SchoolAdminsListComponent implements OnInit, OnDestroy {
   schoolAdministrators: any[] = [];

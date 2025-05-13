@@ -16,9 +16,10 @@ interface RegistrarAdmin {
 }
 
 @Component({
-  selector: 'app-registrar-admins-list',
-  templateUrl: './registrar-admins-list.component.html',
-  styleUrl: './registrar-admins-list.component.css',
+    selector: 'app-registrar-admins-list',
+    templateUrl: './registrar-admins-list.component.html',
+    styleUrl: './registrar-admins-list.component.css',
+    standalone: false
 })
 export class RegistrarAdminsListComponent implements OnInit, OnDestroy {
   registrarAdministrators: any[] = [];

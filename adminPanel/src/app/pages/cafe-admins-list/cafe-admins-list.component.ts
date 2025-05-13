@@ -16,9 +16,10 @@ interface CafeAdmin {
 }
 
 @Component({
-  selector: 'app-cafe-admins-list',
-  templateUrl: './cafe-admins-list.component.html',
-  styleUrls: ['./cafe-admins-list.component.css'],
+    selector: 'app-cafe-admins-list',
+    templateUrl: './cafe-admins-list.component.html',
+    styleUrls: ['./cafe-admins-list.component.css'],
+    standalone: false
 })
 export class CafeAdminsListComponent implements OnInit, OnDestroy {
   cafeAdministrators: any[] = [];

@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-createnewpassword',
-  templateUrl: './createnewpassword.component.html',
-  styleUrls: ['./createnewpassword.component.css'],
+    selector: 'app-createnewpassword',
+    templateUrl: './createnewpassword.component.html',
+    styleUrls: ['./createnewpassword.component.css'],
+    standalone: false
 })
 export class CreatenewpasswordComponent {
   hidePassword = true;

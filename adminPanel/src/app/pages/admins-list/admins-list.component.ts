@@ -18,9 +18,10 @@ interface MonthlyActivity {
 }
 
 @Component({
-  selector: 'app-admins-list',
-  templateUrl: './admins-list.component.html',
-  styleUrls: ['./admins-list.component.css'],
+    selector: 'app-admins-list',
+    templateUrl: './admins-list.component.html',
+    styleUrls: ['./admins-list.component.css'],
+    standalone: false
 })
 export class AdminsListComponent implements OnInit, OnDestroy {
   @ViewChild('myChart') myChartRef: ElementRef | undefined;

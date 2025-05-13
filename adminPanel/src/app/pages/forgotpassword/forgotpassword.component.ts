@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-forgotpassword',
-  templateUrl: './forgotpassword.component.html',
-  styleUrls: ['./forgotpassword.component.css'],
+    selector: 'app-forgotpassword',
+    templateUrl: './forgotpassword.component.html',
+    styleUrls: ['./forgotpassword.component.css'],
+    standalone: false
 })
 export class ForgotpasswordComponent {
   constructor(private router: Router, private authService: AuthService){}

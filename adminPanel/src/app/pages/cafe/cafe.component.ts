@@ -14,9 +14,10 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: 'app-cafe',
-  templateUrl: './cafe.component.html',
-  styleUrls: ['./cafe.component.css'],
+    selector: 'app-cafe',
+    templateUrl: './cafe.component.html',
+    styleUrls: ['./cafe.component.css'],
+    standalone: false
 })
 export class CafeComponent implements OnInit, OnDestroy {
   cards: DashboardCard[] = [];

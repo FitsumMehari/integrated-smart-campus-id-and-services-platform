@@ -24,9 +24,10 @@ export interface Message {
 }
 
 @Component({
-  selector: 'app-registrar-messages-list',
-  templateUrl: './registrar-messages-list.component.html',
-  styleUrl: './registrar-messages-list.component.css',
+    selector: 'app-registrar-messages-list',
+    templateUrl: './registrar-messages-list.component.html',
+    styleUrl: './registrar-messages-list.component.css',
+    standalone: false
 })
 export class RegistrarMessagesListComponent
   implements OnInit, AfterViewInit, OnDestroy

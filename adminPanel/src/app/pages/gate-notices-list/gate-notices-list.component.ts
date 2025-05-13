@@ -26,9 +26,10 @@ export interface Notice {
 }
 
 @Component({
-  selector: 'app-gate-notices-list',
-  templateUrl: './gate-notices-list.component.html',
-  styleUrl: './gate-notices-list.component.css',
+    selector: 'app-gate-notices-list',
+    templateUrl: './gate-notices-list.component.html',
+    styleUrl: './gate-notices-list.component.css',
+    standalone: false
 })
 export class GateNoticesListComponent
   implements OnInit, AfterViewInit, OnDestroy
