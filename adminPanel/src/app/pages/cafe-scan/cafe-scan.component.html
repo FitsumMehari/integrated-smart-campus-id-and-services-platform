@@ -1,1 +1,95 @@
-<p>cafe-scan works!</p>
+<div *ngIf="!hasScanned" class="page">
+    <div class="container">
+        <h2>Scan QR Code to Enter Cafe</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3 my-1">
+                <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-sm">
+        <option [value]="null" selected>Select device</option>
+        <option
+          *ngFor="let c of action.devices.value; let i = index"
+          [value]="c.deviceId"
+          [selected]="i == action.deviceIndexActive"
+          >{{ c.label }}</option
+        >
+      </select>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+                <!-- <p class="text-center">Scan QR Code Here</p> -->
+            </div>
+        </div>
+
+        <p *ngIf="action?.isLoading" class="text-center">Loading...</p>
+        <div class="row justify-content-center">
+            <div class="col-12 text-center">
+                <button class="btn" [class.btn-info]="!action?.isStart" [class.btn-warning]="action?.isStart" [disabled]="action?.isLoading" (click)="handle(action, action?.isStart ? 'stop' : 'start')">
+        <mat-icon *ngIf="!action?.isStart">camera</mat-icon>
+        <mat-icon *ngIf="action?.isStart">camera_off</mat-icon>
+      </button>
+            </div>
+        </div>
+
+        <div *ngIf="scanError" class="text-center">
+            <p style="color: red;">Scan Error: {{ scanError }}</p>
+        </div>
+
+        <div *ngIf="apiResponse" class="text-center">
+            <h3>Entry Status:</h3>
+            <p>{{ apiResponse?.message }}</p>
+            <div *ngIf="apiResponse?.foundUser">
+                <h4>User Details:</h4>
+                <pre>{{ apiResponse.foundUser | json }}</pre>
+            </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="text-center">
+            <p style="color: red;">Error: {{ errorMessage }}</p>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="hasScanned">
+    <main class="main-content">
+        <h1 class="mat-display-1 message-header">{{ apiResponse?.message }}</h1>
+
+        <div *ngIf="apiResponse?.foundUser" class="mat-elevation-z4 user-details-card">
+            <div class="user-details-header">
+                <img [src]="apiResponse.foundUser.profilePic" alt="Profile Picture" class="profile-picture" />
+                <h2 class="mat-headline">{{ apiResponse.foundUser.username }}</h2>
+            </div>
+            <div class="user-details-body">
+                <mat-list>
+                    <mat-list-item>
+                        <span mat-line>ID:</span>
+                        <span mat-line class="secondary-text">{{
+              apiResponse.foundUser.studentId
+            }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span mat-line>Department:</span>
+                        <span mat-line class="secondary-text">{{
+              apiResponse.foundUser.department
+            }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span mat-line>Cafe Status:</span>
+                        <span mat-line class="secondary-text">{{
+              apiResponse.foundUser.cafeStatus
+            }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span mat-line>Last Cafe Entrance:</span>
+                        <span mat-line class="secondary-text">{{
+              apiResponse.foundUser.lastMeal |date:"short"
+            }}</span>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+    </main>
+</div>
