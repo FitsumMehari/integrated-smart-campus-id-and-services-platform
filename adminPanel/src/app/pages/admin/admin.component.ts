@@ -400,7 +400,11 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    this.addNewStudentFormGroup.reset();
+    this.authService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        this.addNewStudentFormGroup.reset();
+      }
+    })
   }
   editStudent() {
     if (this.editStudentFormGroup.invalid) {
@@ -430,7 +434,11 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.editStudentFormGroup.reset();
+    this.authService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        this.editStudentFormGroup.reset();
+      }
+    })
   }
   onFileChange(e: any) {
     this.selectedProfilePic = e.target.files[0] || null;
@@ -485,7 +493,12 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.authService.registerNewUser(this.newUser, this.selectedProfilePic); // Send the data
-    this.addNewAdminFormGroup.reset();
+    this.authService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        this.addNewAdminFormGroup.reset();
+      }
+    })
+
   }
 
   editAdmin() {
@@ -517,7 +530,13 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // console.log(this.updatedUser);
     this.authService.updateUser(this.updatedUser, this.selectedProfilePic); // Send the data
-    this.editAdminFormGroup.reset();
+    this.authService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        console.log(next.smallMessage);
+
+        this.editAdminFormGroup.reset();
+      }
+    })
   }
 
   addNewNotice() {
@@ -542,7 +561,11 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.newNotice);
 
     this.dashboardService.addNotice(this.newNotice); // Send the data
-    this.addNewNoticeFormGroup.reset();
+    this.dashboardService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        this.addNewNoticeFormGroup.reset();
+      }
+    })
   }
   editNotice() {
     if (this.editNoticeFormGroup.invalid) {
@@ -565,7 +588,11 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.dashboardService.updateNotice(updatedNotice);
-    this.editNoticeFormGroup.reset();
+    this.dashboardService._response.subscribe((next:any) => {
+      if(next.smallMessage == "OK") {
+        this.editNoticeFormGroup.reset();
+      }
+    })
   }
   ngOnDestroy(): any {
     // if (this.selectedAdminSubscription) {
