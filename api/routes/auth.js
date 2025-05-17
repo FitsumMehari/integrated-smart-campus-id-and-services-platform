@@ -37,7 +37,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
     // console.log(user);
 
     if (!user.studentId)
-        return res.status(200).json({ message: "Please fill the required inputs" });
+        return res.status(200).json({ message: "Please fill the required inputs", smallMessage: "BAD" });
     else {
         try {
             // const existingUser = await User.findOne({ studentId: user.studentId });
@@ -46,7 +46,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
             });
 
             if (existingUser) {
-                return res.status(200).json({ message: "User email or Id is already taken" });
+                return res.status(200).json({ message: "User email or Id is already taken", smallMessage: "BAD" });
             }
 
             if (req.file) {
@@ -154,7 +154,7 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                         finalSavedUser,
                     });
             } else {
-                res.status(200).json({ message: "Account creation failed" });
+                res.status(200).json({ message: "Account creation failed", smallMessage: "OK" });
             }
         } catch (error) {
             next(error);
@@ -168,12 +168,12 @@ router.put("/user", upload.single("profilePic"), async(req, res, next) => {
     console.log(user);
 
     if (!user.studentId)
-        return res.status(200).json({ message: "Please fill the required inputs" });
+        return res.status(200).json({ message: "Please fill the required inputs", smallMessage: "BAD" });
     else {
         try {
             const existingUser = await User.findById(user.id);
             if (!existingUser) {
-                return res.status(200).json({ message: "User not found" });
+                return res.status(200).json({ message: "User not found", smallMessage: "BAD" });
             }
             // const existingUser = await User.findOne({ studentId: user.studentId });
             // const existingUser = await User.findOne({
@@ -199,7 +199,7 @@ router.put("/user", upload.single("profilePic"), async(req, res, next) => {
                     tempfileName,
                     tempfileURL: existingUser.profilePic,
                     fileURL: existingUser.profilePic,
-                    fileName: existingUser.profilePic
+                    fileName: "existingUser.profilePic"
                 };
             }
 
@@ -296,9 +296,10 @@ router.put("/user", upload.single("profilePic"), async(req, res, next) => {
                     .json({
                         message: "User account updated successfully",
                         finalSavedUser,
+                        smallMessage: "OK"
                     });
             } else {
-                res.status(200).json({ message: "Account update failed" });
+                res.status(200).json({ message: "Account update failed", smallMessage: "BAD" });
             }
         } catch (error) {
             next(error);
@@ -311,9 +312,9 @@ router.delete("/user/:id", async(req, res, next) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
-            return res.status(200).json({ message: "User not found" });
+            return res.status(200).json({ message: "User not found", smallMessage: "BAD" });
         }
-        res.status(200).json({ message: "User deleted successfully" });
+        res.status(200).json({ message: "User deleted successfully", smallMessage: "OK" });
     } catch (error) {
         next(error);
     }
@@ -335,9 +336,9 @@ router.get("/users/:id", async(req, res, next) => {
         }
     }
 
-    if (!allUsers) return res.status(200).json({ message: "No users found" });
+    if (!allUsers) return res.status(200).json({ message: "No users found", smallMessage: "BAD" });
 
-    res.status(200).json({ message: "Users found", allUsers });
+    res.status(200).json({ message: "Users found", allUsers, smallMessage: "OK" });
 });
 
 // Get Digital ID
@@ -350,17 +351,17 @@ router.post("/digitalid", async(req, res, next) => {
         next(error);
     }
 
-    if (!user) return res.status(200).json({ message: "No users found" });
+    if (!user) return res.status(200).json({ message: "No users found", smallMessage: "BAD" });
 
     var digitalId = user.digitalId;
     // var { password, ...otherUserInfo } = user
-    res.status(200).json({ message: "User found", digitalId, user });
+    res.status(200).json({ message: "User found", digitalId, user, smallMessage: "OK" });
 });
 
 // Add a guest
 router.post("/guest", async(req, res, next) => {
     if (!req.body.username || !req.body.phone)
-        return res.status(200).json({ message: "Please fill the required inputs" });
+        return res.status(200).json({ message: "Please fill the required inputs", smallMessage: "BAD" });
     try {
         const newUser = new User({
             username: req.body.username,
@@ -373,7 +374,7 @@ router.post("/guest", async(req, res, next) => {
 
         console.log("New user saved as a guest");
 
-        res.status(200).json({ message: "New user saved successfully" });
+        res.status(200).json({ message: "New user saved successfully", smallMessage: "OK" });
     } catch (error) {
         next(error);
     }
@@ -388,7 +389,7 @@ router.post("/studentlogin", async(req, res, next) => {
             const user = await User.findOne({ studentId: req.body.id });
 
             if (!user) {
-                return res.status(200).json({ message: "Wrong Credientials!" });
+                return res.status(200).json({ message: "Wrong Credientials!", smallMessage: "BAD" });
             }
 
             const passwordMatch = await bcrypt.compare(
@@ -397,7 +398,7 @@ router.post("/studentlogin", async(req, res, next) => {
             );
 
             if (!passwordMatch) {
-                return res.status(200).json({ message: "Wrong Credientials!" });
+                return res.status(200).json({ message: "Wrong Credientials!", smallMessage: "BAD" });
             }
 
             const accessToken = jwt.sign({
@@ -435,7 +436,7 @@ router.post("/studentlogin", async(req, res, next) => {
             console.log(`A person called  ${user.username} has logged in `);
             console.log("New activity added.");
 
-            res.status(200).json({ message: "Log In Successful!", accessToken });
+            res.status(200).json({ message: "Log In Successful!", accessToken, smallMessage: "OK" });
         } catch (err) {
             return next(err);
         }
@@ -446,13 +447,13 @@ router.post("/studentlogin", async(req, res, next) => {
 router.post("/login", async(req, res, next) => {
 
     if (!req.body.email || !req.body.password) {
-        res.status(400).json("Please fill the required inputs!");
+        res.status(400).json({ message: "Please fill the required inputs!", smallMessage: "BAD" });
     } else {
         try {
             const user = await User.findOne({ email: req.body.email });
 
             if (!user) {
-                return res.status(200).json({ message: "Wrong Credientials!" });
+                return res.status(200).json({ message: "Wrong Credientials!", smallMessage: "BAD" });
             } else {
                 const passwordMatch = await bcrypt.compare(
                     req.body.password,
@@ -465,7 +466,7 @@ router.post("/login", async(req, res, next) => {
                     // await console.log(bcrypt.hash(req.body.password, 10));
                     // console.log(user.password);
 
-                    return res.status(200).json({ message: "Wrong Credientials!" });
+                    return res.status(200).json({ message: "Wrong Credientials!", smallMessage: "BAD" });
                 } else {
                     const accessToken = jwt.sign({
                             _id: user._id,
@@ -501,7 +502,7 @@ router.post("/login", async(req, res, next) => {
                     await newActivity.save();
                     console.log(`A person called  ${user.username} has logged in `);
                     console.log("New activity added.");
-                    res.status(200).json({ message: "Log In Successful!", accessToken });
+                    res.status(200).json({ message: "Log In Successful!", accessToken, smallMessage: "OK" });
                 }
             }
 
@@ -517,7 +518,7 @@ router.post("/login", async(req, res, next) => {
 router.post("/forgot-password", async(req, res, next) => {
     try {
         const { email } = req.body;
-        if (!email) return res.status(200).json({ message: "Email is required!" });
+        if (!email) return res.status(200).json({ message: "Email is required!", smallMessage: "BAD" });
 
         const createdPasswordResetOTP = await sendPasswordResetOTP(email, res);
 
@@ -525,7 +526,7 @@ router.post("/forgot-password", async(req, res, next) => {
             `Password reset request sent for a user with the following email: ${email}`
         );
 
-        res.status(200).json({ message: "OTP sent to your email!" });
+        res.status(200).json({ message: "OTP sent to your email!", smallMessage: "OK" });
     } catch (error) {
         next(error);
     }
@@ -594,14 +595,14 @@ router.post("/verify-otp", async(req, res, next) => {
     try {
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
-            return res.status(200).json({ message: "User not found" });
+            return res.status(200).json({ message: "User not found", smallMessage: "BAD" });
         }
 
         if (existingUser.generatedOTP !== otp) {
-            return res.status(200).json({ message: "Invalid or expired OTP" });
+            return res.status(200).json({ message: "Invalid or expired OTP", smallMessage: "BAD" });
         }
 
-        res.status(200).json({ message: 'OTP verified' });
+        res.status(200).json({ message: 'OTP verified', smallMessage: "OK" });
 
     } catch (error) {
         next(error)
@@ -614,7 +615,7 @@ router.post("/reset-password", async(req, res, next) => {
     try {
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
-            return res.status(200).json({ message: "User not found" });
+            return res.status(200).json({ message: "User not found", smallMessage: "BAD" });
         }
 
         // Hash the new password
@@ -641,7 +642,7 @@ router.post("/reset-password", async(req, res, next) => {
         );
         console.log("New activity added.");
 
-        res.json({ message: "Password reset successfully" });
+        res.json({ message: "Password reset successfully", smallMessage: "OK" });
     } catch (error) {
         next(error);
     }

@@ -20,9 +20,9 @@ router.get("/:category", async(req, res, next) => {
         } else {
             var notices = await Notice.find({ category: req.params.category });
         }
-        if (!notices) return res.status(200).json({ message: "No notices found" });
+        if (!notices) return res.status(200).json({ message: "No notices found", smallMessage: 'BAD' });
 
-        res.status(200).json({ message: "Notices Found", notices });
+        res.status(200).json({ message: "Notices Found", notices, smallMessage: 'OK' });
     } catch (error) {
         next(error);
     }
@@ -33,7 +33,7 @@ router.post("/", async(req, res, next) => {
         !req.body.description ||
         !req.body.category
     ) {
-        return res.status(200).json({ "message": "Please fill the required inputs" })
+        return res.status(200).json({ "message": "Please fill the required inputs", smallMessage: 'BAD' })
     }
     try {
         var newNotice = new Notice({
@@ -48,7 +48,8 @@ router.post("/", async(req, res, next) => {
 
         res.status(200).json({
             "message": "Notice saved successfully",
-            newNotice
+            newNotice,
+            smallMessage: 'OK'
 
         })
 
@@ -63,7 +64,7 @@ router.put("/", async(req, res, next) => {
                 $set: req.body,
             }, { new: true }
         );
-        res.status(200).json({ message: "Notice updated successfully", updatedNotice });
+        res.status(200).json({ message: "Notice updated successfully", updatedNotice, smallMessage: 'OK' });
     } catch (error) {
         next(error);
     }
@@ -71,7 +72,7 @@ router.put("/", async(req, res, next) => {
 router.delete("/:id", async(req, res, next) => {
     try {
         await Notice.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: "Notice deleted successfully" });
+        res.status(200).json({ message: "Notice deleted successfully", smallMessage: 'OK' });
     } catch (error) {
         next(error);
     }
