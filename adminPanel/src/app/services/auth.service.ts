@@ -69,6 +69,7 @@ export class AuthService {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
             config.duration = 3000;
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
             this.snackBar.open(response.message, 'Close', config);
             if (response.message === 'Log In Successful!') {
               // Store user data in local storage or a service
@@ -104,6 +105,8 @@ export class AuthService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
             if (response.finalSavedUser) {
@@ -139,7 +142,11 @@ export class AuthService {
             }
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
+            console.log(config);
+
             this.snackBar.open(response.message, 'Close', config);
             if (response.finalSavedUser) {
               this.modalService.closeAllModals();
@@ -167,6 +174,8 @@ export class AuthService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
           }
@@ -188,6 +197,8 @@ export class AuthService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
 
@@ -216,6 +227,8 @@ export class AuthService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
 
@@ -245,6 +258,8 @@ export class AuthService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
 
