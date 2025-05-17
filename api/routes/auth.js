@@ -191,18 +191,17 @@ router.put("/user", upload.single("profilePic"), async(req, res, next) => {
             } else {
                 var tempfileName = "";
                 var tempfileURL = "";
-                var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                // var tempsavedProfilePic = await cloudinaryFileUpload.setSavedFile(
+                //     tempfileName,
+                //     tempfileURL
+                // );
+                var tempsavedProfilePic = {
                     tempfileName,
-                    tempfileURL
-                );
+                    tempfileURL: existingUser.profilePic,
+                    fileURL: existingUser.profilePic,
+                    fileName: existingUser.profilePic
+                };
             }
-
-            // Hash the new password
-            // try {
-            //     var hashedPassword = await bcrypt.hash(user.password, 10);
-            // } catch (error) {
-            //     next(error)
-            // }
 
             const updatedUser = new User({
                 studentId: user.studentId,
