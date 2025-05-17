@@ -103,6 +103,8 @@ export class DashboardService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
           }
@@ -124,6 +126,8 @@ export class DashboardService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
           }
@@ -147,6 +151,8 @@ export class DashboardService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
             if (response.newNotice) {
@@ -172,6 +178,8 @@ export class DashboardService {
           if (response && response.message) {
             const config = new MatSnackBarConfig();
             config.verticalPosition = 'top';
+            config.panelClass = response.smallMessage == 'OK'? 'green-snack-bar':'red-snack-bar'
+
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
             if (response.newNotice) {
