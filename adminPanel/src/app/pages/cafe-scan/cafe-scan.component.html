@@ -54,6 +54,8 @@
 
 
 <div *ngIf="hasScanned">
+    <button mat-raised-button (click)="reload()">Reload</button>
+
     <main class="main-content">
         <h1 class="mat-display-1 message-header">{{ apiResponse?.message }}</h1>
 

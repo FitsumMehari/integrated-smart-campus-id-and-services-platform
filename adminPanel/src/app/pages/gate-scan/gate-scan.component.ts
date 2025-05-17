@@ -42,12 +42,7 @@ export class GateScanComponent implements AfterViewInit {
     private gateScanService: GateScanService
   ) {} // Inject the service
 
-  // ngAfterViewInit(): void {
-  //   console.log('NgxScannerQrcodeComponent initialized'); // Add this line
-  //   this.action.isReady.pipe(delay(1000)).subscribe(() => {
-  //     this.handle(this.action, 'start');
-  //   });
-  // }
+
   ngAfterViewInit(): void {
     console.log('NgAfterViewInit called');
     this.action.isReady.pipe(delay(1000)).subscribe(() => {
@@ -58,21 +53,7 @@ export class GateScanComponent implements AfterViewInit {
     });
   }
 
-//  public onEvent(e: any): void {
-//   console.log('onEvent triggered:', e); // VERY IMPORTANT
-//   if (Array.isArray(e) && e.length > 0 && e[0]?.value) {
-//     console.log('onEvent: Array with value:', e[0].value);
-//     this.qrCodeResult = e;
-//     this.processScannedData(e[0].value);
-//   } else if (e && e.value) {
-//     console.log('onEvent: Single value:', e.value);
-//     this.qrCodeResult = [e];
-//     this.processScannedData(e.value);
-//   } else {
-//     console.warn('onEvent: No value:', e);
-//     this.scanError = 'Could not read QR code value.';
-//   }
-// }
+
 
 public onEvent(e: any): void {
   console.log('onEvent triggered:', e);
@@ -168,6 +149,10 @@ public onEvent(e: any): void {
         },
       });
     }
+  }
+
+  reload() {
+    window.location.reload()
   }
 }
 
