@@ -33,5 +33,19 @@ body {
     /* Ensure the container is also above the modal */
 }
 
+.mat-mdc-snack-bar-container.green-snack-bar .mat-mdc-snackbar-surface {
+    background-color: #4CAF50 !important;
+    /* Or lime, if you preferred that for testing */
+    color: aliceblue !important;
+    /* Or black, if you preferred that for testing */
+}
+
+.mat-mdc-snack-bar-container.red-snack-bar .mat-mdc-snackbar-surface {
+    background-color: #f44336 !important;
+    /* Or purple, if you preferred that for testing */
+    color: aliceblue !important;
+    /* Or white, if you preferred that for testing */
+}
+
 
 /* end of for select in modal */
