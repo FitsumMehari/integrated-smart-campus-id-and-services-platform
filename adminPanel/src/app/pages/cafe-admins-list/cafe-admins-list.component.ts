@@ -23,6 +23,10 @@ interface CafeAdmin {
 })
 export class CafeAdminsListComponent implements OnInit, OnDestroy {
   cafeAdministrators: any[] = [];
+  cafeStudents: any[] = [];
+  noncafeStudents: any[] = [];
+  otherStudents: any[] = [];
+
   private openModalSubscription: Subscription | undefined;
 
   private usersSubscription: Subscription | undefined; // Add this line
@@ -115,6 +119,16 @@ export class CafeAdminsListComponent implements OnInit, OnDestroy {
           this.cafeAdministrators = users.allUsers.filter(
             (user: any) => user.userType === 'cafe'
           );
+          this.cafeStudents = users.allUsers.filter(
+            (user: any) => user.cafeStatus === 'cafe'
+          );
+          this.noncafeStudents = users.allUsers.filter(
+            (user: any) => user.cafeStatus === 'nonCafe'
+          );
+          this.otherStudents = users.allUsers.filter(
+            (user: any) => user.cafeStatus === 'selfsponsored'
+          );
+          this.horizontalBarChartData.datasets[0].data = [((this.cafeStudents.length)/(this.cafeStudents.length + this.noncafeStudents.length + this.otherStudents.length))*100, ((this.noncafeStudents.length)/(this.cafeStudents.length + this.noncafeStudents.length + this.otherStudents.length))*100, ((this.otherStudents.length)/(this.cafeStudents.length + this.noncafeStudents.length + this.otherStudents.length))*100]
         }
         // console.log(this.administrators);
 
