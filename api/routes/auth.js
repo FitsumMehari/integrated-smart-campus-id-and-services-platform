@@ -152,9 +152,10 @@ router.post("/user", upload.single("profilePic"), async(req, res, next) => {
                     .json({
                         message: "User account created successfully",
                         finalSavedUser,
+                        smallMessage: "OK"
                     });
             } else {
-                res.status(200).json({ message: "Account creation failed", smallMessage: "OK" });
+                res.status(200).json({ message: "Account creation failed", smallMessage: "BAD" });
             }
         } catch (error) {
             next(error);
