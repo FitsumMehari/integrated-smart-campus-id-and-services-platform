@@ -85,12 +85,6 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
     title: '',
     description: '',
     category: '',
-    // phone: '',
-    // gender: '',
-    // cafeStatus: '',
-    // password: '',
-    // confirmPassword: '',
-    // department: '',
   };
   selectedProfilePic: File | null = null;
   userProfile: any = {};
