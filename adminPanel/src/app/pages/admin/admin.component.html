@@ -54,111 +54,105 @@
 <!-- add admin -->
 <div class="add-admin-backdrop" *ngIf="modalService.showAddAdmin" (click)="modalService.closeAdmin()"></div>
 <div class="add-admin-card" *ngIf="modalService.showAddAdmin">
-    <h2>Add a New Administrator</h2>
-    <p class="subtitle">Please fill the form</p>
+    <h2>{{"Add a New Administrator" | translate}}</h2>
+    <p class="subtitle">{{"Please fill the form" |translate}}</p>
     <form [formGroup]="addNewAdminFormGroup" class="add-admin-form" (ngSubmit)="addNewAdmin()">
         <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label>{{"Name" | translate}}</mat-label>
             <input matInput type="text" name="username" formControlName="username" required />
             <mat-error *ngIf="addNewAdminFormGroup.get('username')?.hasError('required')">
-                Name is required
+                {{"Name is required"| translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>User ID</mat-label>
+            <mat-label>{{"User ID" | translate}}</mat-label>
             <input matInput type="text" name="studentId" formControlName="studentId" required />
             <mat-error *ngIf="addNewAdminFormGroup.get('studentId')?.hasError('required')">
-                User ID is required
+                {{"User ID is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>{{"Email" |translate}}</mat-label>
             <input matInput type="email" name="email" formControlName="email" required />
             <mat-error *ngIf="addNewAdminFormGroup.get('email')?.hasError('required')">
-                Email is required
+                {{"Email is required" |translate}}
             </mat-error>
             <mat-error *ngIf="addNewAdminFormGroup.get('email')?.hasError('email')">
-                Invalid email address
+                {{"Invalid email address" |translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Phone</mat-label>
+            <mat-label>{{"Phone"| translate}}</mat-label>
             <input matInput type="tel" name="phone" formControlName="phone" required />
             <mat-error *ngIf="addNewAdminFormGroup.get('phone')?.hasError('required')">
-                Phone is required
+                {{"Phone is required" | translate}}
             </mat-error>
             <mat-error *ngIf="addNewAdminFormGroup.get('phone')?.hasError('pattern')">
-                Invalid phone number (e.g., 10 digits)
+                {{"Invalid phone number (e.g., 10 digits)" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
+            <mat-label>{{"Gender" |translate}}</mat-label>
             <mat-select formControlName="gender" required>
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">{{"Male" | translate}}</mat-option>
+                <mat-option value="female">{{"Female" | translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewAdminFormGroup.get('gender')?.hasError('required')">
-                Gender is required
+                {{"Gender is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Admin Type</mat-label>
+            <mat-label>{{"Admin Type" |translate}}</mat-label>
             <mat-select formControlName="userType" required>
-                <mat-option value="cafe">Cafe Admin</mat-option>
-                <mat-option value="school">School Admin</mat-option>
-                <mat-option value="gate">Gate Admin</mat-option>
-                <mat-option value="registrar">Registrar Admin</mat-option>
-                <mat-option value="admin">Super Admin</mat-option>
+                <mat-option value="cafe">{{"Cafe Admin" | translate}}</mat-option>
+                <mat-option value="school">{{"School Admin" |translate}}</mat-option>
+                <mat-option value="gate">{{"Gate Admin" |translate}}</mat-option>
+                <mat-option value="registrar">{{"Registrar Admin" | translate}}</mat-option>
+                <mat-option value="admin">{{"Super Admin" |translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewAdminFormGroup.get('userType')?.hasError('required')">
-                Admin Type is required is required
+                {{"Admin Type is required is required" |translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
+            <mat-label>{{"Password" | translate}}</mat-label>
             <input matInput type="password" name="password" formControlName="password" required />
-            <!-- <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
-              <mat-icon style="width: 0.5rem;margin-;">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button> -->
             <mat-error *ngIf="addNewAdminFormGroup.get('password')?.hasError('required')">
-                Password is required
+                {{"Password is required" | translate}}
             </mat-error>
             <mat-error *ngIf="addNewAdminFormGroup.get('password')?.hasError('minlength')">
-                Password must be at least 8 characters long
+                {{"Password must be at least 8 characters long" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
+            <mat-label>{{"Confirm Password" | translate}}</mat-label>
             <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <!-- <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
-              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button> -->
             <mat-error *ngIf="addNewAdminFormGroup.get('confirmPassword')?.hasError('required')">
-                Confirm Password is required
+                {{"Confirm Password is required"| translate}}
             </mat-error>
             <mat-error *ngIf="addNewAdminFormGroup.hasError('mismatch')">
-                Passwords do not match
+                {{"Passwords do not match"| translate}}
             </mat-error>
         </mat-form-field>
 
         <div>
-            <label for="profilePic">Profile Picture:</label>
+            <label for="profilePic">{{"Profile Picture" | translate}}:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
         </div>
 
         <div class="actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="addNewAdminFormGroup.invalid">
-        Add Admin
+        {{"Add Admin" | translate}}
       </button>
             <button mat-button type="button" (click)="modalService.closeAdmin()">
-        Cancel
+        {{"Cancel" | translate}}
       </button>
         </div>
     </form>
@@ -170,105 +164,99 @@
 <!-- add student -->
 <div class="add-student-backdrop" *ngIf="modalService.showAddStudent" (click)="modalService.closeAddStudent()"></div>
 <div class="add-student-card" *ngIf="modalService.showAddStudent">
-    <h2>Add a New Student</h2>
-    <p class="subtitle">Please fill the form</p>
+    <h2>{{"Add a New Student" | translate}}</h2>
+    <p class="subtitle">{{"Please fill the form"| translate}}</p>
     <form [formGroup]="addNewStudentFormGroup" class="add-student-form" (ngSubmit)="addNewStudent()">
         <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label>{{"Name" | translate}}</mat-label>
             <input matInput type="text" name="username" formControlName="username" required />
             <mat-error *ngIf="addNewStudentFormGroup.get('username')?.hasError('required')">
-                Name is required
+                {{"Name is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Student ID</mat-label>
+            <mat-label>{{"Student ID" | translate}}</mat-label>
             <input matInput type="text" name="studentId" formControlName="studentId" required />
             <mat-error *ngIf="addNewStudentFormGroup.get('studentId')?.hasError('required')">
-                Student ID is required
+                {{"Student ID is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>{{"Email" | translate}}</mat-label>
             <input matInput type="email" name="email" formControlName="email" required />
             <mat-error *ngIf="addNewStudentFormGroup.get('email')?.hasError('required')">
-                Email is required
+                {{"Email is required" | translate}}
             </mat-error>
             <mat-error *ngIf="addNewStudentFormGroup.get('email')?.hasError('email')">
-                Invalid email address
+                {{"Invalid email address" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Phone</mat-label>
+            <mat-label>{{"Phone" | translate}}</mat-label>
             <input matInput type="tel" name="phone" formControlName="phone" required />
             <mat-error *ngIf="addNewStudentFormGroup.get('phone')?.hasError('required')">
-                Phone is required
+                {{"Phone is required" | translate}}
             </mat-error>
             <mat-error *ngIf="addNewStudentFormGroup.get('phone')?.hasError('pattern')">
-                Invalid phone number (e.g., 10 digits)
+                {{"Invalid phone number (e.g., 10 digits)" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
+            <mat-label>{{"Gender" |translate}}</mat-label>
             <mat-select formControlName="gender" required>
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">{{"Male"|translate}}</mat-option>
+                <mat-option value="female">{{"Female"|translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewStudentFormGroup.get('gender')?.hasError('required')">
-                Gender is required
+                {{"Gender is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Cafe Status</mat-label>
+            <mat-label>{{"Cafe Status" | translate}}</mat-label>
             <mat-select formControlName="cafeStatus" required>
-                <mat-option value="cafe">Cafe</mat-option>
-                <mat-option value="nonCafe">Non Cafe</mat-option>
-                <mat-option value="selfsponsored">Self Sponsored</mat-option>
+                <mat-option value="cafe">{{"Cafe" | translate}}</mat-option>
+                <mat-option value="nonCafe">{{"Non Cafe" | translate}}</mat-option>
+                <mat-option value="selfsponsored">{{"Self Sponsored" | translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewStudentFormGroup.get('cafeStatus')?.hasError('required')">
-                Cafe Status is required
+                {{"Cafe Status is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
+            <mat-label>{{"Password" | translate}}</mat-label>
             <input matInput type="password" name="password" formControlName="password" required />
-            <!-- <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" aria-label="Hide password" [attr.aria-pressed]="hidePassword">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button> -->
             <mat-error *ngIf="addNewStudentFormGroup.get('password')?.hasError('required')">
-                Password is required
+                {{"Password is required"| translate}}
             </mat-error>
             <mat-error *ngIf="addNewStudentFormGroup.get('password')?.hasError('minlength')">
-                Password must be at least 8 characters long
+                {{"Password must be at least 8 characters long" | translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
+            <mat-label>{{"Confirm Password" | translate}}</mat-label>
             <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" required />
-            <!-- <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" aria-label="Hide confirm password" [attr.aria-pressed]="hideConfirmPassword">
-              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button> -->
             <mat-error *ngIf="addNewStudentFormGroup.get('confirmPassword')?.hasError('required')">
-                Confirm Password is required
+                {{"Confirm Password is required" | translate}}
             </mat-error>
             <mat-error *ngIf="addNewStudentFormGroup.hasError('mismatch')">
-                Passwords do not match
+                {{"Passwords do not match" | translate}}
             </mat-error>
         </mat-form-field>
 
         <div>
-            <label for="profilePic">Profile Picture:</label>
+            <label for="profilePic">{{"Profile Picture" | translate}}:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
         </div>
 
         <mat-form-field appearance="outline">
-            <mat-label>Department</mat-label>
+            <mat-label>{{"Department" | translate}}</mat-label>
             <mat-select formControlName="department" required>
                 <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
                 <mat-option value="mechanical">Mechanical Engineering</mat-option>
@@ -278,16 +266,16 @@
                 <mat-option value="urban">Urban Planning</mat-option>
             </mat-select>
             <mat-error *ngIf="addNewStudentFormGroup.get('department')?.hasError('required')">
-                Department is required
+                {{"Department is required" | translate}}
             </mat-error>
         </mat-form-field>
 
         <div class="actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="addNewStudentFormGroup.invalid">
-        Add Student
+        {{"Add Student" | translate}}
       </button>
             <button mat-button type="button" (click)="modalService.closeAddStudent()">
-        Cancel
+        {{"Cancel" | translate}}
       </button>
         </div>
     </form>
@@ -298,87 +286,87 @@
 <!-- edit student -->
 <div class="edit-student-backdrop" *ngIf="modalService.showEditStudent" (click)="modalService.closeEditStudent()"></div>
 <div class="edit-student-card" *ngIf="modalService.showEditStudent">
-    <h2>Update Student Profile</h2>
-    <p class="subtitle">Please fill the form</p>
+    <h2>{{"Update Student Profile"|translate}}</h2>
+    <p class="subtitle">{{"Please fill the form"|translate}}</p>
     <form [formGroup]="editStudentFormGroup" class="edit-student-form" (ngSubmit)="editStudent()">
         <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label>{{"Name"|translate}}</mat-label>
             <input matInput type="text" name="username" formControlName="username" required />
             <mat-error *ngIf="editStudentFormGroup.get('username')?.hasError('required')">
-                Name is required
+                {{"Name is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Student ID</mat-label>
+            <mat-label>{{"Student ID"|translate}}</mat-label>
             <input matInput type="text" name="studentId" formControlName="studentId" required />
             <mat-error *ngIf="editStudentFormGroup.get('studentId')?.hasError('required')">
-                Student ID is required
+                {{"Student ID is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>{{"Email"|translate}}</mat-label>
             <input matInput type="email" name="email" formControlName="email" required />
             <mat-error *ngIf="editStudentFormGroup.get('email')?.hasError('required')">
-                Email is required
+                {{"Email is required"|translate}}
             </mat-error>
             <mat-error *ngIf="editStudentFormGroup.get('email')?.hasError('email')">
-                Invalid email address
+                {{"Invalid email address"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Phone</mat-label>
+            <mat-label>{{"Phone"|translate}}</mat-label>
             <input matInput type="tel" name="phone" formControlName="phone" required />
             <mat-error *ngIf="editStudentFormGroup.get('phone')?.hasError('required')">
-                Phone is required
+                {{"Phone is required"|translate}}
             </mat-error>
             <mat-error *ngIf="editStudentFormGroup.get('phone')?.hasError('pattern')">
-                Invalid phone number (e.g., 10 digits)
+                {{"Invalid phone number (e.g., 10 digits)"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
+            <mat-label>{{"Gender"|translate}}</mat-label>
             <mat-select formControlName="gender" required>
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">{{"Male"|translate}}</mat-option>
+                <mat-option value="female">{{"Female"|translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="editStudentFormGroup.get('gender')?.hasError('required')">
-                Gender is required
+                {{"Gender is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Cafe Status</mat-label>
+            <mat-label>{{"Cafe Status"|translate}}</mat-label>
             <mat-select formControlName="cafeStatus" required>
-                <mat-option value="cafe">Cafe</mat-option>
-                <mat-option value="nonCafe">Non Cafe</mat-option>
-                <mat-option value="selfsponsored">Self Sponsored</mat-option>
+                <mat-option value="cafe">{{"Cafe"|translate}}</mat-option>
+                <mat-option value="nonCafe">{{"Non Cafe"|translate}}</mat-option>
+                <mat-option value="selfsponsored">{{"Self Sponsored"|translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="editStudentFormGroup.get('cafeStatus')?.hasError('required')">
-                Cafe Status is required
+                {{"Cafe Status is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <div>
-            <label for="profilePic">Profile Picture:</label>
+            <label for="profilePic">{{"Profile Picture"|translate}}:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
 
             <div *ngIf="profilePicUrl" style="margin-top: 10px;">
                 <img [src]="profilePicUrl" alt="Current Profile Picture Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; object-fit: cover;">
             </div>
             <div *ngIf="!profilePicUrl && (addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
-                No new profile picture selected.
+                {{"No new profile picture selected"|translate}}.
             </div>
             <div *ngIf="!profilePicUrl && !(addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
-                No profile picture selected.
+                {{"No profile picture selected"|translate}}.
             </div>
         </div>
 
         <mat-form-field appearance="outline">
-            <mat-label>Department</mat-label>
+            <mat-label>{{"Department"|translate}}</mat-label>
             <mat-select formControlName="department" required>
                 <mat-option value="electrical">Electrical and Computer Engineering</mat-option>
                 <mat-option value="mechanical">Mechanical Engineering</mat-option>
@@ -388,16 +376,16 @@
                 <mat-option value="urban">Urban Planning</mat-option>
             </mat-select>
             <mat-error *ngIf="editStudentFormGroup.get('department')?.hasError('required')">
-                Department is required
+                {{"Department is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <div class="actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="editStudentFormGroup.invalid">
-    Update Student
+    {{"Update Student"|translate}}
   </button>
             <button mat-button type="button" (click)="modalService.closeEditStudent()">
-    Cancel
+    {{"Cancel"|translate}}
   </button>
         </div>
     </form>
@@ -408,93 +396,93 @@
 <!-- edit profile -->
 <div class="edit-profile-backdrop" *ngIf="modalService.showEditProfile" (click)="modalService.closeEditProfile()"></div>
 <div class="edit-profile-card" *ngIf="modalService.showEditProfile">
-    <h2>Profile</h2>
-    <p class="subtitle">Edit your profile here</p>
+    <h2>{{"Profile"|translate}}</h2>
+    <p class="subtitle">{{"Edit your profile here"|translate}}</p>
     <form [formGroup]="editAdminFormGroup" class="edit-profile-form" (ngSubmit)="editAdmin()">
         <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label>{{"Name"|translate}}</mat-label>
             <input matInput type="text" name="username" formControlName="username" required />
             <mat-error *ngIf="editAdminFormGroup.get('username')?.hasError('required')">
-                Name is required
+                {{"Name is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>User ID</mat-label>
+            <mat-label>{{"User ID"|translate}}</mat-label>
             <input matInput type="text" name="studentId" formControlName="studentId" required />
             <mat-error *ngIf="editAdminFormGroup.get('studentId')?.hasError('required')">
-                User ID is required
+                {{"User ID is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>{{"Email"|translate}}</mat-label>
             <input matInput type="email" name="email" formControlName="email" required />
             <mat-error *ngIf="editAdminFormGroup.get('email')?.hasError('required')">
-                Email is required
+                {{"Email is required"|translate}}
             </mat-error>
             <mat-error *ngIf="editAdminFormGroup.get('email')?.hasError('email')">
-                Invalid email address
+                {{"Invalid email address"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Phone</mat-label>
+            <mat-label>{{"Phone"|translate}}</mat-label>
             <input matInput type="tel" name="phone" formControlName="phone" required />
             <mat-error *ngIf="editAdminFormGroup.get('phone')?.hasError('required')">
-                Phone is required
+                {{"Phone is required"|translate}}
             </mat-error>
             <mat-error *ngIf="editAdminFormGroup.get('phone')?.hasError('pattern')">
-                Invalid phone number (e.g., 10 digits)
+                {{"Invalid phone number (e.g., 10 digits)"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Gender</mat-label>
+            <mat-label>{{"Gender"|translate}}</mat-label>
             <mat-select formControlName="gender" required>
-                <mat-option value="male">Male</mat-option>
-                <mat-option value="female">Female</mat-option>
+                <mat-option value="male">{{"Male"|translate}}</mat-option>
+                <mat-option value="female">{{"Female"|translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="editAdminFormGroup.get('gender')?.hasError('required')">
-                Gender is required
+                {{"Gender is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Admin Type</mat-label>
+            <mat-label>{{"Admin Type"|translate}}</mat-label>
             <mat-select formControlName="userType" required>
-                <mat-option value="cafe">Cafe Admin</mat-option>
-                <mat-option value="school">School Admin</mat-option>
-                <mat-option value="gate">Gate Admin</mat-option>
-                <mat-option value="registrar">Registrar Admin</mat-option>
-                <mat-option value="admin">Super Admin</mat-option>
+                <mat-option value="cafe">{{"Cafe Admin"|translate}}</mat-option>
+                <mat-option value="school">{{"School Admin"|translate}}</mat-option>
+                <mat-option value="gate">{{"Gate Admin"|translate}}</mat-option>
+                <mat-option value="registrar">{{"Registrar Admin"|translate}}</mat-option>
+                <mat-option value="admin">{{"Super Admin"|translate}}</mat-option>
             </mat-select>
             <mat-error *ngIf="editAdminFormGroup.get('userType')?.hasError('required')">
-                Admin Type is required is required
+                {{"Admin Type is required is required"|translate}}
             </mat-error>
         </mat-form-field>
 
         <div>
-            <label for="profilePic">Profile Picture:</label>
+            <label for="profilePic">{{"Profile Picture"|translate}}:</label>
             <input (change)="onFileChange($event)" type="file" id="profilePic" name="profilePic" formControlName="profilePic" />
 
             <div *ngIf="profilePicUrl" style="margin-top: 10px;">
                 <img [src]="profilePicUrl" alt="Current Profile Picture Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; object-fit: cover;">
             </div>
             <div *ngIf="!profilePicUrl && (addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
-                No new profile picture selected.
+                {{"No new profile picture selected"|translate}}.
             </div>
             <div *ngIf="!profilePicUrl && !(addNewStudentFormGroup.get('profilePic')?.value || addNewAdminFormGroup.get('profilePic')?.value || editStudentFormGroup.get('profilePic')?.value || editAdminFormGroup.get('profilePic')?.value)">
-                No profile picture selected.
+                {{"No profile picture selected"|translate}}.
             </div>
         </div>
 
         <div class="actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="editAdminFormGroup.invalid">
-    Update Profile
+    {{"Update Profile"|translate}}
   </button>
             <button mat-button type="button" (click)="modalService.closeEditProfile()">
-    Cancel
+    {{"Cancel"|translate}}
   </button>
         </div>
     </form>
@@ -505,34 +493,34 @@
 <!-- add notice -->
 <div class="add-notice-backdrop" *ngIf="modalService.showAddNotice" (click)="modalService.closeAddNotice()"></div>
 <div class="add-notice-card" *ngIf="modalService.showAddNotice">
-    <h2>Add a New Notice</h2>
-    <p class="subtitle">Please fill the form</p>
+    <h2>{{"Add a New Notice" | translate}}</h2>
+    <p class="subtitle">{{"Please fill the form" | translate}}</p>
     <form [formGroup]="addNewNoticeFormGroup" class="add-notice-form" (ngSubmit)="addNewNotice()">
 
         <mat-form-field appearance="outline">
-            <mat-label>Title</mat-label>
+            <mat-label>{{"Title" | translate}}</mat-label>
             <input matInput type="text" name="title" formControlName="title" required/>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
+            <mat-label>{{"Description" | translate}}</mat-label>
             <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Category</mat-label>
             <mat-select name="category" class="mat-select-panel" formControlName="category" required>
-                <mat-option value="cafe">Cafe</mat-option>
-                <mat-option value="gate">Gate</mat-option>
-                <mat-option value="school">School</mat-option>
-                <mat-option value="registrar">Registrar</mat-option>
+                <mat-option value="cafe">{{"Cafe"| translate}}</mat-option>
+                <mat-option value="gate">{{"Gate" | translate}}</mat-option>
+                <mat-option value="school">{{"School"| translate}}</mat-option>
+                <mat-option value="registrar">{{"Registrar" | translate}}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Add Notice</button>
+            <button mat-raised-button color="primary" type="submit">{{"Add Notice"|translate}}</button>
             <button mat-button type="button" (click)="modalService.closeAddNotice()">
-        Cancel
+        {{"Cancel" | translate}}
       </button>
         </div>
     </form>
@@ -543,33 +531,33 @@
 <!-- edit notice -->
 <div class="edit-notice-backdrop" *ngIf="modalService.showEditNotice" (click)="modalService.closeEditNotice()"></div>
 <div class="edit-notice-card" *ngIf="modalService.showEditNotice">
-    <h2>Update Notice</h2>
-    <p class="subtitle">Please fill the form</p>
+    <h2>{{"Update Notice"|translate}}</h2>
+    <p class="subtitle">{{"Please fill the form" | translate}}</p>
     <form [formGroup]="editNoticeFormGroup" class="edit-notice-form" (ngSubmit)="editNotice()">
         <mat-form-field appearance="outline">
-            <mat-label>Title</mat-label>
+            <mat-label>{{"Title" | translate}}</mat-label>
             <input matInput type="text" name="title" formControlName="title" required/>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
+            <mat-label>{{"Description" | translate}}</mat-label>
             <input matInput type="text" name="description" formControlName="description" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Category</mat-label>
+            <mat-label>{{"Category" | translate}}</mat-label>
             <mat-select name="category" class="mat-select-panel" formControlName="category" required>
-                <mat-option value="cafe">Cafe</mat-option>
-                <mat-option value="gate">Gate</mat-option>
-                <mat-option value="school">School</mat-option>
-                <mat-option value="registrar">Registrar</mat-option>
+                <mat-option value="cafe">{{"Cafe" | translate}}</mat-option>
+                <mat-option value="gate">{{"Gate" | translate}}</mat-option>
+                <mat-option value="school">{{"School"| translate}}</mat-option>
+                <mat-option value="registrar">{{"Registrar"| translate}}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <div class="actions">
-            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-raised-button color="primary" type="submit">{{"Save" | translate}}</button>
             <button mat-button type="button" (click)="modalService.closeEditNotice()">
-        Cancel
+        {{"Cancel" | translate}}
       </button>
         </div>
     </form>

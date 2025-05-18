@@ -1,11 +1,11 @@
 <div *ngIf="!hasScanned" class="page">
     <div class="container">
-        <h2>Scan QR Code to Enter Cafe</h2>
+        <h2>{{"Scan QR Code to Enter Cafe" | translate}}</h2>
 
         <div class="row justify-content-center">
             <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3 my-1">
                 <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-sm">
-        <option [value]="null" selected>Select device</option>
+        <option [value]="null" selected>{{"Select device" | translate}}</option>
         <option
           *ngFor="let c of action.devices.value; let i = index"
           [value]="c.deviceId"
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <p *ngIf="action?.isLoading" class="text-center">Loading...</p>
+        <p *ngIf="action?.isLoading" class="text-center">{{"Loading" |translate}}</p>
         <div class="row justify-content-center">
             <div class="col-12 text-center">
                 <button class="btn" [class.btn-info]="!action?.isStart" [class.btn-warning]="action?.isStart" [disabled]="action?.isLoading" (click)="handle(action, action?.isStart ? 'stop' : 'start')">
@@ -34,27 +34,27 @@
         </div>
 
         <div *ngIf="scanError" class="text-center">
-            <p style="color: red;">Scan Error: {{ scanError }}</p>
+            <p style="color: red;">{{"Scan Error" |translate}}: {{ scanError }}</p>
         </div>
 
         <div *ngIf="apiResponse" class="text-center">
-            <h3>Entry Status:</h3>
+            <h3>{{"Entry Status" | translate}}:</h3>
             <p>{{ apiResponse?.message }}</p>
             <div *ngIf="apiResponse?.foundUser">
-                <h4>User Details:</h4>
+                <h4>{{"User Details" | translate}}:</h4>
                 <pre>{{ apiResponse.foundUser | json }}</pre>
             </div>
         </div>
 
         <div *ngIf="errorMessage" class="text-center">
-            <p style="color: red;">Error: {{ errorMessage }}</p>
+            <p style="color: red;">{{"Error" | translate}}: {{ errorMessage }}</p>
         </div>
     </div>
 </div>
 
 
 <div *ngIf="hasScanned">
-    <button mat-raised-button (click)="reload()">Reload</button>
+    <button mat-raised-button (click)="reload()">{{"Reload" | translate}}</button>
 
     <main class="main-content">
         <h1 class="mat-display-1 message-header">{{ apiResponse?.message }}</h1>
@@ -67,25 +67,25 @@
             <div class="user-details-body">
                 <mat-list>
                     <mat-list-item>
-                        <span mat-line>ID:</span>
+                        <span mat-line>{{"ID" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
               apiResponse.foundUser.studentId
             }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Department:</span>
+                        <span mat-line>{{"Department" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
               apiResponse.foundUser.department
             }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Cafe Status:</span>
+                        <span mat-line>{{"Cafe Status" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
               apiResponse.foundUser.cafeStatus
             }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Last Cafe Entrance:</span>
+                        <span mat-line>{{"Last Cafe Entrance" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
               apiResponse.foundUser.lastMeal |date:"short"
             }}</span>

@@ -1,7 +1,7 @@
 <div class="cafe-admins-list-container">
     <div class="cafe-admin-list-side">
-        <h2>Cafe Administrators</h2>
-        <button mat-raised-button color="primary" (click)="openAddAdminCard()">Add New Admin</button>
+        <h2>{{"Cafe Administrators" | translate}}</h2>
+        <button mat-raised-button color="primary" (click)="openAddAdminCard()">{{"Add New Admin" | translate}}</button>
         <mat-list>
             <mat-list-item *ngFor="let admin of cafeAdministrators; let i = index">
                 <img matListItemAvatar [src]="admin.profilePic" alt="{{ admin.username }}" class="profile-pic">
@@ -17,7 +17,7 @@
         </mat-list>
     </div>
     <div class="cafe-admin-graph-side">
-        <h3>Cafe Student Demographics</h3>
+        <h3>{{"Cafe Student Demographics" | translate}}</h3>
         <div class="activity-graph">
             <canvas baseChart [data]="horizontalBarChartData" [options]="horizontalBarChartOptions" chartType="bar">
       </canvas>
