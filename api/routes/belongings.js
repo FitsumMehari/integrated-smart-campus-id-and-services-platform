@@ -20,7 +20,7 @@ router.get("/:filter", async(req, res, next) => {
         if (req.params.filter == "all") {
             var belongings = await Belongings.find();
         } else {
-            var belongings = await Belongings.find({ _id: req.params.filter });
+            var belongings = await Belongings.find({ userId: req.params.filter });
         }
         if (!belongings) return res.status(200).json({ message: "No items found" });
 
@@ -69,6 +69,22 @@ router.post("/", async(req, res, next) => {
         }
 
         res.status(200).json({ message: "Item saved successfully" });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.delete("/:filter", async(req, res, next) => {
+    try {
+        if (req.params.filter == "all") {
+            var belongings = await Belongings.find();
+        } else {
+            var belongings = await Belongings.findOneAndDelete({ _id: req.params.filter });
+        }
+        if (!belongings) return res.status(200).json({ message: "No items found" });
+
+        res.status(200).json({ message: "Items Deleted", belongings });
     } catch (error) {
         next(error);
     }
