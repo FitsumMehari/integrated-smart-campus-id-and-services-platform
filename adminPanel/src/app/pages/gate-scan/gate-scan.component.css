@@ -16,6 +16,10 @@
 
 /* For after scan */
 
+.infoDisplay {
+    display: flex;
+}
+
 .main-content {
     padding: 24px;
     display: flex;
@@ -85,4 +89,26 @@
 .user-details-body mat-list-item span.secondary-text {
     color: #555;
     font-weight: 500;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.add-belonging-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    /* Adjust width as needed */
+}
+
+.mat-form-field {
+    margin-bottom: 20px;
+}
+
+button {
+    margin-top: 10px;
 }
