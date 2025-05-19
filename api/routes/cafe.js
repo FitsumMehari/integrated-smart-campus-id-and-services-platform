@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const transporter = require("./transporter");
 const verifyOTP = require("./verifyOTP");
 
-const activity = require("./activity")
+const activity = require("./activity");
 
 dotenv.config();
 
@@ -21,34 +21,51 @@ router.post("/enter", async(req, res, next) => {
         return res.status(200).json({ message: "Please fill the required inputs" });
     }
     try {
-        var foundUser = await Users.findOne({ _id: req.body.id })
+        var foundUser = await Users.findOne({ _id: req.body.id });
         var timeElapsed = Date.now();
         var today = new Date(timeElapsed);
 
-        if (!foundUser) return res.status(200).json({ message: "You may NOT enter. You are not in the system.", foundUser: foundUser });
+        if (!foundUser)
+            return res
+                .status(200)
+                .json({
+                    message: "You may NOT enter. You are not in the system.",
+                    foundUser: foundUser,
+                });
 
-        if (foundUser.cafeStatus == "noncafe" || foundUser.cafeStatus == "selfsponsored") return res.status(200).json({ message: "You may NOT enter. You are not a cafe user.", foundUser: foundUser });
+        if (foundUser.cafeStatus !== "cafe")
+            return res
+                .status(200)
+                .json({
+                    message: "You may NOT enter. You are not a cafe user.",
+                    foundUser: foundUser,
+                });
 
         if (foundUser.lastMeal) {
-            var mealGap = timeElapsed - foundUser.lastMeal
-            if (mealGap < 10800000) return res.status(200).json({ message: "You can not enter twice for the same meal time.", foundUser: foundUser });
+            var mealGap = timeElapsed - foundUser.lastMeal;
+            if (mealGap < 10800000)
+                return res
+                    .status(200)
+                    .json({
+                        message: "You can not enter twice for the same meal time.",
+                        foundUser: foundUser,
+                    });
         }
-
-
-
 
         foundUser.lastMeal = timeElapsed;
 
-        await foundUser.save()
+        await foundUser.save();
 
         var newActivity = new Activity({
             userId: foundUser._id,
             title: "Entering the cafe",
-            description: `${foundUser.username} is entering the cafe at ${today.toLocaleString()}`,
-            category: 'cafe'
-        })
+            description: `${
+        foundUser.username
+      } is entering the cafe at ${today.toLocaleString()}`,
+            category: "cafe",
+        });
 
-        await newActivity.save()
+        await newActivity.save();
 
         console.log(`A person called  ${foundUser.username} has enterd the cafe `);
         console.log("New activity added.");
