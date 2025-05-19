@@ -86,5 +86,12 @@
     "Reload": "ደጊምካ ምስፋር",
     "ID": "መለለዪ",
     "Last Cafe Entrance": "ንመጨረሻ ግዜ ካፌ ዝኣተውሉ ",
-    "Scan QR Code to Enter The Campus": "ግቢ ንምእታው QR ኮድ ስካን ይግበሩ"
+    "Scan QR Code to Enter The Campus": "ግቢ ንምእታው QR ኮድ ስካን ይግበሩ",
+    "User Belongings": "ዝትመዝገቡ ንብረታት",
+    "No belongings found for this user": "ምንም ዓይነት ንብረት አይተረኽበን",
+    "Loading belongings": "ንብረታት ዝርዝር ብምውፃእ",
+    "Add Belonging": "ሓዱሽ ንብረት ወስኽ",
+    "Serial Key": "ሴሪያል ቁፅሪ",
+    "Submit": "ወስኽ"
+
 }

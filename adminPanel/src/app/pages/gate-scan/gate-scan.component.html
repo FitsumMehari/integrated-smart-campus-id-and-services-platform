@@ -53,7 +53,7 @@
 
 
 <div *ngIf="hasScanned" class="infoDisplay">
-    <button mat-raised-button (click)="reload()">Reload</button>
+    <button mat-raised-button (click)="reload()">{{"Reload" | translate}}</button>
     <main class="main-content">
         <h1 class="mat-display-1 message-header">{{ apiResponse?.message }}</h1>
 
@@ -65,25 +65,25 @@
             <div class="user-details-body">
                 <mat-list>
                     <mat-list-item>
-                        <span mat-line>ID:</span>
+                        <span mat-line>{{"ID" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
                           apiResponse.foundUser.studentId
                           }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Department:</span>
+                        <span mat-line>{{"Department" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
                           apiResponse.foundUser.department
                           }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Phone:</span>
+                        <span mat-line>{{"Phone" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
                           apiResponse.foundUser.phone
                           }}</span>
                     </mat-list-item>
                     <mat-list-item>
-                        <span mat-line>Gender:</span>
+                        <span mat-line>{{"Gender" | translate}}:</span>
                         <span mat-line class="secondary-text">{{
                           apiResponse.foundUser.gender
                           }}</span>
@@ -91,32 +91,32 @@
                 </mat-list>
             </div>
             <div class="user-details-body mt-3">
-                <h3 class="mat-subheading-1">User Belongings</h3>
+                <h3 class="mat-subheading-1">{{"User Belongings" |translate}}</h3>
                 <div *ngIf="!loading">
                     <ul *ngIf="belongings && belongings.length > 0; else noBelongings">
                         <li *ngFor="let item of belongings">{{ item.serialKey }} <button (click)="deleteItem(item._id)"><mat-icon>delete</mat-icon></button></li>
                     </ul>
                     <ng-template #noBelongings>
-                        <p>No belongings found for this user.</p>
+                        <p>{{"No belongings found for this user" |translate}}.</p>
                     </ng-template>
                 </div>
                 <div *ngIf="loading">
-                    <p>Loading belongings...</p>
+                    <p>{{"Loading belongings" | translate}}...</p>
                 </div>
             </div>
         </div>
     </main>
 
     <div class="form">
-        <p>Add Belonging</p>
+        <p>{{"Add Belonging" | translate}}</p>
         <form class="add-belonging-form">
             <mat-form-field appearance="outline">
-                <mat-label>Serial Key</mat-label>
+                <mat-label>{{"Serial Key" | translate}}</mat-label>
                 <input matInput placeholder="Enter serial key" name="serialKey" #serialKeyInput>
                 <mat-icon matSuffix>vpn_key</mat-icon>
             </mat-form-field>
 
-            <button mat-raised-button color="primary" (click)="submitSerialKey(serialKeyInput.value, apiResponse.foundUser._id)">Submit</button>
+            <button mat-raised-button color="primary" (click)="submitSerialKey(serialKeyInput.value, apiResponse.foundUser._id)">{{"Submit" | translate}}</button>
         </form>
     </div>
 </div>

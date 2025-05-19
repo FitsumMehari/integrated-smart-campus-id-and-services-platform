@@ -86,5 +86,12 @@
     "Reload": "ዳግም ጫን",
     "ID": "መለያ",
     "Last Cafe Entrance": "የመጨረሻው ካፌ መግቢያ",
-    "Scan QR Code to Enter The Campus": "ወደ ካምፓስ ለመግባት የQR ኮድን ያስነብቡ"
+    "Scan QR Code to Enter The Campus": "ወደ ካምፓስ ለመግባት የQR ኮድን ያስነብቡ",
+    "User Belongings": "የተመዘገቡ ንብረቶች",
+    "No belongings found for this user": "ምንም ዓይነት ንብረት አልተገኘም",
+    "Loading belongings": "የንብረት ዝርዝር በማውጣት ላይ",
+    "Add Belonging": "አዲስ ንብረት መዝግብ",
+    "Serial Key": "ሴሪያል ቁጥር",
+    "Submit": "መዝግብ"
+
 }

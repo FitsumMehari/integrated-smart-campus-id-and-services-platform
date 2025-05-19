@@ -86,5 +86,11 @@
     "Reload": "Reload",
     "ID": "ID",
     "Last Cafe Entrance": "Last Cafe Entrance",
-    "Scan QR Code to Enter The Campus": "Scan QR Code to Enter The Campus"
+    "Scan QR Code to Enter The Campus": "Scan QR Code to Enter The Campus",
+    "User Belongings": "User Belongings",
+    "No belongings found for this user": "No belongings found for this user",
+    "Loading belongings": "Loading belongings",
+    "Add Belonging": "Add Belonging",
+    "Serial Key": "Serial Key",
+    "Submit": "Submit"
 }
