@@ -27,12 +27,17 @@ export class GateScanComponent implements AfterViewInit {
   };
 
   public qrCodeResult: ScannerQRCodeResult[] = [];
+  public belongings: any[] = []; // Array to store fetched belongings
+  public loading: boolean = false;
+
   public scanError: any;
   public errorMessage: string | null = null;
   public apiResponse: any;
 
   // for hiding the video
   hasScanned:boolean = false
+
+  newSerialKey: any = ''
 
   @ViewChild('action') action!: NgxScannerQrcodeComponent;
   @ViewChild('select1') select1!: any;
@@ -107,7 +112,7 @@ public onEvent(e: any): void {
       this.scanError = 'Unknown QR code data format.';
       return;
     }
-    this.enterCafe(scannedString);
+    this.enterGate(scannedString);
   }
 
  public handle(action: any, fn: string): void {
@@ -133,7 +138,7 @@ public onEvent(e: any): void {
   }
 }
 
-  enterCafe(qrCodeValue: string): void {
+  enterGate(qrCodeValue: string): void {
     if (qrCodeValue) {
       this.gateScanService.sendQrCodeId(qrCodeValue).subscribe({
         // Use the service here
@@ -141,6 +146,9 @@ public onEvent(e: any): void {
           console.log('Entry Response:', response);
           this.errorMessage = null;
           this.apiResponse = response;
+          console.log(this.apiResponse.foundUser._id);
+
+          this.getItems(this.apiResponse.foundUser._id)
         },
         error: (error) => {
           console.error('Entry Error:', error);
@@ -150,6 +158,52 @@ public onEvent(e: any): void {
       });
     }
   }
+
+  getItems(filter: any): void {
+    this.loading = true; // Set loading to true before making the API call
+    this.gateScanService.getItemBelongings(filter).subscribe({
+        next: (response:any) => {
+            console.log('Items Response:', response);
+            this.loading = false; // Set loading to false after receiving the response
+            this.belongings = response.belongings || []; // Store the belongings, default to empty array if undefined.
+            this.errorMessage = null; // Clear any previous error message
+        },
+        error: (error:any) => {
+            console.error('Items Error:', error);
+            this.loading = false; // Set loading to false on error
+            this.errorMessage = error.message || 'Failed to fetch items.'; // Set an appropriate error message
+            this.belongings = [];
+        },
+    });
+}
+
+
+submitSerialKey(serialKey: string, userId:string) {
+  // You can add your logic to handle the submitted serial key here
+  const itemData = {
+    userId: userId,
+    serialKey: serialKey
+  };
+  this.gateScanService.addItemBelongings(itemData).subscribe({
+    next: (response:any) => {
+      if(response) {
+        console.log('Item added successfully:', response);
+      this.getItems(userId)
+      }
+      // Optionally clear the input field if you have the template reference
+      // this.serialKeyInput.nativeElement.value = '';
+    },
+    error: (error:any) => {
+      console.error('Error adding item:', error);
+      // Handle the error, e.g., display an error message to the user
+    }
+  });
+}
+
+deleteItem(serialKey:any) {
+  this.gateScanService.deleteItemBelongings(serialKey)
+  this.getItems(this.apiResponse.foundUser._id)
+}
 
   reload() {
     window.location.reload()
