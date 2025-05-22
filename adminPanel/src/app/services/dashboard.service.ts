@@ -182,7 +182,7 @@ export class DashboardService {
 
             config.duration = 3000;
             this.snackBar.open(response.message, 'Close', config);
-            if (response.newNotice) {
+            if (response.updatedNotice) {
               this.modalService.closeAllModals();
             }
           }
