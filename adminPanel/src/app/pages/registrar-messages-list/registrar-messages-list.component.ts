@@ -124,17 +124,7 @@ export class RegistrarMessagesListComponent
   deleteMessage(message: any) {
     console.log('Delete message:', message);
 
-    this.dashboardService._response.subscribe((response) => {
-      console.log(response);
-      if (response && response.message) {
-        const config = new MatSnackBarConfig();
-        config.verticalPosition = 'top';
-        config.duration = 3000;
-        this.snackBar.open(response.message, 'Close', config);
 
-        this.getMessages();
-      }
-    });
     // Implement your delete logic here
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
@@ -150,6 +140,17 @@ export class RegistrarMessagesListComponent
       if (result) {
         // User confirmed, proceed with removal
         this.dashboardService.deleteMessage(message._id);
+         this.dashboardService._response.subscribe((response) => {
+      console.log(response);
+      if (response && response.message) {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = 'top';
+        config.duration = 3000;
+        this.snackBar.open(response.message, 'Close', config);
+
+        this.getMessages();
+      }
+    });
         this.getMessages();
       } else {
         // User cancelled, do nothing or log it
