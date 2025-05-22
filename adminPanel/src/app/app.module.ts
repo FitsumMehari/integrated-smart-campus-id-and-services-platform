@@ -9,8 +9,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BaseChartDirective } from 'ng2-charts';
 import { FileUploadModule } from 'ng2-file-upload';
 
-import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
+import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
 
+
+// Necessary to solve the problem of losing internet connection
+LOAD_WASM('assets/wasm/ngx-scanner-qrcode.wasm').subscribe();
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'i18n/', '.json');
