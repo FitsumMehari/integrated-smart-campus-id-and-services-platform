@@ -106,10 +106,10 @@ export class SchoolComponent implements OnInit, OnDestroy {
           }
         });
       }
-      if (this.account.userType !== 'cafe') {
+      if (this.account.userType !== 'school') {
         this.cards[0].count = this.admins.length;
       }
-      if (this.account.userType !== 'cafe') {
+      if (this.account.userType !== 'school') {
         this.cards[1].count = this.students.length;
       } else {
         this.cards[0].count = this.students.length;
