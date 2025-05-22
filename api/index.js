@@ -70,7 +70,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const path = require("path"); // <--- Add this
+const path = require("path"); // <--- Make sure this is here!
 
 dotenv.config();
 
@@ -79,11 +79,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors()); // Use the cors middleware
+app.use(cors());
 
-// Serve static files from the 'browser' directory (your Angular build output)
-// This MUST come before your API routes and any general catch-all routes
-app.use(express.static("browser"));
+// 1. Serve static files from the 'browser' directory.
+// This handles all your Angular build output (index.html, main.js, styles.css, etc.)
+// It MUST come before any specific API routes or the catch-all route.
+app.use(express.static(path.join(__dirname, "browser"))); // <--- Use path.join for robustness
 
 // Database connector code
 mongoose
@@ -95,35 +96,27 @@ mongoose
         console.log(error);
     });
 
-// API Routes
-const authRoute = require("./routes/auth")
-const noticeRoute = require("./routes/notice")
-const belongingsRoute = require("./routes/belongings")
-const messagesRoute = require("./routes/messages")
-const activitysRoute = require("./routes/activity")
-const gatesRoute = require("./routes/gate")
-const cafesRoute = require("./routes/cafe")
+// API Routes (these should be hit before the SPA fallback)
+app.use("/auth", require("./routes/auth"));
+app.use("/notice", require("./routes/notice"));
+app.use("/belongings", require("./routes/belongings"));
+app.use("/messages", require("./routes/messages"));
+app.use("/activity", require("./routes/activity"));
+app.use("/gate", require("./routes/gate"));
+app.use("/cafe", require("./routes/cafe"));
 
-app.use("/auth", authRoute);
-app.use("/notice", noticeRoute);
-app.use("/belongings", belongingsRoute);
-app.use("/messages", messagesRoute);
-app.use("/activity", activitysRoute);
-app.use("/gate", gatesRoute);
-app.use("/cafe", cafesRoute);
-
-
-// This route handles any requests that are NOT caught by your API routes
-// and are NOT found as static files. This sends index.html for your Angular app.
-app.use((req, res, next) => {
+// 2. SPA Fallback (Catch-all for Angular's routing)
+// Any request that isn't an API route or a directly served static file will fall here.
+// This ensures your Angular app handles its own internal routing.
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'browser', 'index.html'));
 });
 
-//ERROR handler (always last)
+// 3. Error Handler (Always last)
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    // In production, consider sending a less verbose error message
-    res.status(500).send("Something broke!"); // More user-friendly message
+    // For production, send a less detailed error to the client
+    res.status(500).send("Something broke on the server!");
 });
 
 app.listen(PORT, () => {
