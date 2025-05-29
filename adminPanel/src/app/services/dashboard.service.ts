@@ -110,6 +110,9 @@ export class DashboardService {
           }
         });
         this.router.navigateByUrl(this.router.url)
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );
@@ -133,6 +136,9 @@ export class DashboardService {
           }
         });
         this.router.navigateByUrl(this.router.url)
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );
@@ -161,6 +167,9 @@ export class DashboardService {
           }
         });
         this.router.navigateByUrl(this.router.url)
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );
@@ -188,6 +197,9 @@ export class DashboardService {
           }
         });
         this.router.navigateByUrl(this.router.url)
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );

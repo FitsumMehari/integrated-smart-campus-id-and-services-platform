@@ -115,6 +115,9 @@ export class AuthService {
           }
         });
         this.router.navigateByUrl(this.router.url);
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );
@@ -156,6 +159,9 @@ export class AuthService {
           }
         });
         this.router.navigateByUrl(this.router.url);
+       setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
         // console.log(this.router.url);
 
       },
@@ -181,6 +187,9 @@ export class AuthService {
           }
         });
         this.router.navigateByUrl(this.router.url);
+        setTimeout(()=> {
+         window.location.reload()
+       }, 2000)
       },
       (error) => {}
     );
